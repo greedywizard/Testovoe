@@ -26,6 +26,7 @@ seed_phrase: str = 'milk craft duck galaxy occur copy rich drastic also wise hai
 mm: Metamask = Metamask(driver)
 
 mm.open_wallet(seed_phrase)
+mm.run()
 
 input()
 

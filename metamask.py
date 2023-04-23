@@ -50,3 +50,9 @@ class Metamask:
         self.click_button('/html/body/div[1]/div/div[2]/div/div/div/div[2]/button')
         self.click_button('/html/body/div[1]/div/div[2]/div/div/div/div[2]/button')
         self.click_button('/html/body/div[2]/div/div/section/div[2]/div/button')
+
+        self.driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#settings/advanced')
+
+    def run(self) -> None:
+        # Переключить чекбокс "Show test networks"
+        self.click_button('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[7]/div[2]/div/label/div[1]')
