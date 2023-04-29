@@ -103,8 +103,14 @@ class Metamask:
         e: WebElement = self.get_element('/html/body/div[1]/div/div[3]/div/div/div/div[3]/div/div'
                                          '[./div[2]/button/h2/span[text()="GoerliETH"]]')
 
-        # Чекнуть есть ли баланс
-        if float(e.find_element(By.CLASS_NAME, 'asset-list-item__token-value').text) == 0:
+        print(float(e.find_element(By.CLASS_NAME, 'asset-list-item__token-value').text) != 0.0)
+
+        # Чекнуть есть ли баланс, если нет сбросить ак и выйти?
+        if float(e.find_element(By.CLASS_NAME, 'asset-list-item__token-value').text) == 0.0:
+            self.driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#settings/advanced')
+            self.click_button('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div/button')
+            self.click_button('/html/body/div[1]/div/span/div[1]/div/div/div[2]/button[2]')
             return
+
 
 

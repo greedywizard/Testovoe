@@ -1,21 +1,18 @@
+import time
+from metamask import Metamask
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.webdriver import WebDriver
 
-# Initialize the webdriver (use the appropriate driver for your browser)
-driver = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
 
-# Navigate to the dynamic web page
-driver.get("https://example.com/your-dynamic-web-page")
+driver: WebDriver = webdriver.Chrome(options=options)
 
-# Wait for a specific element to be present
-element = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.ID, "your_element_id"))
-)
+driver.get("https://scroll.io/alpha/bridge")
 
-# Perform actions on the element or continue with your script
-print(element.text)
 
-# Close the driver when done
+input()
+
 driver.quit()
