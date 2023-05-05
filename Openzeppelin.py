@@ -1,6 +1,8 @@
 import random
 import string
 
+from selenium.common import NoAlertPresentException
+from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from Automizer import Automizer
@@ -13,9 +15,16 @@ class Openzeppelin:
         self.__automizer = Automizer(driver, wait_time=15)
 
     def create_contract(self) -> (str, str):
-        self.__driver.execute_script("window.open('');")
-        self.__automizer.switch_to_new_window()
         self.__driver.get(f"https://docs.openzeppelin.com/contracts/4.x/wizard")
+
+        try:
+            # Проверьте наличие модального диалога и примите его, если он есть
+            alert = self.__driver.switch_to.alert
+            alert.accept()
+        except NoAlertPresentException:
+            # Продолжить, если нет модального диалога
+            pass
+
 
         iframe = self.__automizer.get_element_by_xpath("/html/body/div[1]/main/div/article/oz-wizard/iframe")
         self.__driver.switch_to.frame(iframe)
@@ -31,6 +40,5 @@ class Openzeppelin:
         # Получить код контракта
         code: str = self.__automizer.get_element_by_xpath("/html/body/div/div[2]/div[2]/pre/code").text
         self.__driver.switch_to.default_content()
-        self.__automizer.switch_to_prev_window()
 
         return code, random_letter

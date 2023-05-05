@@ -43,10 +43,8 @@ class ScrollIo:
         self.__driver.get("https://scroll.io/alpha/bridge")
         self.__driver.refresh()
 
-        # Получить количество токенов
-        e = float(self.__automizer.get_element_by_xpath("/html/body/div/div[1]/div[1]/div[3]/div/div[1]/div[2]/div[2]/h6").text.split(' ')[1])
         # Ввести 99.4% от максимального значения
-        self.__automizer.input_by_id(':r0:', str(e * (1 - 0.6 / 100)))
+        self.__automizer.input_by_id(':r0:', str(value * (1 - 0.6 / 100)))
         # "Send ETH to Scroll Alpha Test" кнопка
         self.__automizer.click_button_by_id(":r2:")
         # Переключиться на всплывающее окно

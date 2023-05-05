@@ -1,7 +1,7 @@
 import time
 
 from selenium.common import NoAlertPresentException
-from selenium.webdriver import Keys
+from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
@@ -65,6 +65,15 @@ class Remix:
         compile_version = self.__automizer.get_element_by_id("versionSelector").text.split('soljson-')[1].split('.js')[0]
         # "Compile"
         self.__automizer.click_button_by_id("compileBtn")
+
+        while True:
+            try:
+                self.__automizer.get_element_by_class_name("text-success")
+                break
+            except:
+                pass
+
+
         # Открыть деплой
         self.__automizer.click_button_by_id("verticalIconsKindudapp")
         # Открыть список enviroment
@@ -86,14 +95,23 @@ class Remix:
         # Время лока
         self.__automizer.input_by_xpath("/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[2]/div[3]/div[1]/div/div[1]/div[1]/input",
                                         str(1696118400))
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[2]/div[3]/div[1]/div/div[1]/div[1]/button")
-        # Переключаемся на всплывающее окно
-        self.__automizer.switch_to_new_window()
-        # "Confirm"
-        self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
-        # Переключение на основное окно
-        self.__automizer.switch_to_prev_window()
-        #
+
+        while True:
+            try:
+                # "Deploy"
+                self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[2]/div[3]/div[1]/div/div[1]/div[1]/button")
+                # Переключаемся на всплывающее окно
+                self.__automizer.switch_to_new_window()
+                # "Confirm"
+                self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
+                # Переключение на основное окно
+                self.__automizer.switch_to_prev_window()
+                break
+            except:
+                pass
+
+
+        # Получаем адресс токена
         address: str
         while True:
             try:
@@ -105,13 +123,10 @@ class Remix:
 
         return compile_version, address
 
-    def deploy_token(self, code: str, name: str):
+    def deploy_token(self, code: str, name: str) -> str:
         self.__driver.get("https://remix.ethereum.org/")
         # Ожидание анимаций
         time.sleep(1)
-
-        # "Accept"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div[3]/div/div/div[3]/button[1]")
 
         while True:
             try:
@@ -128,6 +143,66 @@ class Remix:
                     # Продолжить, если нет модального диалога
                     pass
 
+        # Ввод имени файла
         self.__automizer.click_button_by_id("createNewFile")
-        input_element = self.__driver.switch_to.active_element
-        input_element.send_keys(f"{name}.sol")
+        action = ActionChains(self.__driver)
+        action.send_keys(f"{name}.sol").perform()
+        action.send_keys(Keys.ENTER).perform()
+        # Открыть файл для редактирования
+        self.__automizer.click_button_by_xpath(f"//span[text()='{name}.sol']")
+        # Установка каретки в редактор
+        self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[5]/div[1]/div[2]/div/div/section/div/div/div[1]/div[2]/div[1]/div[4]")
+
+        # Ввод кода
+        code_arr = code.split('{')
+        for i in range(code_arr.__len__()):
+            if i != 0:
+                action.send_keys('{')
+                action.send_keys(Keys.DELETE).perform()
+            action.send_keys(code_arr[i]).perform()
+
+        # Открыть компилятор
+        self.__automizer.click_button_by_id("verticalIconsKindsolidity")
+        # "Compile"
+        self.__automizer.click_button_by_id("compileBtn")
+
+        while True:
+            try:
+                self.__automizer.get_element_by_class_name("text-success")
+                break
+            except:
+                pass
+
+        # Открыть деплой
+        self.__automizer.click_button_by_id("verticalIconsKindudapp")
+        # Открыть список enviroment
+        self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[1]/div[1]/div/div/button")
+        # Выбрать inject metamsk
+        self.__automizer.click_button_by_xpath("//a/span[text()='Injected Provider - MetaMask']")
+
+        while True:
+            try:
+                # "Deploy"
+                self.__automizer.click_button_by_xpath("//button[.//div[text()='Deploy']]")
+                # Переключаемся на всплывающее окно
+                self.__automizer.switch_to_new_window()
+                # "Confirm"
+                self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
+                # Переключение на основное окно
+                self.__automizer.switch_to_prev_window()
+                #
+                break
+            except:
+                pass
+
+        address: str
+        while True:
+            try:
+                element = self.__automizer.get_element_by_xpath(
+                    "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[4]/div[2]/div/div[1]/div/div[2]/a/i")
+                address = element.get_attribute("content")
+                break
+            except:
+                pass
+
+        return address
