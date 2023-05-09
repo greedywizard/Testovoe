@@ -29,7 +29,7 @@ class Metamask:
             self.__driver.refresh()
 
         # "I agree" кнопка
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div/div/div/button[1]')
+        self.__automizer.click_button_by_xpath("//button[text()='I agree']")
 
         # Ввод seed фразы
         seed_arr = seed_phrase.split(' ')
@@ -42,7 +42,7 @@ class Metamask:
             input_element.send_keys(i)
 
         # "Condirm" кнопка
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div/div/div[4]/div/button')
+        self.__automizer.click_button_by_xpath("//button[text()='Confirm Secret Recovery Phrase']")
         # Ввод пароля
         password: str = '12345678'
         input_element = self.__driver.switch_to.active_element
@@ -62,15 +62,15 @@ class Metamask:
         while True:
             try:
                 # "Got it" кнопка
-                self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div/div/div[2]/button')
+                self.__automizer.click_button_by_xpath("//button[text()='Got it!']")
                 break
             except:
                 pass
 
         # "Next"
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div/div/div[2]/button')
+        self.__automizer.click_button_by_xpath("//button[text()='Next']")
         # "Done"
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div/div/div[2]/button')
+        self.__automizer.click_button_by_xpath("//button[text()='Done']")
 
     def setup_wallet(self) -> None:
         # Открыть настройки
@@ -84,8 +84,8 @@ class Metamask:
     def add_test_networks(self):
         self.__driver.get(f'{self.link_ext}/home.html#settings/networks')
 
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div/div[1]/div/button')
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div/div[3]')
+        self.__automizer.click_button_by_xpath("//button[text()='Add a network']")
+        self.__automizer.click_button_by_xpath("//div[./a/h6[text()='Add a network manually']]")
 
         # добавить сеть
         # Network name
@@ -108,7 +108,7 @@ class Metamask:
         input_element = self.__driver.switch_to.active_element
         input_element.send_keys('https://blockscout.scroll.io')
 
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div/div[2]/div/div[3]/button[2]')
+        self.__automizer.click_button_by_xpath("//button[text()='Save']")
         self.__automizer.click_button_by_xpath('/html/body/div[2]/div/div/section/div/div/button[1]')
 
     def swap_to_sat(self):

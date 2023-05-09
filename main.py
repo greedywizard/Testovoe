@@ -43,14 +43,12 @@ sio.connect_metamask()
 mm.add_test_networks()
 goerli_balance = mm.check_balance()
 print("goerli_balance:", goerli_balance)
-if goerli_balance == 0.0:
+if goerli_balance != 0.0:
     mm.clear_account()
 else:
-    # sio.transfer_goerli_to_alphatest(goerli_balance/10)
-    # Ожидаем транзакцию
-    # time.sleep(15*60)
-    # us.connect_wallet()
-    # balance = us.swap_eth_to_weth()
+    #sio.transfer_goerli_to_alphatest(goerli_balance/10.0)
+    us.connect_wallet()
+    balance = us.swap_eth_to_weth(0.39)
     # us.swap_weth_to_usdc()
     # us.add_liquid()
     # us.swap_usdc_to_eth()

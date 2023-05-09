@@ -15,6 +15,8 @@ class Automizer:
         self.__wait: WebDriverWait = WebDriverWait(driver, wait_time)
         self.__prev_window = None
 
+    def get(self, url: str) -> None:
+        self.__driver.execute_script(f"window.location.href = '{url}';")
     def always_false(self) -> bool:
         return False
 
@@ -85,12 +87,12 @@ class Automizer:
         self.__select(By.XPATH, path, option)
 
     # Switch window
-    def switch_to_new_window(self, number: int = 2, count: int = 2) -> str:
+    def switch_to_new_window(self, count: int = 2) -> str:
         current_window = self.__driver.current_window_handle
         self.__prev_window = current_window
 
         self.__wait.until(EC.number_of_windows_to_be(count))
-        self.__driver.switch_to.window(self.__driver.window_handles[number - 1])
+        self.__driver.switch_to.window(self.__driver.window_handles[-1])
 
         return current_window
 
