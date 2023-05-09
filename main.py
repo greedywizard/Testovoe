@@ -1,5 +1,7 @@
 import time
 
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 from Openzeppelin import Openzeppelin
 from Remix import Remix
 from ScrollIo import ScrollIo
@@ -10,6 +12,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+
 seed_phrase: str = 'milk craft duck galaxy occur copy rich drastic also wise hair project'
 
 options = webdriver.ChromeOptions()
@@ -17,7 +20,7 @@ options.add_extension('./Extentions/metamask.crx')
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--no-sandbox")
 
-driver: WebDriver = webdriver.Chrome(options=options)
+driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
 
 WebDriverWait(driver, 5).until(EC.new_window_is_opened(driver.window_handles))
 current_window = driver.current_window_handle

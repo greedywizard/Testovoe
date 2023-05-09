@@ -11,17 +11,20 @@ from Automizer import Automizer
 
 
 class Metamask:
+    link_ext = "chrome-extension://imlfeaehgpdgmhiaejegbphhpcnmebpn"
+
     def __init__(self, driver: WebDriver):
         self.__driver: WebDriver = driver
         self.__wait = WebDriverWait(driver, 10)
         self.__automizer = Automizer(driver, wait_time=15)
 
     def open_wallet(self, seed_phrase: str) -> None:
-        self.__driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html')
+        self.__driver.get(f'{self.link_ext}/home.html')
 
         try:
+            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div/div/ul/li[1]/div/input")
             # "Import wallet" кнопка
-            self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div/div/ul/li[2]/button')
+            self.__automizer.click_button_by_xpath("//button[text()='Import an existing wallet']")
         except:
             self.__driver.refresh()
 
@@ -71,15 +74,15 @@ class Metamask:
 
     def setup_wallet(self) -> None:
         # Открыть настройки
-        self.__driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#settings/advanced')
-        self.__driver.refresh()
+        self.__driver.get(f'{self.link_ext}/home.html#settings/advanced')
+
         # Переключить чекбокс "Show test networks"
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[7]/div[2]/div/label/div[1]')
+        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[5]/div[2]/div/label/div[1]/div[1]/div[2]')
         # Закрыть настройки
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[1]/div[1]/div[2]')
 
     def add_test_networks(self):
-        self.__driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#settings/networks')
+        self.__driver.get(f'{self.link_ext}/home.html#settings/networks')
 
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div/div[1]/div/button')
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div/div[3]')
@@ -109,7 +112,7 @@ class Metamask:
         self.__automizer.click_button_by_xpath('/html/body/div[2]/div/div/section/div/div/button[1]')
 
     def swap_to_sat(self):
-        self.__driver.get("chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html")
+        self.__driver.get(f"{self.link_ext}/home.html")
 
         # Открыть свиписок сетей
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div', as_mouse=False)
@@ -117,7 +120,7 @@ class Metamask:
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/li[.//span[text()="Scroll Alpha Testnet"]]', as_mouse=False)
 
     def check_balance(self) -> float:
-        self.__driver.get("chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html")
+        self.__driver.get(f"{self.link_ext}/home.html")
 
         # Открыть свиписок сетей
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[1]/div/div[2]/div/div', as_mouse=False)
@@ -141,13 +144,13 @@ class Metamask:
             return v
 
     def clear_account(self):
-        self.__driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#settings/advanced')
+        self.__driver.get(f'{self.link_ext}/home.html#settings/advanced')
 
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[3]/div[2]/div/button', as_mouse=False)
         self.__automizer.click_button_by_xpath('/html/body/div[1]/div/span/div[1]/div/div/div[2]/button[2]', as_mouse=False)
 
     def add_token(self, address):
-        self.__driver.get('chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#import-token')
+        self.__driver.get(f'{self.link_ext}/home.html#import-token')
         try:
             # Проверьте наличие модального диалога и примите его, если он есть
             alert = self.__driver.switch_to.alert
@@ -172,7 +175,7 @@ class Metamask:
         self.__automizer.click_button_by_xpath("//button[text()='Add custom token']", as_mouse=False)
 
     def create_sencond_account(self):
-        self.__driver.get("chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#new-account")
+        self.__driver.get(f"{self.link_ext}/home.html#new-account")
 
         # Ввести название
         self.__automizer.input_by_xpath("/html/body/div[1]/div/div[3]/div/div/div[2]/input", "scroll2", as_mouse=False)
@@ -180,7 +183,7 @@ class Metamask:
         self.__automizer.click_button_by_xpath("//button[text()='Create']", as_mouse=False)
 
     def send_to_2_account_and_revert(self):
-        self.__driver.get("chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#send")
+        self.__driver.get(f"{self.link_ext}/home.html#send")
 
         # Открыть список аккаунтов
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[3]/div/div[3]/div/div/a", as_mouse=False)
@@ -222,7 +225,7 @@ class Metamask:
         # Выбрать scroll2
         self.__automizer.click_button_by_xpath("//button[text()='scroll2']", as_mouse=False)
 
-        self.__driver.get("chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/home.html#send")
+        self.__driver.get(f"{self.link_ext}/home.html#send")
 
         # Открыть список аккаунтов
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[3]/div/div[3]/div/div/a", as_mouse=False)
