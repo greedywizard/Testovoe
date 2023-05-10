@@ -20,8 +20,7 @@ class ScrollIo:
 
 
     def connect_metamask(self):
-        self.__driver.get("https://scroll.io/alpha")
-        self.__driver.refresh()
+        self.__automizer.get("https://scroll.io/alpha")
 
         shadow_dom = ShadowDOM(self.__driver, shadow_xpath="/html/body/onboard-v2", wait_time=3)
 
@@ -35,13 +34,12 @@ class ScrollIo:
         # "Next" кнопка
         self.__automizer.click_button_by_xpath("//button[text()='Next']")
         # "Connect"" кнопка
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div[2]/div[2]/footer/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
         # Перключение обратно на исходное окно
         self.__automizer.switch_to_prev_window()
 
     def transfer_goerli_to_alphatest(self, value: float):
-        self.__driver.get("https://scroll.io/alpha/bridge")
-        self.__driver.refresh()
+        self.__automizer.get("https://scroll.io/alpha/bridge")
 
         # Ввести 99.4% от максимального значения
         self.__automizer.input_by_id(':r0:', str(value * (1 - 0.6 / 100)))
@@ -50,10 +48,16 @@ class ScrollIo:
         # Переключиться на всплывающее окно
         self.__automizer.switch_to_new_window()
         # "Confirm" кнопка
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
         # Переключиться на предыдущее окно
         self.__automizer.switch_to_prev_window()
 
+        while True:
+            try:
+                self.__automizer.get_element_by_xpath("/html/body/div/div/div[1]/div[3]/div/div/table/tbody/tr[1]/td[1]/div/div[1]/span[text()='Success']")
+                self.__automizer.get_element_by_xpath("/html/body/div/div/div[1]/div[3]/div/div/table/tbody/tr/td[1]/div/div[2]/span[text()='Success']")
+            except:
+                pass
     def validate_contract(self, compiler: str, address: str):
         self.__driver.execute_script("window.open('');")
         self.__automizer.switch_to_new_window()
