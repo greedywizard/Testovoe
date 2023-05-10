@@ -24,8 +24,8 @@ class Uniswap:
         return random_number / pointer
 
     def connect_wallet(self):
-        self.__driver.get("https://uniswap-v3.scroll.io/#/swap")
-        self.__driver.refresh()
+        self.__automizer.get("https://uniswap-v3.scroll.io/#/swap")
+
         # "Connect" кнопка
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button")
         # "Metamask" конпка
@@ -52,8 +52,8 @@ class Uniswap:
         self.__automizer.switch_to_prev_window()
 
     def swap_eth_to_weth(self, value: float) -> float:
-        self.__driver.get("https://uniswap-v3.scroll.io/#/swap")
-        self.__driver.refresh()
+        self.__automizer.get("https://uniswap-v3.scroll.io/#/swap")
+
         # Список токенов на которые переводить
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
         # Выбрать токен WETH
@@ -70,15 +70,14 @@ class Uniswap:
         # Переключение на всплвающее окно
         self.__automizer.switch_to_new_window()
         # "Confirm"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
         # Переключение на исходное окно
         self.__automizer.switch_to_prev_window()
 
         return val
 
     def swap_weth_to_usdc(self):
-        self.__driver.get("https://uniswap-v3.scroll.io/#/swap?outputCurrency=0xA0D71B9877f44C744546D649147E3F1e70a93760")
-        self.__driver.refresh()
+        self.__automizer.get("https://uniswap-v3.scroll.io/#/swap?outputCurrency=0xA0D71B9877f44C744546D649147E3F1e70a93760")
 
         # "I understand" кнопка
         self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
@@ -101,21 +100,21 @@ class Uniswap:
 
         if allow_button:
             # "Allow the Uniswap Protocol to use your WETH"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]")
+            self.__automizer.click_button_by_xpath("//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]")
             # Переключение на всплвающее окно
             self.__automizer.switch_to_new_window()
             # "Max"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[7]/div/div/label/div[2]/button/span")
+            self.__automizer.click_button_by_xpath("//button[text()='Max']")
             # "Next"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[9]/footer/button[2]")
+            self.__automizer.click_button_by_xpath("//button[text()='Next']")
             # "Approve"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[10]/footer/button[2]")
+            self.__automizer.click_button_by_xpath("//button[text()='Approve']")
             # Переключение на исходное окно
             self.__automizer.switch_to_prev_window()
             # Ожидание подсчетов
             time.sleep(3)
             # Swap
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[2]")
+            self.__automizer.click_button_by_xpath("//button[.//div[text()='Swap']]")
             # Переключение на всплвающее окно
             self.__automizer.switch_to_new_window()
             #
@@ -130,15 +129,15 @@ class Uniswap:
             # Переключение на всплвающее окно
             self.__automizer.switch_to_new_window()
             # "Confirm"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]")
+            self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
             # Переключение на исходное окно
             self.__automizer.switch_to_prev_window()
             # "Close"
             self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
 
     def add_liquid(self):
-        self.__driver.get("https://uniswap-v3.scroll.io/#/add/ETH")
-        self.__driver.refresh()
+        self.__automizer.get("https://uniswap-v3.scroll.io/#/add/ETH")
+
         # Список токенов
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[2]/div[3]/div/div/button")
         # выбор usdc

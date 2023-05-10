@@ -11,7 +11,7 @@ from Automizer import Automizer
 
 
 class Metamask:
-    link_ext = "chrome-extension://imlfeaehgpdgmhiaejegbphhpcnmebpn"
+    link_ext = "chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn"
 
     def __init__(self, driver: WebDriver):
         self.__driver: WebDriver = driver
@@ -22,7 +22,7 @@ class Metamask:
         self.__driver.get(f'{self.link_ext}/home.html')
 
         try:
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div/div/ul/li[1]/div/input")
+            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div/div/ul/li[1]/div/input", as_mouse=False)
             # "Import wallet" кнопка
             self.__automizer.click_button_by_xpath("//button[text()='Import an existing wallet']")
         except:

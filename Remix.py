@@ -15,7 +15,7 @@ class Remix:
         self.__automizer = Automizer(driver, wait_time=15)
 
     def deploy_contract(self) -> (str, str):
-        self.__driver.get("https://remix.ethereum.org/")
+        self.__automizer.get("https://remix.ethereum.org/")
 
         compile_version: str
         # Ожидание анимаций
@@ -124,7 +124,7 @@ class Remix:
         return compile_version, address
 
     def deploy_token(self, code: str, name: str) -> str:
-        self.__driver.get("https://remix.ethereum.org/")
+        self.__automizer.get("https://remix.ethereum.org/")
         # Ожидание анимаций
         time.sleep(1)
 
