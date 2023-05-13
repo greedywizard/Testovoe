@@ -24,35 +24,35 @@ class Uniswap:
         return random_number / pointer
 
     def connect_wallet(self):
-        self.__automizer.get("https://uniswap-v3.scroll.io/#/swap")
+        self.__driver.get("https://uniswap-v3.scroll.io/#/swap")
 
         # "Connect" кнопка
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button")
+        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
         # "Metamask" конпка
-        self.__automizer.click_button_by_id("metamask", as_mouse=False)
+        self.__automizer.click_button_by_id("metamask")
         # Переключение на всплвающее окно
         self.__automizer.switch_to_new_window()
         # "Next"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[3]/div[2]/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Next']")
         # "Connect"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div[2]/div[2]/footer/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
         # Переключение на исходное окно
         self.__automizer.switch_to_prev_window()
         # Кнопка около кошелька для выбор сети
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
         # "Scroll alpha testnet"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/div/div/button")
+        self.__automizer.click_button_by_xpath("//button[.//div[text()='Scroll Alpha']]")
         # Переключение на всплвающее окно
         self.__automizer.switch_to_new_window()
         # "Approve"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Approve']")
         # "Switch network"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Switch network']")
         # Переключение на исходное окно
         self.__automizer.switch_to_prev_window()
 
     def swap_eth_to_weth(self, value: float) -> float:
-        self.__automizer.get("https://uniswap-v3.scroll.io/#/swap")
+        self.__driver.get("https://uniswap-v3.scroll.io/#/swap")
 
         # Список токенов на которые переводить
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
@@ -77,26 +77,31 @@ class Uniswap:
         return val
 
     def swap_weth_to_usdc(self):
-        self.__automizer.get("https://uniswap-v3.scroll.io/#/swap?outputCurrency=0xA0D71B9877f44C744546D649147E3F1e70a93760")
+        self.__driver.get("https://uniswap-v3.scroll.io/#/swap?outputCurrency=0xA0D71B9877f44C744546D649147E3F1e70a93760")
 
-        # "I understand" кнопка
-        self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+        try:
+            # "I understand" кнопка
+            self.__automizer.click_button_by_xpath("//button[text()='I understand']")
+        except:
+            pass
+
         # Открыть список монет
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/button")
         # Выбрать монеты WETH
         self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div[3]/div[1]/div/div/div[./div[2]/div[text()='WETH']]")
         # "I understand" кнопка
-        self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+        self.__automizer.click_button_by_xpath("//button[text()='I understand']")
         try:
             # Кнопка "max"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[2]/div/div[2]/button")
+            self.__automizer.click_button_by_xpath("//button[text()='Max']")
         except:
             return
 
         # Ожидаем подсчет
         time.sleep(3)
         # Проверка наличия "Allow the Uniswap Protocol to use your WETH"
-        allow_button: bool = len(self.__driver.find_elements(By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]")) > 0
+        allow_button: bool = len(self.__driver.find_elements(By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]")) > 0
+        uwrap_button: bool = len(self.__driver.find_elements(By.XPATH, "//button[text()='Unwrap']"))
 
         if allow_button:
             # "Allow the Uniswap Protocol to use your WETH"
@@ -112,13 +117,18 @@ class Uniswap:
             # Переключение на исходное окно
             self.__automizer.switch_to_prev_window()
             # Ожидание подсчетов
-            time.sleep(3)
+            while True:
+                try:
+                    self.__automizer.get_element_by_xpath("//div[text()='You can now trade WETH']")
+                    break
+                except:
+                    pass
             # Swap
             self.__automizer.click_button_by_xpath("//button[.//div[text()='Swap']]")
             # Переключение на всплвающее окно
             self.__automizer.switch_to_new_window()
             #
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]")
+            self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
             # Переключение на исходное окно
             self.__automizer.switch_to_prev_window()
         else:
@@ -136,7 +146,7 @@ class Uniswap:
             self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
 
     def add_liquid(self):
-        self.__automizer.get("https://uniswap-v3.scroll.io/#/add/ETH")
+        self.__driver.get("https://uniswap-v3.scroll.io/#/add/ETH")
 
         # Список токенов
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[2]/div[3]/div/div/button")
@@ -145,12 +155,31 @@ class Uniswap:
         #
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button")
 
+        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[3]/div/div[2]/button[3]")
+        self.__automizer.click_button_by_xpath("//button[.//div[text()='Full Range']]")
+        self.__automizer.click_button_by_xpath("//button[.//div[text()='I understand']]")
+        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[3]/div/div[2]/div/div[2]/button")
+        self.__automizer.click_button_by_xpath("//button[text()='Approve USDC']")
+        # Переключение на всплвающее окно
+        self.__automizer.switch_to_new_window()
+        # "Max"
+        self.__automizer.click_button_by_xpath("//button[text()='Max']")
+        # "Next"
+        self.__automizer.click_button_by_xpath("//button[text()='Next']")
+        # "Approve"
+        self.__automizer.click_button_by_xpath("//button[text()='Approve']")
+        # Переключение на исходное окно
+        self.__automizer.switch_to_prev_window()
+
     def swap_usdc_to_eth(self):
         self.__driver.get("https://uniswap-v3.scroll.io/#/swap?outputCurrency=0xA0D71B9877f44C744546D649147E3F1e70a93760")
-        self.__driver.refresh()
 
-        # "I understand" кнопка
-        self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+        try:
+            # "I understand" кнопка
+            self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+        except:
+            pass
+
         # Открыть список монет
         self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/button")
         # Выбрать монеты usdc
@@ -161,33 +190,37 @@ class Uniswap:
         self.__automizer.click_button_by_xpath("/html/body/reach-portal[2]/div[3]/div/div/div/div/div[3]/div[1]/div/div/div[./div[2]/div[text()='ETH']]")
         try:
             # Кнопка "max"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[2]/div/div[2]/button")
+            self.__automizer.click_button_by_xpath("//button[text()='Max']")
         except:
             return
 
 
         # Ожидаем подсчет
         time.sleep(3)
-        # Проверка наличия "Allow the Uniswap Protocol to use your WETH"
-        allow_button: bool = len(self.__driver.find_elements(By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]")) > 0
+        # Проверка наличия "Allow the Uniswap Protocol to use your USDC"
+        allow_button: bool = len(self.__driver.find_elements(By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]")) > 0
 
         if allow_button:
             # "Allow the Uniswap Protocol to use your WETH"
-            self.__automizer.click_button_by_xpath(
-                "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]")
+            self.__automizer.click_button_by_xpath("//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]")
             # Переключение на всплвающее окно
             self.__automizer.switch_to_new_window()
             # "Max"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[7]/div/div/label/div[2]/button/span")
+            self.__automizer.click_button_by_xpath("//button[text()='Max']")
             # "Next"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[9]/footer/button[2]")
+            self.__automizer.click_button_by_xpath("//button[text()='Next']")
             # "Approve"
-            self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[10]/footer/button[2]")
+            self.__automizer.click_button_by_xpath("//button[text()='Approve']")
             # Переключение на исходное окно
             self.__automizer.switch_to_prev_window()
 
         # Ожидание подсчетов
-        time.sleep(3)
+        while True:
+            try:
+                self.__automizer.get_element_by_xpath("//div[text()='You can now trade USDC']")
+                break
+            except:
+                pass
         # "Swap"
         self.__automizer.click_button_by_id("swap-button")
         # "Confirm swap"

@@ -17,20 +17,25 @@ class Automizer:
 
     def get(self, url: str) -> None:
         self.__driver.execute_script(f"window.location.href = '{url}';")
+
     def always_false(self) -> bool:
         return False
 
+    def __exist(self, by: str, path: str):
+        self.__wait.until_not(EC.visibility_of_element_located((by, path)))
+
+    def element_hided_by_xpath(self, path: str):
+        self.__exist(By.XPATH, path)
+
     # Click buttons
     def __click(self, by: str, path: str, as_mouse: bool):
-        button: WebElement = self.__wait.until(EC.visibility_of_element_located(
-            (by, path)))
+        button: WebElement = self.__wait.until(EC.visibility_of_element_located((by, path)))
 
         if as_mouse:
             try:
                 button.click()
             except ElementClickInterceptedException:
-                button = self.__wait.until(EC.element_to_be_clickable(
-                    (by, path)))
+                button = self.__wait.until(EC.element_to_be_clickable((by, path)))
                 button.click()
         else:
             self.__driver.execute_script("arguments[0].click();", button)

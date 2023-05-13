@@ -15,19 +15,19 @@ class Remix:
         self.__automizer = Automizer(driver, wait_time=15)
 
     def deploy_contract(self) -> (str, str):
-        self.__automizer.get("https://remix.ethereum.org/")
+        self.__driver.get("https://remix.ethereum.org/")
 
         compile_version: str
         # Ожидание анимаций
         time.sleep(1)
 
         # "Accept"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div[3]/div/div/div[3]/button[1]")
+        self.__automizer.click_button_by_xpath("//button[text()='Accept']")
 
         while True:
             try:
                 # "Github"
-                self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[5]/div[1]/div[3]/div/div/div/div/div/div/div/div[1]/div[4]/div[2]/button[1]")
+                self.__automizer.click_button_by_xpath("//button[text()='GitHub']")
                 break
             except:
                 self.__driver.refresh()
@@ -47,7 +47,7 @@ class Remix:
         # Ввод ссылки контракта
         self.__automizer.input_by_id("inputPrompt_text", "https://github.com/scroll-tech/scroll-contract-deploy-demo/blob/main/contracts/Lock.sol")
         # "Import"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[5]/div[1]/div[3]/div/div/div/div/div/div/div/div[1]/div[2]/div/div/div[3]/button")
+        self.__automizer.click_button_by_xpath("//button[text()='Import']")
         try:
             # Выбрать файл
             self.__automizer.click_button_by_xpath("//span[text()='Lock.sol']")
@@ -83,9 +83,9 @@ class Remix:
         # Переключаемся на всплывающее окно
         self.__automizer.switch_to_new_window()
         # "Next"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[3]/div[2]/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Next']")
         # "Connect"
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div[2]/div[2]/div[2]/footer/button[2]")
+        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
         # Переключение на основное окно
         self.__automizer.switch_to_prev_window()
         # Количество которое будем лочить
@@ -99,7 +99,7 @@ class Remix:
         while True:
             try:
                 # "Deploy"
-                self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[2]/div[3]/div[1]/div/div[1]/div[1]/button")
+                self.__automizer.click_button_by_xpath("//button[.//div[text()='Deploy']]")
                 # Переключаемся на всплывающее окно
                 self.__automizer.switch_to_new_window()
                 # "Confirm"
@@ -124,14 +124,14 @@ class Remix:
         return compile_version, address
 
     def deploy_token(self, code: str, name: str) -> str:
-        self.__automizer.get("https://remix.ethereum.org/")
+        self.__driver.get("https://remix.ethereum.org/")
         # Ожидание анимаций
         time.sleep(1)
 
         while True:
             try:
                 # "New file"
-                self.__automizer.click_button_by_xpath("/html/body/div[1]/div[1]/div[5]/div[1]/div[3]/div/div/div/div/div/div/div/div[1]/div[4]/div[1]/button[1]")
+                self.__automizer.click_button_by_xpath("//button[text()='New File']")
                 break
             except:
                 self.__driver.refresh()
@@ -190,7 +190,6 @@ class Remix:
                 self.__automizer.click_button_by_xpath("//button[text()='Confirm']")
                 # Переключение на основное окно
                 self.__automizer.switch_to_prev_window()
-                #
                 break
             except:
                 pass

@@ -15,7 +15,7 @@ class Openzeppelin:
         self.__automizer = Automizer(driver, wait_time=15)
 
     def create_contract(self) -> (str, str):
-        self.__automizer.get(f"https://docs.openzeppelin.com/contracts/4.x/wizard")
+        self.__driver.get(f"https://docs.openzeppelin.com/contracts/4.x/wizard")
 
         try:
             # Проверьте наличие модального диалога и примите его, если он есть

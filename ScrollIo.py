@@ -20,7 +20,7 @@ class ScrollIo:
 
 
     def connect_metamask(self):
-        self.__automizer.get("https://scroll.io/alpha")
+        self.__driver.get("https://scroll.io/alpha")
 
         shadow_dom = ShadowDOM(self.__driver, shadow_xpath="/html/body/onboard-v2", wait_time=3)
 
@@ -39,7 +39,7 @@ class ScrollIo:
         self.__automizer.switch_to_prev_window()
 
     def transfer_goerli_to_alphatest(self, value: float):
-        self.__automizer.get("https://scroll.io/alpha/bridge")
+        self.__driver.get("https://scroll.io/alpha/bridge")
 
         # Ввести 99.4% от максимального значения
         self.__automizer.input_by_id(':r0:', str(value * (1 - 0.6 / 100)))
@@ -56,8 +56,10 @@ class ScrollIo:
             try:
                 self.__automizer.get_element_by_xpath("/html/body/div/div/div[1]/div[3]/div/div/table/tbody/tr[1]/td[1]/div/div[1]/span[text()='Success']")
                 self.__automizer.get_element_by_xpath("/html/body/div/div/div[1]/div[3]/div/div/table/tbody/tr/td[1]/div/div[2]/span[text()='Success']")
+                break
             except:
                 pass
+
     def validate_contract(self, compiler: str, address: str):
         self.__driver.execute_script("window.open('');")
         self.__automizer.switch_to_new_window()
