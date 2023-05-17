@@ -1,4 +1,22 @@
-test: str = 'sdsadsa'
+from abc import ABC, abstractmethod
+import typing
 
-if test:
-    print('assad')
+
+class Test(ABC):
+    @typing.final
+    def Exec(self):
+        print("exec")
+        return self._run()
+
+    @abstractmethod
+    def _run(self):
+        pass
+
+
+class T(Test):
+    def _run(self):
+        print("run")
+        return self
+
+
+T().Exec()
