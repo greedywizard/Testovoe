@@ -26,10 +26,9 @@ driver.switch_to.window(all_window_handles[0])
 
 OpenMetamaskWallet(driver, wait, seed_phrase).Exec()
 SetupMetamaskWallet(driver, wait).Exec()
-ConnectScroll(driver, wait).Exec()
 
 # Начало
-#sio.connect_metamask()
+# sio.connect_metamask()
 # goerli_balance = mm.check_balance()
 # print("goerli_balance:", goerli_balance)
 # if goerli_balance == 0.0:

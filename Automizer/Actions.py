@@ -72,9 +72,19 @@ class Click(Action):
         return self
 
     def _shadow_run(self):
+        self.__win_count = self._scenario.Driver.window_handles.__len__()
+
+        if self.__by != By.CSS_SELECTOR:
+            raise AttributeError("Use only css selector")
         button: WebElement = self._shadow_root.find_element(self.__by, self.__path)
         button.click()
-        pass
+
+        if self.__is_opening_window:
+            self._scenario.Wait.until(EC.number_of_windows_to_be(self.__win_count + 1))
+            self.__new_window = self._scenario.Driver.window_handles[-1]
+            self.__cur_window = self._scenario.Driver.current_window_handle
+
+        return self
 
     @property
     def New_Window(self) -> str:
