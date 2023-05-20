@@ -18,26 +18,6 @@ class ScrollIo:
         self.__wait = WebDriverWait(driver, 20)
         self.__automizer = Automizer(driver, wait_time=15)
 
-
-    def connect_metamask(self):
-        self.__driver.get("https://scroll.io/alpha")
-
-        shadow_dom = ShadowDOM(self.__driver, shadow_xpath="/html/body/onboard-v2", wait_time=3)
-
-        # "Connect wallet" кнопка от Scroll Alpha Testnet
-        self.__automizer.click_button_by_xpath("/html/body/div/div/div[1]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a")
-        # "Metamask" кнопка
-        shadow_dom.click_button_by_css(
-            "section > div > div > div > div > div > div > div > div.scroll-container.svelte-1qwmck3 > div > div > div > div.wallet-button-container.svelte-1vlog3j > button > div")
-        # Переключение на появившееся окно подтверждения
-        self.__automizer.switch_to_new_window()
-        # "Next" кнопка
-        self.__automizer.click_button_by_xpath("//button[text()='Next']")
-        # "Connect"" кнопка
-        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
-        # Перключение обратно на исходное окно
-        self.__automizer.switch_to_prev_window()
-
     def transfer_goerli_to_alphatest(self, value: float):
         self.__driver.get("https://scroll.io/alpha/bridge")
 

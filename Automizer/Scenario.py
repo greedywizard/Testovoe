@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from typing import final
+
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -26,5 +28,14 @@ class Scenario(ABC):
         self._active_window = value
 
     @abstractmethod
-    def Exec(self):
+    def _run(self):
         pass
+
+    @final
+    def Exec(self):
+        self._run()
+
+        v = self.Driver.current_window_handle
+
+        if self.Active_Window != self.Driver.current_window_handle:
+            self.Driver.switch_to.window(self.Active_Window)

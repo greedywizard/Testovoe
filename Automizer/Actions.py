@@ -49,7 +49,7 @@ class Click(Action):
         self.__by = by
         self.__path = path
         self.__new_window = None
-        self.__cur_window = None
+        self.__old_window = None
 
     def _run(self):
         self.__win_count = self._scenario.Driver.window_handles.__len__()
@@ -67,7 +67,7 @@ class Click(Action):
         if self.__is_opening_window:
             self._scenario.Wait.until(EC.number_of_windows_to_be(self.__win_count + 1))
             self.__new_window = self._scenario.Driver.window_handles[-1]
-            self.__cur_window = self._scenario.Driver.current_window_handle
+            self.__old_window = self._scenario.Driver.current_window_handle
 
         return self
 
@@ -82,7 +82,7 @@ class Click(Action):
         if self.__is_opening_window:
             self._scenario.Wait.until(EC.number_of_windows_to_be(self.__win_count + 1))
             self.__new_window = self._scenario.Driver.window_handles[-1]
-            self.__cur_window = self._scenario.Driver.current_window_handle
+            self.__old_window = self._scenario.Driver.current_window_handle
 
         return self
 
@@ -91,8 +91,8 @@ class Click(Action):
         return self.__new_window
 
     @property
-    def Current_Window(self) -> str:
-        return self.__cur_window
+    def Old_Window(self) -> str:
+        return self.__old_window
 
 
 class GetElement(Action):
