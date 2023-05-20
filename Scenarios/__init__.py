@@ -1,0 +1,2 @@
+from .OpenMetamaskWallet import OpenMetamaskWallet
+from .SetupMetamaskWallet import SetupMetamaskWallet

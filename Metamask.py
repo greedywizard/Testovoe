@@ -17,72 +17,7 @@ class Metamask:
         self.__driver: WebDriver = driver
         self.__wait = WebDriverWait(driver, 10)
         self.__automizer = Automizer(driver, wait_time=15)
-
-    def open_wallet(self, seed_phrase: str) -> None:
-        self.__driver.get(f'{self.link_ext}/home.html')
-
-        while True:
-            try:
-                self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[2]/div/div/div/ul/li[1]/div/input")
-                # "Import wallet" кнопка
-                self.__automizer.click_button_by_xpath("//button[text()='Import an existing wallet']")
-                break
-            except:
-                self.__driver.refresh()
-
-        # "I agree" кнопка
-        self.__automizer.click_button_by_xpath("//button[text()='I agree']")
-
-        # Ввод seed фразы
-        seed_arr = seed_phrase.split(' ')
-        input_element = self.__automizer.get_element_by_id('import-srp__srp-word-0')
-        input_element.send_keys(seed_arr.pop(0))
-
-        for i in seed_arr:
-            input_element.send_keys(Keys.TAB, Keys.TAB)
-            input_element = self.__driver.switch_to.active_element
-            input_element.send_keys(i)
-
-        # "Condirm" кнопка
-        self.__automizer.click_button_by_xpath("//button[text()='Confirm Secret Recovery Phrase']")
-        # Ввод пароля
-        password: str = '12345678'
-        input_element = self.__driver.switch_to.active_element
-        input_element.send_keys(password)
-        input_element.send_keys(Keys.TAB)
-        input_element = self.__driver.switch_to.active_element
-        input_element.send_keys(password)
-        input_element.send_keys(Keys.TAB)
-        # Чекбокс
-        check_box = self.__driver.switch_to.active_element
-        check_box.click()
-        check_box.send_keys(Keys.TAB, Keys.TAB)
-        # "Import" кнопка
-        button = self.__driver.switch_to.active_element
-        button.click()
-
-        while True:
-            try:
-                # "Got it" кнопка
-                self.__automizer.click_button_by_xpath("//button[text()='Got it!']")
-                break
-            except:
-                pass
-
-        # "Next"
-        self.__automizer.click_button_by_xpath("//button[text()='Next']")
-        # "Done"
-        self.__automizer.click_button_by_xpath("//button[text()='Done']")
-
-    def setup_wallet(self) -> None:
-        # Открыть настройки
-        self.__driver.get(f'{self.link_ext}/home.html#settings/advanced')
-
-        # Переключить чекбокс "Show test networks"
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[5]/div[2]/div/label/div[1]/div[1]/div[2]')
-        # Закрыть настройки
-        self.__automizer.click_button_by_xpath('/html/body/div[1]/div/div[3]/div/div[1]/div[1]/div[2]')
-
+        
     def add_test_networks(self):
         self.__driver.get(f'{self.link_ext}/home.html#settings/networks')
 
