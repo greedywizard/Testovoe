@@ -3,25 +3,35 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.webdriver import WebDriver
 from Automizer.Scenario import Scenario
 from abc import ABC, abstractmethod
 from typing import final
 
 
 class Action(ABC):
-    def __init__(self, scenario: Scenario, as_script: bool):
+    def __init__(self, scenario: Scenario, as_script: bool, shadow_root: WebElement):
         self._as_script: bool = as_script
         self._scenario: Scenario = scenario
+        self._shadow_root: WebElement = shadow_root
 
     @final
     def Exec(self):
         if self._scenario.Active_Window != self._scenario.Driver.current_window_handle:
             self._scenario.Driver.switch_to.window(self._scenario.Active_Window)
 
-        return self._run()
+        if self._shadow_root is None:
+            return self._run()
+        else:
+            return self._shadow_run()
 
     @abstractmethod
     def _run(self):
+        pass
+
+    @abstractmethod
+    def _shadow_run(self):
         pass
 
 
@@ -30,9 +40,10 @@ class Click(Action):
                  scenario: Scenario,
                  by: By,
                  path: str,
+                 shadow_root: WebElement = None,
                  as_script: bool = False,
                  is_opening_window: bool = False):
-        super().__init__(scenario, as_script)
+        super().__init__(scenario, as_script, shadow_root)
         self.__is_opening_window: bool = is_opening_window
         self.__win_count: int = 1
         self.__by = by
@@ -60,6 +71,11 @@ class Click(Action):
 
         return self
 
+    def _shadow_run(self):
+        button: WebElement = self._shadow_root.find_element(self.__by, self.__path)
+        button.click()
+        pass
+
     @property
     def New_Window(self) -> str:
         return self.__new_window
@@ -74,8 +90,9 @@ class GetElement(Action):
                  scenario: Scenario,
                  by: By,
                  path: str,
+                 shadow_root: WebElement = None,
                  as_script: bool = False):
-        super().__init__(scenario, as_script)
+        super().__init__(scenario, as_script, shadow_root)
         self.__by = by
         self.__path = path
         self._element = None
@@ -83,6 +100,9 @@ class GetElement(Action):
     def _run(self):
         self._scenario.Wait.until(EC.visibility_of_element_located((self.__by, self.__path)))
         return self
+
+    def _shadow_run(self):
+        pass
 
     @property
     def Element(self) -> WebElement:
@@ -95,8 +115,9 @@ class Selector(Action):
                  by: By,
                  path: str,
                  option: str,
+                 shadow_root: WebElement = None,
                  as_script: bool = False):
-        super().__init__(scenario, as_script)
+        super().__init__(scenario, as_script, shadow_root)
         self.__by = by
         self.__path = path
         self.__option = option
@@ -106,6 +127,9 @@ class Selector(Action):
         select_element.select_by_value(self.__option)
         return self
 
+    def _shadow_run(self):
+        pass
+
 
 class Input(Action):
     def __init__(self,
@@ -113,8 +137,9 @@ class Input(Action):
                  by: By,
                  path: str,
                  data: str,
+                 shadow_root: WebElement = None,
                  as_script: bool = False):
-        super().__init__(scenario, as_script)
+        super().__init__(scenario, as_script, shadow_root)
         self.__by = by
         self.__path = path
         self.__data = data
@@ -124,6 +149,9 @@ class Input(Action):
         input_element.send_keys(self.__data)
         return self
 
+    def _shadow_run(self):
+        pass
+
 
 class WaitElementVisible(Action):
     def __init__(self,
@@ -131,9 +159,10 @@ class WaitElementVisible(Action):
                  by: By,
                  path: str,
                  data: str,
+                 shadow_root: WebElement = None,
                  hide: bool = False,
                  as_script: bool = False):
-        super().__init__(scenario, as_script)
+        super().__init__(scenario, as_script, shadow_root)
         self.__by = by
         self.__path = path
         self.__data = data
@@ -147,6 +176,9 @@ class WaitElementVisible(Action):
 
         return self
 
+    def _shadow_run(self):
+        pass
+
 
 class OpenUrl(Action):
     def __init__(self,
@@ -154,7 +186,7 @@ class OpenUrl(Action):
                  url: str,
                  in_new_window: bool = False,
                  as_script: bool = False):
-        super().__init__(scenario, as_script)
+        super().__init__(scenario, as_script, None)
         self.__url = url
         self.__in_new_window = in_new_window
         self.__new_window = None
@@ -177,6 +209,9 @@ class OpenUrl(Action):
 
         return self
 
+    def _shadow_run(self):
+        pass
+
     @property
     def New_Window(self) -> str:
         return self.__new_window
@@ -184,3 +219,8 @@ class OpenUrl(Action):
     @property
     def Current_Window(self) -> str:
         return self.__cur_window
+
+
+def GetShadowRoot(wait: WebDriverWait, driver: WebDriver, by: By, path: str) -> WebElement:
+    shadow_host = wait.until(EC.presence_of_element_located((by, path)))
+    return driver.execute_script('return arguments[0].shadowRoot', shadow_host)
