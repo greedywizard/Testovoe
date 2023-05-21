@@ -4,8 +4,26 @@ from selenium.webdriver.support import expected_conditions as EC
 from Automizer.Scenario import Scenario
 
 
+class GetShadowRootResult:
+    def __init__(self):
+        self.__element = None
+
+    @property
+    def Element(self) -> WebElement:
+        return self.__element
+
+    @Element.setter
+    def Element(self, value: WebElement):
+        self.__element = value
+
+
 def GetShadowRoot(scenario: Scenario,
                   by: By,
-                  path: str) -> WebElement:
+                  path: str) -> GetShadowRootResult:
+    result: GetShadowRootResult = GetShadowRootResult()
+
     shadow_host = scenario.Wait.until(EC.presence_of_element_located((by, path)))
-    return scenario.Driver.execute_script('return arguments[0].shadowRoot', shadow_host)
+    result.Element = scenario.Driver.execute_script('return arguments[0].shadowRoot', shadow_host)
+
+    return result
+

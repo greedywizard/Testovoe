@@ -13,21 +13,21 @@ class ConnectScroll(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self):
-        Actions.OpenUrl(self, url=URLs.Scroll_Alpha).Exec()
+        Actions.OpenUrl(self, url=URLs.Scroll_Alpha)
 
-        Actions.Click(self, By.XPATH, "/html/body/div/div/div[1]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a").Exec()
+        Actions.Click(self, By.XPATH, "/html/body/div/div/div[1]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a")
 
-        shadow_root = Actions.GetShadowRoot(self.Wait, self.Driver, By.XPATH, "/html/body/onboard-v2")
+        result_sr = Actions.GetShadowRoot(self, By.XPATH, "/html/body/onboard-v2")
         r: Actions.Click = Actions.Click(self,
                                          By.CSS_SELECTOR,
                                          "section > div > div > div > div > div > div > div > div.scroll-container.svelte-1qwmck3 >"
                                          " div > div > div > div.wallet-button-container.svelte-1vlog3j > button > div",
-                                         shadow_root=shadow_root,
-                                         is_opening_window=True).Exec()
+                                         shadow_root=result_sr.Element,
+                                         is_opening_window=True)
 
         self.Active_Window = r.New_Window
 
-        Actions.Click(self, By.XPATH, "//button[text()='Next']").Exec()
-        Actions.Click(self, By.XPATH, "//button[text()='Connect']").Exec()
+        Actions.Click(self, By.XPATH, "//button[text()='Next']")
+        Actions.Click(self, By.XPATH, "//button[text()='Connect']")
 
         self.Active_Window = r.Old_Window

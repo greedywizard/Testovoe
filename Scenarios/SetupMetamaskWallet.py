@@ -13,7 +13,7 @@ class SetupMetamaskWallet(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self):
-        Actions.OpenUrl(self, url=URLs.Metamask_Settings_Advance).Exec()
+        Actions.OpenUrl(self, url=URLs.Metamask_Settings_Advance)
 
-        Actions.Click(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[5]/div[2]/div/label/div[1]/div[1]/div[2]").Exec()
-        Actions.Click(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[1]/div[1]/div[2]").Exec()
+        Actions.Click(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[5]/div[2]/div/label/div[1]/div[1]/div[2]")
+        Actions.Click(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[1]/div[1]/div[2]")
