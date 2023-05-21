@@ -12,7 +12,7 @@ class ConnectScroll(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def _run(self):
+    def Exec(self):
         Actions.OpenUrl(self, url=URLs.Scroll_Alpha).Exec()
 
         Actions.Click(self, By.XPATH, "/html/body/div/div/div[1]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a").Exec()

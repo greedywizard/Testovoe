@@ -15,7 +15,7 @@ class OpenMetamaskWallet(Scenario):
         super().__init__(driver, wait)
         self.__sp = seed_phrase
 
-    def _run(self):
+    def Exec(self):
         Actions.OpenUrl(self, url=URLs.Metamask_Home).Exec()
 
         while True:

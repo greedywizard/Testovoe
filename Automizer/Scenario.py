@@ -25,17 +25,9 @@ class Scenario(ABC):
 
     @Active_Window.setter
     def Active_Window(self, value: str):
+        self.Driver.switch_to.window(value)
         self._active_window = value
 
     @abstractmethod
-    def _run(self):
-        pass
-
-    @final
     def Exec(self):
-        self._run()
-
-        v = self.Driver.current_window_handle
-
-        if self.Active_Window != self.Driver.current_window_handle:
-            self.Driver.switch_to.window(self.Active_Window)
+        pass

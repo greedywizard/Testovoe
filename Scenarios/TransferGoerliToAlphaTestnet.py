@@ -12,7 +12,7 @@ class TransferGoerliToAlphaTestnet(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def _run(self):
+    def Exec(self):
         Actions.OpenUrl(self, URLs.Scroll_Bridge).Exec()
 
         return self
