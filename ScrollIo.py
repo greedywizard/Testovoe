@@ -57,4 +57,3 @@ class ScrollIo:
         # "Publish"
         self.__automizer.click_button_by_xpath("/html/body/div[1]/main/section/div[2]/form/div[14]/button[text()='Verify & publish']")
         self.__automizer.switch_to_prev_window()
-

@@ -24,19 +24,19 @@ for handle in all_window_handles[1:]:
     driver.close()
 driver.switch_to.window(all_window_handles[0])
 
-OpenMetamaskWallet(driver, wait, seed_phrase).Exec()
+OpenMetamaskWallet(driver, wait).Exec({"seed": seed_phrase})
 SetupMetamaskWallet(driver, wait).Exec()
 ConnectScroll(driver, wait).Exec()
-TransferGoerliToAlphaTestnet(driver, wait).Exec()
+try:
+    TransferGoerliToAlphaTestnet(driver, wait).Exec()
+except ValueError:
+    print('clear account')
+ConnectUniswap(driver, wait).Exec()
+# SwapEthToWeth(driver, wait).Exec()
+
+
 
 # Начало
-# goerli_balance = mm.check_balance()
-# print("goerli_balance:", goerli_balance)
-# if goerli_balance == 0.0:
-#     mm.clear_account()
-# else:
-#     sio.transfer_goerli_to_alphatest(goerli_balance/10.0)
-#     us.connect_wallet()
 #     balance = us.swap_eth_to_weth(0.3)
 #     us.swap_weth_to_usdc()
 #     us.add_liquid()

@@ -2,3 +2,5 @@ from .OpenMetamaskWallet import OpenMetamaskWallet
 from .SetupMetamaskWallet import SetupMetamaskWallet
 from .ConnectScroll import ConnectScroll
 from .TransferGoerliToAlphaTestnet import TransferGoerliToAlphaTestnet
+from .ConnectUniswap import ConnectUniswap
+from .SwapEthToWeth import SwapEthToWeth

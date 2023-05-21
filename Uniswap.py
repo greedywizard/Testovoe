@@ -14,42 +14,8 @@ class Uniswap:
         self.__wait = WebDriverWait(driver, 20)
         self.__automizer = Automizer(driver, wait_time=15)
 
-    @staticmethod
-    def generate_half_random(target_number):
-        pointer = 100
-        lower_bound = int(target_number * 0.4 * pointer)  # 40% от искомого числа
-        upper_bound = int(target_number * 0.6 * pointer)  # 60% от искомого числа
 
-        random_number = random.randint(lower_bound, upper_bound)
-        return random_number / pointer
 
-    def connect_wallet(self):
-        self.__driver.get("https://uniswap-v3.scroll.io/#/swap")
-
-        # "Connect" кнопка
-        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
-        # "Metamask" конпка
-        self.__automizer.click_button_by_id("metamask")
-        # Переключение на всплвающее окно
-        self.__automizer.switch_to_new_window()
-        # "Next"
-        self.__automizer.click_button_by_xpath("//button[text()='Next']")
-        # "Connect"
-        self.__automizer.click_button_by_xpath("//button[text()='Connect']")
-        # Переключение на исходное окно
-        self.__automizer.switch_to_prev_window()
-        # Кнопка около кошелька для выбор сети
-        self.__automizer.click_button_by_xpath("/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-        # "Scroll alpha testnet"
-        self.__automizer.click_button_by_xpath("//button[.//div[text()='Scroll Alpha']]")
-        # Переключение на всплвающее окно
-        self.__automizer.switch_to_new_window()
-        # "Approve"
-        self.__automizer.click_button_by_xpath("//button[text()='Approve']")
-        # "Switch network"
-        self.__automizer.click_button_by_xpath("//button[text()='Switch network']")
-        # Переключение на исходное окно
-        self.__automizer.switch_to_prev_window()
 
     def swap_eth_to_weth(self, value: float) -> float:
         self.__driver.get("https://uniswap-v3.scroll.io/#/swap")

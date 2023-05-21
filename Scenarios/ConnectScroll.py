@@ -1,5 +1,5 @@
 from selenium.webdriver.common.by import By
-from Automizer.Scenario import Scenario
+from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -12,7 +12,9 @@ class ConnectScroll(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self):
+    def Exec(self, args=None):
+        result: ScenarioResult = ScenarioResult()
+
         Actions.OpenUrl(self, url=URLs.Scroll_Alpha)
 
         Actions.Click(self, By.XPATH, "/html/body/div/div/div[1]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a")
@@ -31,3 +33,5 @@ class ConnectScroll(Scenario):
         Actions.Click(self, By.XPATH, "//button[text()='Connect']")
 
         self.Active_Window = r.Old_Window
+
+        return result
