@@ -33,16 +33,14 @@ except ValueError:
     print('clear account')
 ConnectUniswap(driver, wait).Exec()
 # SwapEthToWeth(driver, wait).Exec()
-
-
+# SwapWethToUsdc(driver, wait).Exec()
+# Добавить ликвидность
+# SwapUsdcToEth(driver, wait).Exec()
+# res = DeployContract(driver, wait).Exec()
+# ValidateContract().Exec(res.ResultData)
 
 # Начало
-#     balance = us.swap_eth_to_weth(0.3)
-#     us.swap_weth_to_usdc()
 #     us.add_liquid()
-#     us.swap_usdc_to_eth()
-#     deploy = rem.deploy_contract()
-#     sio.validate_contract(deploy[0], deploy[1])
 #     o = oz.create_contract()
 #     a = rem.deploy_token(o[0], o[1])
 #     mm.add_token(a)

@@ -37,9 +37,7 @@ class SwapEthToWeth(Scenario):
         Actions.Click(self, By.XPATH, "//button[text()='Confirm']")
         # Переключение на исходное окно
         self.Active_Window = res.Old_Window
-
-        result.ResultData["value"] = val
-
+        
         return result
 
     @staticmethod

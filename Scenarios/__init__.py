@@ -4,3 +4,7 @@ from .ConnectScroll import ConnectScroll
 from .TransferGoerliToAlphaTestnet import TransferGoerliToAlphaTestnet
 from .ConnectUniswap import ConnectUniswap
 from .SwapEthToWeth import SwapEthToWeth
+from .SwapWethToUsdc import SwapWethToUsdc
+from .SwapUsdcToEth import SwapUsdcToEth
+from .DeployContract import DeployContract
+from .ValidateContract import ValidateContract

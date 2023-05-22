@@ -7,24 +7,24 @@ from Automizer.Scenario import Scenario
 
 class ClickResult:
     def __init__(self):
-        self._new_window = None
-        self._old_window = None
+        self.__new_window = None
+        self.__old_window = None
 
     @property
     def New_Window(self) -> str:
-        return self._new_window
+        return self.__new_window
 
     @New_Window.setter
     def New_Window(self, value: str):
-        self._new_window = value
+        self.__new_window = value
 
     @property
     def Old_Window(self) -> str:
-        return self._old_window
+        return self.__old_window
 
     @Old_Window.setter
     def Old_Window(self, value: str):
-        self._old_window = value
+        self.__old_window = value
 
 
 def Click(scenario: Scenario,
