@@ -98,7 +98,7 @@ class Metamask:
         except NoAlertPresentException:
             # Продолжить, если нет модального диалога
             pass
-        pass
+
 
         self.__automizer.input_by_id("custom-address", address)
 

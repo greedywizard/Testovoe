@@ -34,20 +34,17 @@ except ValueError:
 ConnectUniswap(driver, wait).Exec()
 # SwapEthToWeth(driver, wait).Exec()
 # SwapWethToUsdc(driver, wait).Exec()
-# Добавить ликвидность
+# AddLiquid(driver, wait)
 # SwapUsdcToEth(driver, wait).Exec()
 # res = DeployContract(driver, wait).Exec()
 # ValidateContract().Exec(res.ResultData)
+res = CreateToken(driver, wait).Exec()
+res = DeployToken(driver, wait).Exec(res)
+AddToken(driver, wait).Exec(res)
+SwapToScrollAlpha(driver, wait).Exec()
+CreateSecondAccount(driver, wait).Exec()
+SendBetweenAccounts(driver, wait).Exec()
 
-# Начало
-#     us.add_liquid()
-#     o = oz.create_contract()
-#     a = rem.deploy_token(o[0], o[1])
-#     mm.add_token(a)
-#     mm.swap_to_sat()
-#     mm.create_sencond_account()
-#     mm.send_to_2_account_and_revert()
-#     pass
 
 input()
 driver.quit()
