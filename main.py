@@ -6,7 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from Scenarios import *
 
-seed_phrase: str = 'milk craft duck galaxy occur copy rich drastic also wise hair project'
+seed_phrase: str = ''
 
 options = webdriver.ChromeOptions()
 options.add_extension('./Extentions/metamask.crx')
