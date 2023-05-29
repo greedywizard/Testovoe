@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import List
-
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -9,6 +8,7 @@ class Scenario(ABC):
     def __init__(self, driver: WebDriver, wait: WebDriverWait):
         self._driver: WebDriver = driver
         self._wait: WebDriverWait = wait
+
         self._active_window: str = driver.current_window_handle
 
     @property

@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
-
 import URLs
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,7 +13,7 @@ class OpenMetamaskWallet(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args = None):
+    def Exec(self, args=None):
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, url=URLs.Metamask_Home)
