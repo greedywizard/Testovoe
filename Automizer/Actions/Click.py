@@ -2,7 +2,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException
+
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario
+from Automizer.Enums import WindowActions
 
 
 class ClickResult:
@@ -32,20 +35,23 @@ def Click(scenario: Scenario,
           path: str,
           as_script: bool = False,
           shadow_root: WebElement = None,
-          is_opening_window: bool = False) -> ClickResult:
+          window_action: WindowActions = None) -> ClickResult:
     result: ClickResult = ClickResult()
     win_count = scenario.Driver.window_handles.__len__()
 
     def _run():
         button: WebElement = scenario.Wait.until(EC.visibility_of_element_located((by, path)))
 
-        if as_script:
-            scenario.Driver.execute_script("arguments[0].click();", button)
-        else:
-            try:
+        try:
+            if as_script:
+                scenario.Driver.execute_script("arguments[0].click();", button)
+            else:
                 button.click()
-            except ElementClickInterceptedException:
-                button = scenario.Wait.until(EC.element_to_be_clickable((by, path)))
+        except ElementClickInterceptedException:
+            button = scenario.Wait.until(EC.element_to_be_clickable((by, path)))
+            if as_script:
+                scenario.Driver.execute_script("arguments[0].click();", button)
+            else:
                 button.click()
 
     def _shadow_run():
@@ -59,9 +65,12 @@ def Click(scenario: Scenario,
     else:
         _shadow_run()
 
-    if is_opening_window:
+    if window_action == WindowActions.Open:
         scenario.Wait.until(EC.number_of_windows_to_be(win_count + 1))
         result.Old_Window = scenario.Driver.current_window_handle
         result.New_Window = scenario.Driver.window_handles[-1]
+
+    if window_action == WindowActions.Close:
+        scenario.Wait.until(EC.number_of_windows_to_be(win_count - 1))
 
     return result

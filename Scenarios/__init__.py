@@ -15,3 +15,4 @@ from .SwapToScrollAlpha import SwapToScrollAlpha
 from .CreateSecondAccount import CreateSecondAccount
 from .SendBetweenAccounts import SendBetweenAccounts
 from .AddLiquid import AddLiquid
+from .WaitTransferGoerliToAlpha import WaitTransferGoerliToAlpha

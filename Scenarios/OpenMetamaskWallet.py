@@ -14,12 +14,14 @@ class OpenMetamaskWallet(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self, args=None):
+        Logger.Info("Start OpenMetamaskWallet()")
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, url=URLs.Metamask_Home)
 
         while True:
             try:
+                Logger.Info("Try import wallet")
                 Actions.Click(self, By.ID, "onboarding__terms-checkbox")
                 Actions.Click(self, By.XPATH, "//button[@data-testid='onboarding-import-wallet']")
                 break
@@ -37,13 +39,12 @@ class OpenMetamaskWallet(Scenario):
         password: str = '12345678'
         Actions.Input(self, By.XPATH, "//input[@data-testid='create-password-new']", password)
         Actions.Input(self, By.XPATH, "//input[@data-testid='create-password-confirm']", password)
-        # Чекбокс
         Actions.Click(self, By.XPATH, "//input[@data-testid='create-password-terms']")
-        # "Import"
         Actions.Click(self, By.XPATH, "//button[@data-testid='create-password-import']")
 
         while True:
             try:
+                Logger.Info("Try complete import")
                 # "Got it"
                 Actions.Click(self, By.XPATH, "//button[@data-testid='onboarding-complete-done']")
                 break

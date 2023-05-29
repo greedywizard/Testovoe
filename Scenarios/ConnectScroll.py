@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from Automizer.Enums import WindowActions
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,11 +15,12 @@ class ConnectScroll(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self, args=None):
+        Logger.Info("ConnectScroll()")
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, url=URLs.Scroll_Alpha)
 
-        Actions.Click(self, By.XPATH, "/html/body/div/div/div[1]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a")
+        Actions.Click(self, By.XPATH, "/html/body/div/div/div[2]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a")
 
         result_sr = Actions.GetShadowRoot(self, By.XPATH, "/html/body/onboard-v2")
         r: Actions.Click = Actions.Click(self,
@@ -25,12 +28,12 @@ class ConnectScroll(Scenario):
                                          "section > div > div > div > div > div > div > div > div.scroll-container.svelte-1qwmck3 >"
                                          " div > div > div > div.wallet-button-container.svelte-1vlog3j > button > div",
                                          shadow_root=result_sr.Element,
-                                         is_opening_window=True)
+                                         window_action=WindowActions.Open)
 
         self.Active_Window = r.New_Window
 
         Actions.Click(self, By.XPATH, "//button[text()='Next']")
-        Actions.Click(self, By.XPATH, "//button[text()='Connect']")
+        Actions.Click(self, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.Close)
 
         self.Active_Window = r.Old_Window
 

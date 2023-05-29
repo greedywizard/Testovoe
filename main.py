@@ -19,7 +19,7 @@ def main():
     options.add_argument("--no-sandbox")
 
     driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-    wait: WebDriverWait = WebDriverWait(driver, 5)
+    wait: WebDriverWait = WebDriverWait(driver, 15)
 
     wait.until(EC.new_window_is_opened(driver.window_handles))
     all_window_handles = driver.window_handles
@@ -29,16 +29,20 @@ def main():
     driver.switch_to.window(all_window_handles[0])
 
     OpenMetamaskWallet(driver, wait).Exec({"seed": seed_phrase})
-    # SetupMetamaskWallet(driver, wait).Exec()
-    # ConnectScroll(driver, wait).Exec()
+    SetupMetamaskWallet(driver, wait).Exec()
+    ConnectScroll(driver, wait).Exec()
     # try:
     #     TransferGoerliToAlphaTestnet(driver, wait).Exec()
     # except ValueError:
+    #     Logger.Info("There is no Goerli balance")
     #     print('clear account')
-    # ConnectUniswap(driver, wait).Exec()
+    # WaitTransferGoerliToAlpha(driver, wait).Exec()
+    ConnectUniswap(driver, wait).Exec()
     # SwapEthToWeth(driver, wait).Exec()
     # SwapWethToUsdc(driver, wait).Exec()
-    # AddLiquid(driver, wait)
+
+    AddLiquid(driver, wait)
+
     # SwapUsdcToEth(driver, wait).Exec()
     # res = DeployContract(driver, wait).Exec()
     # ValidateContract().Exec(res.ResultData)
@@ -51,6 +55,7 @@ def main():
 
     input()
     driver.quit()
+
 
 if __name__ == "__main__":
     main()
