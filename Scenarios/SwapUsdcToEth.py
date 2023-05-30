@@ -41,7 +41,8 @@ class SwapUsdcToEth(Scenario):
             # Кнопка "max"
             Actions.Click(self, By.XPATH, "//button[text()='Max']")
         except:
-            return
+            Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
+            return result
 
 
         # Ожидаем подсчет
@@ -59,7 +60,7 @@ class SwapUsdcToEth(Scenario):
             # "Next"
             Actions.Click(self, By.XPATH, "//button[text()='Next']")
             # "Approve"
-            Actions.Click(self, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.Close)
+            Actions.Click(self, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.WaitClose)
             # Переключение на исходное окно
             self.Active_Window = res.Old_Window
 
@@ -74,7 +75,7 @@ class SwapUsdcToEth(Scenario):
 
             res = Actions.Click(self, By.XPATH, "//button[.//div[text()='Swap']]", window_action=WindowActions.Open)
             self.Active_Window = res.New_Window
-            Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.Close)
+            Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
             self.Active_Window = res.Old_Window
         else:
             Actions.Click(self, By.ID, "swap-button")
@@ -84,7 +85,7 @@ class SwapUsdcToEth(Scenario):
         # Переключение на всплвающее окно
         self.Active_Window = res.New_Window
         # "Confirm"
-        Actions.Click(self, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]", window_action=WindowActions.Close)
+        Actions.Click(self, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]", window_action=WindowActions.WaitClose)
         # Переключение на исходное окно
         self.Active_Window = res.Old_Window
         # "Close"

@@ -21,7 +21,7 @@ class OpenMetamaskWallet(Scenario):
 
         while True:
             try:
-                Logger.Info("Try import wallet")
+                Logger.Info("Try import wallet...")
                 Actions.Click(self, By.ID, "onboarding__terms-checkbox")
                 Actions.Click(self, By.XPATH, "//button[@data-testid='onboarding-import-wallet']")
                 break
@@ -44,7 +44,7 @@ class OpenMetamaskWallet(Scenario):
 
         while True:
             try:
-                Logger.Info("Try complete import")
+                Logger.Info("Try complete import...")
                 # "Got it"
                 Actions.Click(self, By.XPATH, "//button[@data-testid='onboarding-complete-done']")
                 break

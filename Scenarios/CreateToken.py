@@ -1,6 +1,8 @@
 import time
 from selenium.common import NoAlertPresentException
 from selenium.webdriver.common.by import By
+
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -22,6 +24,7 @@ class CreateToken(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self, args=None):
+        Logger.Info("CreateToken()")
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.OpenZeppelin_Wizard)
@@ -39,7 +42,7 @@ class CreateToken(Scenario):
         result.ResultData["name"] = random_letter
         Actions.Input(self, By.XPATH, "/html/body/div/div[2]/div[1]/div[1]/section[1]/div/label[2]/input", random_letter)
         # много денях
-        Actions.Input(self, By.XPATH, "/html/body/div/div[2]/div[1]/div[1]/section[1]/label/input", str(121002102))
+        Actions.Input(self, By.XPATH, "/html/body/div/div[2]/div[1]/div[1]/section[1]/label/input", str(2124221))
         # Получить код контракта
         result.ResultData["code"] = Actions.GetElement(self, By.XPATH, "/html/body/div/div[2]/div[2]/pre/code").Element.text
         self.Driver.switch_to.default_content()

@@ -1,6 +1,9 @@
 import time
 from selenium.common import NoAlertPresentException
 from selenium.webdriver.common.by import By
+
+from Automizer.Enums import WindowActions
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -15,6 +18,7 @@ class DeployContract(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self, args=None):
+        Logger.Info("DeployContract()")
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Remix)
@@ -27,16 +31,14 @@ class DeployContract(Scenario):
         Actions.Click(self, By.XPATH, "//button[text()='Accept']")
 
         while True:
+            Logger.Info("Waiting github button...")
             try:
                 # "Github"
                 Actions.Click(self, By.XPATH, "//button[text()='GitHub']")
                 break
             except:
                 self.Driver.refresh()
-                try:
-                    Actions.AcceptAlert(self)
-                except NoAlertPresentException:
-                    pass
+                Actions.AcceptAlert(self)
 
         # Ожидание анимаций
         time.sleep(2)
@@ -66,24 +68,25 @@ class DeployContract(Scenario):
         Actions.Click(self, By.ID, "compileBtn")
 
         while True:
+            Logger.Info("Compile contract...")
             try:
                 Actions.GetElement(self, By.CLASS_NAME, "text-success")
                 break
             except:
-                pass
+                return result
 
         # Открыть деплой
         Actions.Click(self, By.ID, "verticalIconsKindudapp")
         # Открыть список enviroment
         Actions.Click(self, By.XPATH, "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[1]/div[1]/div/div/button")
         # Выбрать inject metamsk
-        res = Actions.Click(self, By.XPATH, "//a/span[text()='Injected Provider - MetaMask']")
+        res = Actions.Click(self, By.XPATH, "//a/span[text()='Injected Provider - MetaMask']", window_action=WindowActions.Open)
         # Переключаемся на всплывающее окно
         self.Active_Window = res.New_Window
         # "Next"
         Actions.Click(self, By.XPATH, "//button[text()='Next']")
         # "Connect"
-        Actions.Click(self, By.XPATH, "//button[text()='Connect']")
+        Actions.Click(self, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
         # Переключение на основное окно
         self.Active_Window = res.Old_Window
         # Количество которое будем лочить
@@ -92,16 +95,17 @@ class DeployContract(Scenario):
         Actions.Input(self, By.ID, "unit", "gwei")
         # Время лока
         Actions.Input(self, By.XPATH, "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[2]/div[3]/div[1]/div/div[1]/div[1]/input",
-                                        str(1696118400))
+                      str(1696118400))
 
         while True:
+            Logger.Info("Try start deploy...")
             try:
                 # "Deploy"
-                res = Actions.Click(self, By.XPATH, "//button[.//div[text()='Deploy']]")
+                res = Actions.Click(self, By.XPATH, "//button[.//div[text()='Deploy']]", window_action=WindowActions.Open)
                 # Переключаемся на всплывающее окно
                 self.Active_Window = res.New_Window
                 # "Confirm"
-                Actions.Click(self, By.XPATH, "//button[text()='Confirm']")
+                Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
                 # Переключение на основное окно
                 self.Active_Window = res.Old_Window
                 break
@@ -109,6 +113,7 @@ class DeployContract(Scenario):
                 pass
 
         while True:
+            Logger.Info("Deploying...")
             try:
                 res = Actions.GetElement(self, By.XPATH, "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[4]/div[2]/div/div[1]/div/div[2]/a/i")
                 result.ResultData["address"] = res.Element.get_attribute("content")

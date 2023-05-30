@@ -25,7 +25,7 @@ class SwapWethToUsdc(Scenario):
         try:
             Actions.Click(self, By.XPATH, "//button[text()='I understand']")
         except:
-            pass
+            return result
 
         # Открыть список монет
         Actions.Click(self, By.XPATH, '//*[@id="swap-currency-output"]/div/div[1]/button')
@@ -40,6 +40,7 @@ class SwapWethToUsdc(Scenario):
         try:
             Actions.Click(self, By.XPATH, "//button[text()='Max']")
         except:
+            Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
             return
 
         # Ожидаем подсчет
@@ -53,7 +54,7 @@ class SwapWethToUsdc(Scenario):
             self.Active_Window = res.New_Window
             Actions.Click(self, By.XPATH, "//button[text()='Max']")
             Actions.Click(self, By.XPATH, "//button[text()='Next']")
-            Actions.Click(self, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.Close)
+            Actions.Click(self, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.WaitClose)
             self.Active_Window = res.Old_Window
 
             # Ожидание подсчетов
@@ -69,14 +70,14 @@ class SwapWethToUsdc(Scenario):
             # Swap
             res = Actions.Click(self, By.XPATH, "//button[.//div[text()='Swap']]", window_action=WindowActions.Open)
             self.Active_Window = res.New_Window
-            Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.Close)
+            Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
             self.Active_Window = res.Old_Window
         else:
             Actions.Click(self, By.ID, "swap-button")
 
         res = Actions.Click(self, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)
         self.Active_Window = res.New_Window
-        Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.Close)
+        Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
         self.Active_Window = res.Old_Window
         # "Close"
         Actions.Click(self, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")

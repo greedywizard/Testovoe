@@ -9,7 +9,7 @@ class SelectedResult:
     pass
 
 
-def Selected(scenario: Scenario,
+def Selector(scenario: Scenario,
              by: By,
              path: str,
              option: str) -> SelectedResult:

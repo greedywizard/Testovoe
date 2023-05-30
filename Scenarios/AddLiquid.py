@@ -34,7 +34,7 @@ class AddLiquid(Scenario):
         self.Active_Window = res.New_Window
         Actions.Click(self, By.XPATH, "//button[text()='Max']")
         Actions.Click(self, By.XPATH, "//button[@data-testid='page-container-footer-next']")
-        Actions.Click(self, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.Close)
+        Actions.Click(self, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         self.Active_Window = res.Old_Window
 
         return result

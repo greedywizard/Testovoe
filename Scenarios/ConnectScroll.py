@@ -33,7 +33,7 @@ class ConnectScroll(Scenario):
         self.Active_Window = r.New_Window
 
         Actions.Click(self, By.XPATH, "//button[text()='Next']")
-        Actions.Click(self, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.Close)
+        Actions.Click(self, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
 
         self.Active_Window = r.Old_Window
 

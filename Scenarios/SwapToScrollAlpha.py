@@ -1,6 +1,8 @@
 import time
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
+
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -15,6 +17,7 @@ class SwapToScrollAlpha(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self, args=None):
+        Logger.Info("SwapToScrollAlpha()")
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Metamask_Home)

@@ -40,7 +40,7 @@ class SwapEthToWeth(Scenario):
         # Переключение на всплвающее окно
         self.Active_Window = res.New_Window
         # "Confirm"
-        Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.Close)
+        Actions.Click(self, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
         # Переключение на исходное окно
         self.Active_Window = res.Old_Window
         

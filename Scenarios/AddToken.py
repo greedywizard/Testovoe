@@ -3,6 +3,8 @@ import time
 from selenium.common import NoAlertPresentException
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
+
+from Automizer.Logger import Logger
 from Automizer.Scenario import Scenario, ScenarioResult
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -17,6 +19,7 @@ class AddToken(Scenario):
         super().__init__(driver, wait)
 
     def Exec(self, args=None):
+        Logger.Info("AddToken()")
         result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Metamask_ImportToken)
@@ -26,6 +29,7 @@ class AddToken(Scenario):
         Actions.Input(self, By.ID, "custom-address", args["address"])
 
         while True:
+            Logger.Info("Importing token...")
             try:
                 symbol = Actions.GetElement(self, By.ID, "custom-symbol").Element.text
                 if not symbol or symbol is None:

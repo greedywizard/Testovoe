@@ -36,6 +36,10 @@ def Click(scenario: Scenario,
           as_script: bool = False,
           shadow_root: WebElement = None,
           window_action: WindowActions = None) -> ClickResult:
+    """
+    Имитирует нажатие на элемент
+    """
+
     result: ClickResult = ClickResult()
     win_count = scenario.Driver.window_handles.__len__()
 
@@ -70,7 +74,7 @@ def Click(scenario: Scenario,
         result.Old_Window = scenario.Driver.current_window_handle
         result.New_Window = scenario.Driver.window_handles[-1]
 
-    if window_action == WindowActions.Close:
+    if window_action == WindowActions.WaitClose:
         scenario.Wait.until(EC.number_of_windows_to_be(win_count - 1))
 
     return result
