@@ -39,11 +39,9 @@ def main():
     # WaitTransferGoerliToAlpha(driver, wait).Exec()
     ConnectUniswap(driver, wait).Exec()
     # SwapEthToWeth(driver, wait).Exec()
-    # SwapWethToUsdc(driver, wait).Exec()
-
-    AddLiquid(driver, wait)
-
-    # SwapUsdcToEth(driver, wait).Exec()
+    SwapWethToUsdc(driver, wait).Exec()
+    # AddLiquid(driver, wait).Exec()
+    SwapUsdcToEth(driver, wait).Exec()
     # res = DeployContract(driver, wait).Exec()
     # ValidateContract().Exec(res.ResultData)
     # res = CreateToken(driver, wait).Exec()
