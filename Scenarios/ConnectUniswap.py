@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -14,9 +14,8 @@ class ConnectUniswap(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args=None):
+    def _exec(self):
         Logger.Info("ConnectUniswap()")
-        result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Uniswap_Swap)
 
@@ -32,5 +31,3 @@ class ConnectUniswap(Scenario):
         Actions.Click(self, By.XPATH, "//button[text()='Approve']")
         Actions.Click(self, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
         self.Active_Window = res.Old_Window
-
-        return result

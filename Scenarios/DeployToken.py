@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -12,14 +12,25 @@ import URLs
 
 
 class DeployToken(Scenario):
+    class Result:
+        def __init__(self):
+            self.address: str = None
+
+    class Data:
+        def __init__(self):
+            self.name: str = None
+            self.code: str = None
+
     def __init__(self,
                  driver: WebDriver,
-                 wait: WebDriverWait):
+                 wait: WebDriverWait,
+                 data: Data):
         super().__init__(driver, wait)
+        self.__data = data
 
-    def Exec(self, args=None):
-        Logger.Info("CreateToken()")
-        result: ScenarioResult = ScenarioResult()
+    def _exec(self):
+        Logger.Info("DeployToken()")
+        result = self.Result()
 
         Actions.OpenUrl(self, URLs.Remix)
 
@@ -38,15 +49,15 @@ class DeployToken(Scenario):
         # Ввод имени файла
         Actions.Click(self, By.ID, "createNewFile")
         action_chain = ActionChains(self.Driver)
-        action_chain.send_keys(f"{args['name']}.sol").perform()
+        action_chain.send_keys(f"{self.__data.name}.sol").perform()
         action_chain.send_keys(Keys.ENTER).perform()
         # Открыть файл для редактирования
-        Actions.Click(self, By.XPATH, f"//span[text()='{args['name']}.sol']")
+        Actions.Click(self, By.XPATH, f"//span[text()='{self.__data.name}.sol']")
         # Установка каретки в редактор
         Actions.Click(self, By.XPATH, "/html/body/div[1]/div[1]/div[5]/div[1]/div[2]/div/div/section/div/div/div[1]/div[2]/div[1]/div[4]")
 
         # Ввод кода
-        code_arr = args['code'].split('{')
+        code_arr = self.__data.code.split('{')
         for i in range(code_arr.__len__()):
             if i != 0:
                 action_chain.send_keys('{')
@@ -93,7 +104,7 @@ class DeployToken(Scenario):
             try:
                 element = Actions.GetElement(self, By.XPATH,
                     "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[4]/div[2]/div/div[1]/div/div[2]/a/i")
-                result.ResultData["address"] = element.Element.get_attribute("content")
+                result.address = element.Element.get_attribute("content")
                 break
             except:
                 pass

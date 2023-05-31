@@ -3,7 +3,7 @@ from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
 
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -16,9 +16,8 @@ class SwapToScrollAlpha(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args=None):
+    def _exec(self, args=None):
         Logger.Info("SwapToScrollAlpha()")
-        result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Metamask_Home)
 
@@ -26,5 +25,3 @@ class SwapToScrollAlpha(Scenario):
         Actions.Click(self, By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div', as_script=True)
         # Выбрать сеть goerli
         Actions.Click(self, By.XPATH, '/html/body/div[1]/div/div[2]/div/div[2]/li[.//span[text()="Scroll Alpha"]]', as_script=True)
-
-        return result

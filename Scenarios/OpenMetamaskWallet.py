@@ -1,21 +1,25 @@
 from selenium.webdriver.common.by import By
 import URLs
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
 
 
 class OpenMetamaskWallet(Scenario):
+    class Data:
+        def __init__(self):
+            self.seed: str = None
     def __init__(self,
                  driver: WebDriver,
-                 wait: WebDriverWait):
+                 wait: WebDriverWait,
+                 data: Data):
         super().__init__(driver, wait)
+        self.__data = data
 
-    def Exec(self, args=None):
+    def _exec(self):
         Logger.Info("Start OpenMetamaskWallet()")
-        result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, url=URLs.Metamask_Home)
 
@@ -30,7 +34,7 @@ class OpenMetamaskWallet(Scenario):
 
         Actions.Click(self, By.XPATH, "//button[@data-testid='metametrics-i-agree']")
 
-        seed_arr = args["seed"].split(' ')
+        seed_arr = self.__data.seed.split(' ')
         for i in range(seed_arr.__len__()):
             Actions.Input(self, By.ID, f"import-srp__srp-word-{i}", seed_arr[i])
 
@@ -53,5 +57,3 @@ class OpenMetamaskWallet(Scenario):
 
         Actions.Click(self, By.XPATH, "//button[@data-testid='pin-extension-next']")
         Actions.Click(self, By.XPATH, "//button[@data-testid='pin-extension-done']")
-
-        return result

@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -12,14 +12,19 @@ import URLs
 
 
 class DeployContract(Scenario):
+    class Result:
+        def __init__(self):
+            self.compile_version = None
+            self.address = None
+
     def __init__(self,
                  driver: WebDriver,
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args=None):
+    def _exec(self):
         Logger.Info("DeployContract()")
-        result: ScenarioResult = ScenarioResult()
+        result = self.Result()
 
         Actions.OpenUrl(self, URLs.Remix)
 
@@ -63,7 +68,7 @@ class DeployContract(Scenario):
 
         # Открыть компилятор
         Actions.Click(self, By.ID, "verticalIconsKindsolidity")
-        result.ResultData["compile_version"] = Actions.GetElement(self, By.ID, "versionSelector").Element.text.split('soljson-')[1].split('.js')[0]
+        result.compile_version = Actions.GetElement(self, By.ID, "versionSelector").Element.text.split('soljson-')[1].split('.js')[0]
         # "Compile"
         Actions.Click(self, By.ID, "compileBtn")
 
@@ -116,7 +121,7 @@ class DeployContract(Scenario):
             Logger.Info("Deploying...")
             try:
                 res = Actions.GetElement(self, By.XPATH, "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[4]/div[2]/div/div[1]/div/div[2]/a/i")
-                result.ResultData["address"] = res.Element.get_attribute("content")
+                result.address = res.Element.get_attribute("content")
                 break
             except:
                 pass

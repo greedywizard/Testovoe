@@ -5,7 +5,7 @@ from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
 
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -13,20 +13,25 @@ import URLs
 
 
 class AddToken(Scenario):
+    class Data:
+        def __init__(self):
+            self.address: str = None
+
     def __init__(self,
                  driver: WebDriver,
-                 wait: WebDriverWait):
+                 wait: WebDriverWait,
+                 data: Data):
         super().__init__(driver, wait)
+        self.__data = data
 
-    def Exec(self, args=None):
+    def _exec(self):
         Logger.Info("AddToken()")
-        result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Metamask_ImportToken)
 
         Actions.AcceptAlert(self)
 
-        Actions.Input(self, By.ID, "custom-address", args["address"])
+        Actions.Input(self, By.ID, "custom-address", self.__data.address)
 
         while True:
             Logger.Info("Importing token...")
@@ -40,5 +45,3 @@ class AddToken(Scenario):
                 pass
 
         Actions.Click(self, By.XPATH, "//button[text()='Add custom token']", as_script=True)
-
-        return result

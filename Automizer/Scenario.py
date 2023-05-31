@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, final
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -28,8 +28,13 @@ class Scenario(ABC):
         self.Driver.switch_to.window(value)
         self._active_window = value
 
+    @final
+    def Run(self, skip=False):
+        if not skip:
+            self._exec()
+
     @abstractmethod
-    def Exec(self, args=None) -> 'ScenarioResult':
+    def _exec(self):
         pass
 
 
@@ -46,22 +51,4 @@ class Repeater:
     def Args(self):
         return self.__args
 
-
-class ScenarioResult:
-    def __init__(self):
-        self.__result = dict()
-        self.__args = None
-        self.__pre_scenarios = None
-
-    @property
-    def PreScenarios(self) -> List[Repeater]:
-        return self.__pre_scenarios
-
-    @PreScenarios.setter
-    def PreScenarios(self, value: List[Repeater]):
-        self.__pre_scenarios = value
-
-    @property
-    def ResultData(self) -> dict:
-        return self.__result
 

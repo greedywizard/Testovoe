@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -16,16 +16,14 @@ class SwapWethToUsdc(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args=None):
+    def _exec(self, args=None):
         Logger.Info("SwapWethToUsdc()")
-        result: ScenarioResult = ScenarioResult()
-
         Actions.OpenUrl(self, URLs.Uniswap_Swap_Usdc)
 
         try:
             Actions.Click(self, By.XPATH, "//button[text()='I understand']")
         except:
-            return result
+            return
 
         # Открыть список монет
         Actions.Click(self, By.XPATH, '//*[@id="swap-currency-output"]/div/div[1]/button')
@@ -81,5 +79,3 @@ class SwapWethToUsdc(Scenario):
         self.Active_Window = res.Old_Window
         # "Close"
         Actions.Click(self, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
-
-        return result

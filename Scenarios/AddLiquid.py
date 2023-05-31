@@ -4,7 +4,7 @@ from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -17,9 +17,8 @@ class AddLiquid(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args=None):
+    def _exec(self, args=None):
         Logger.Info("AddLiquid()")
-        result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Uniswap_ETH_Liquid)
 
@@ -36,5 +35,3 @@ class AddLiquid(Scenario):
         Actions.Click(self, By.XPATH, "//button[@data-testid='page-container-footer-next']")
         Actions.Click(self, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         self.Active_Window = res.Old_Window
-
-        return result

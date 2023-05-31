@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario, ScenarioResult
+from Automizer.Scenario import Scenario
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 import Automizer.Actions as Actions
@@ -17,9 +17,8 @@ class SwapUsdcToEth(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def Exec(self, args=None):
+    def _exec(self, args=None):
         Logger.Info("SwapUsdcToEth()")
-        result: ScenarioResult = ScenarioResult()
 
         Actions.OpenUrl(self, URLs.Uniswap_Swap_Usdc)
 
@@ -42,8 +41,7 @@ class SwapUsdcToEth(Scenario):
             Actions.Click(self, By.XPATH, "//button[text()='Max']")
         except:
             Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
-            return result
-
+            return
 
         # Ожидаем подсчет
         time.sleep(3)
@@ -90,5 +88,3 @@ class SwapUsdcToEth(Scenario):
         self.Active_Window = res.Old_Window
         # "Close"
         Actions.Click(self, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
-
-        return result

@@ -19,7 +19,7 @@ def main():
     options.add_argument("--no-sandbox")
 
     driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-    wait: WebDriverWait = WebDriverWait(driver, 15)
+    wait: WebDriverWait = WebDriverWait(driver, 5)
 
     wait.until(EC.new_window_is_opened(driver.window_handles))
     all_window_handles = driver.window_handles
@@ -28,28 +28,38 @@ def main():
         driver.close()
     driver.switch_to.window(all_window_handles[0])
 
-    OpenMetamaskWallet(driver, wait).Exec({"seed": seed_phrase})
-    SetupMetamaskWallet(driver, wait).Exec()
-    ConnectScroll(driver, wait).Exec()
+    data1 = OpenMetamaskWallet.Data()
+    data1.seed = seed_phrase
+    OpenMetamaskWallet(driver, wait, data1).Run()
+    SetupMetamaskWallet(driver, wait).Run()
+    ConnectScroll(driver, wait).Run()
     # try:
-    #     TransferGoerliToAlphaTestnet(driver, wait).Exec()
+    #     TransferGoerliToAlphaTestnet(driver, wait).Run()
     # except ValueError:
     #     Logger.Info("There is no Goerli balance")
     #     print('clear account')
-    # WaitTransferGoerliToAlpha(driver, wait).Exec()
-    ConnectUniswap(driver, wait).Exec()
-    # SwapEthToWeth(driver, wait).Exec()
-    # SwapWethToUsdc(driver, wait).Exec()
-    # AddLiquid(driver, wait).Exec()
-    # SwapUsdcToEth(driver, wait).Exec()
-    res = DeployContract(driver, wait).Exec()
-    ValidateContract(driver, wait).Exec(res.ResultData)
-    res = CreateToken(driver, wait).Exec()
-    res = DeployToken(driver, wait).Exec(res)
-    AddToken(driver, wait).Exec(res)
-    SwapToScrollAlpha(driver, wait).Exec()
-    CreateSecondAccount(driver, wait).Exec()
-    # SendBetweenAccounts(driver, wait).Exec()
+    # WaitTransferGoerliToAlpha(driver, wait).Run()
+    ConnectUniswap(driver, wait).Run()
+    # SwapEthToWeth(driver, wait).Run()
+    # SwapWethToUsdc(driver, wait).Run()
+    # AddLiquid(driver, wait).Run()
+    # SwapUsdcToEth(driver, wait).Run()
+    res2 = DeployContract(driver, wait).Run()
+    data2 = ValidateContract.Data()
+    data2.address = res2.address
+    data2.compile_version = res2.compile_version
+    ValidateContract(driver, wait, data2).Run()
+    res3 = CreateToken(driver, wait).Run()
+    data3 = DeployToken.Data()
+    data3.name = res3.name
+    data3.code = res3.code
+    res4 = DeployToken(driver, wait, data3).Run()
+    data4 = AddToken.Data()
+    data4.address = res4.address
+    AddToken(driver, wait, data4).Run()
+    SwapToScrollAlpha(driver, wait).Run()
+    CreateSecondAccount(driver, wait).Run()
+    # SendBetweenAccounts(driver, wait).Run()
 
     input()
     driver.quit()
