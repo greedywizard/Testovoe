@@ -11,10 +11,11 @@ class OpenMetamaskWallet(Scenario):
     class Data:
         def __init__(self):
             self.seed: str = None
+
     def __init__(self,
                  driver: WebDriver,
                  wait: WebDriverWait,
-                 data: Data):
+                 data:Data):
         super().__init__(driver, wait)
         self.__data = data
 

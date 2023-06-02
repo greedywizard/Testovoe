@@ -29,8 +29,10 @@ class Scenario(ABC):
         self._active_window = value
 
     @final
-    def Run(self, skip=False):
-        if not skip:
+    def Run(self, mapper=None):
+        if mapper:
+            return mapper(self._exec())
+        else:
             self._exec()
 
     @abstractmethod

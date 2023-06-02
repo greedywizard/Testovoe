@@ -1,11 +1,35 @@
+from typing import List
+
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+import Automizer.Scenario
 from Automizer.Logger import Logger
 from Scenarios import *
+
+
+def mapper2(x: DeployContract.Result) -> ValidateContract.Data:
+    data = ValidateContract.Data()
+    data.address = x.address
+    data.compile_version = x.compile_version
+    return data
+
+
+def mapper3(x: CreateToken.Result) -> DeployToken.Data:
+    data = DeployToken.Data()
+    data.name = x.name
+    data.code = x.code
+    return data
+
+
+def mapper4(x: DeployToken.Result) -> AddToken.Data:
+    data = AddToken.Data()
+    data.address = x.address
+    return data
 
 
 def main():
@@ -44,18 +68,10 @@ def main():
     # SwapWethToUsdc(driver, wait).Run()
     # AddLiquid(driver, wait).Run()
     # SwapUsdcToEth(driver, wait).Run()
-    res2 = DeployContract(driver, wait).Run()
-    data2 = ValidateContract.Data()
-    data2.address = res2.address
-    data2.compile_version = res2.compile_version
+    data2 = DeployContract(driver, wait).Run(mapper2)
     ValidateContract(driver, wait, data2).Run()
-    res3 = CreateToken(driver, wait).Run()
-    data3 = DeployToken.Data()
-    data3.name = res3.name
-    data3.code = res3.code
-    res4 = DeployToken(driver, wait, data3).Run()
-    data4 = AddToken.Data()
-    data4.address = res4.address
+    data3 = CreateToken(driver, wait).Run(mapper3)
+    data4 = DeployToken(driver, wait, data3).Run(mapper4)
     AddToken(driver, wait, data4).Run()
     SwapToScrollAlpha(driver, wait).Run()
     CreateSecondAccount(driver, wait).Run()
