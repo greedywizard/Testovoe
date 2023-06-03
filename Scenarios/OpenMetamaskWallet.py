@@ -15,7 +15,7 @@ class OpenMetamaskWallet(Scenario):
     def __init__(self,
                  driver: WebDriver,
                  wait: WebDriverWait,
-                 data:Data):
+                 data: Data):
         super().__init__(driver, wait)
         self.__data = data
 
