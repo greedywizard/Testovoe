@@ -4,26 +4,29 @@ from typing import final
 
 class ControlPointResult(ABC):
     def __init__(self):
-        self.next_point_id = None
+        self.restore_point = None
+        self.next_point = None
         self.data = None
 
 
 class ControlPoint(ABC):
-    def __init__(self, base_id, restore_id):
-        self.__rId = restore_id
-        self.__bId = base_id
+    def __init__(self, next_point, restore_point):
+        self.__rId = restore_point
+        self.__bId = next_point
 
     @final
     def Restore(self, data) -> ControlPointResult:
-        result = ControlPointResult()
-        result.next_point_id = self.__rId
-        result.data = self._restore(data)
-        return result
+        result = self._restore(data)
+        return self._base(result)
 
     @final
     def Base(self, data) -> ControlPointResult:
         result = ControlPointResult()
-        result.next_point_id = self.__bId
+        result.next_point = self.__bId
+        if self.__rId:
+            result.restore_point = self.__rId
+        else:
+            result.restore_point = self.__bId
         result.data = self._base(data)
         return result
 

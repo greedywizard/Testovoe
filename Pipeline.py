@@ -35,33 +35,32 @@ class Pipeline:
             self.driver.close()
         self.driver.switch_to.window(all_window_handles[0])
 
-        mm_data = OpenMetamaskWallet.Data()
-        mm_data.seed = self.__data.seed_phrase
-
         graph = {
-            "Point 1": Point1(self.driver, self.wait, base_id="Point 2"),
-            "Point 2": Point2(self.driver, self.wait, base_id="Point 3"),
-            "Point 3": Point3(self.driver, self.wait, base_id="Point 4"),
-            "Point 4": Point4(self.driver, self.wait, base_id="Point 5"),
-            "Point 5": Point5(self.driver, self.wait, base_id="Mapper 1"),
-            "Point 6": Point6(self.driver, self.wait, base_id="Mapper 2"),
+            "Point 1": Point1(self.driver, self.wait, next_point="Point 2"),
+            "Point 2": Point2(self.driver, self.wait, next_point="Point 3"),
+            "Point 3": Point3(self.driver, self.wait, next_point="Point 4"),
+            "Point 4": Point4(self.driver, self.wait, next_point="Point 5"),
+            "Point 5": Point5(self.driver, self.wait, next_point="Mapper 1"),
+            "Point 6": Point6(self.driver, self.wait, next_point="Mapper 2"),
             "Point 7": Point7(self.driver, self.wait),
-            "Mapper 1": Mapper1(self.driver, self.wait, base_id="Point 6"),
-            "Mapper 2": Mapper1(self.driver, self.wait, base_id="Point 7"),
+            "Mapper 1": Mapper1(self.driver, self.wait, next_point="Point 6"),
+            "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
         }
 
-        DATA = Point7.RestoreData()
-        DATA.mm_data = mm_data
-        DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
+        RESTORE_DATA = Point7.RestoreData()
+        RESTORE_DATA.seed_phrase = self.__data.seed_phrase
+        RESTORE_DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
+
+        DATA = None
         POINT = "Point 7"
         while True:
             result: ControlPointResult
             if self.__is_restore:
-                result = graph[POINT].Restore(DATA)
+                result = graph[POINT].Restore(RESTORE_DATA)
                 self.__is_restore = False
             else:
                 result = graph[POINT].Base(DATA)
-                POINT = result.next_point_id
+                POINT = result.next_point
 
             DATA = result.data
             if not POINT:

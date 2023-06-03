@@ -4,8 +4,8 @@ from Scenarios import *
 
 
 class Point1(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -25,8 +25,8 @@ class Point1(ControlPoint):
 
 
 class Point2(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -42,8 +42,8 @@ class Point2(ControlPoint):
 
 
 class Point3(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -59,8 +59,8 @@ class Point3(ControlPoint):
 
 
 class Point4(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -80,8 +80,8 @@ class Point4(ControlPoint):
 
 
 class Point5(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -97,8 +97,8 @@ class Point5(ControlPoint):
 
 
 class Point6(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -125,15 +125,15 @@ class Point6(ControlPoint):
 class Point7(ControlPoint):
     class RestoreData:
         token = None
-        mm_data = None
+        seed_phrase = None
 
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
     def _restore(self, data: RestoreData):
-        OpenMetamaskWallet(self.__driver, self.__wait, data.mm_data).Run()
+        OpenMetamaskWallet(self.__driver, self.__wait, data.seed_phrase).Run()
         SetupMetamaskWallet(self.__driver, self.__wait).Run()
         ConnectScroll(self.__driver, self.__wait).Run()
         ConnectUniswap(self.__driver, self.__wait).Run()
@@ -149,8 +149,8 @@ class Point7(ControlPoint):
 
 
 class Mapper1(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
@@ -165,8 +165,8 @@ class Mapper1(ControlPoint):
 
 
 class Mapper2(ControlPoint):
-    def __init__(self, driver, wait, base_id=None, restore_id=None):
-        super().__init__(base_id, restore_id)
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
 
