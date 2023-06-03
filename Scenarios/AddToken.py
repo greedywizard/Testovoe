@@ -36,11 +36,8 @@ class AddToken(Scenario):
         while True:
             Logger.Info("Importing token...")
             try:
-                symbol = Actions.GetElement(self, By.ID, "custom-symbol").Element.text
-                if not symbol or symbol is None:
-                    break
-                else:
-                    time.sleep(3)
+                Actions.WaitAttributeChanged(self, By.ID, "custom-symbol", "value", "")
+                break
             except:
                 pass
 

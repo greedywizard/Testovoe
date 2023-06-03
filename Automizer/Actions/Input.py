@@ -4,17 +4,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from Automizer.Scenario import Scenario
 
 
-class InputResult:
-    pass
-
-
 def Input(scenario: Scenario,
           by: By,
           path: str,
           data: str):
-    result: InputResult = InputResult()
-
-    input_element: WebElement = scenario.Wait.until(EC.element_to_be_clickable((by, path)))
+    input_element: WebElement = scenario.Wait.until(EC.presence_of_element_located((by, path)) and EC.element_to_be_clickable((by, path)))
     input_element.send_keys(data)
-
-    return result

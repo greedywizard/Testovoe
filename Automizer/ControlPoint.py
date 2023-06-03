@@ -16,8 +16,8 @@ class ControlPoint(ABC):
 
     @final
     def Restore(self, data) -> ControlPointResult:
-        result = self._restore(data)
-        return self._base(result)
+        res = self._restore(data)
+        return self.Base(res)
 
     @final
     def Base(self, data) -> ControlPointResult:

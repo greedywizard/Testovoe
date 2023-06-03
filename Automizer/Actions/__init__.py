@@ -7,3 +7,4 @@ from .OpenUrl import *
 from .Selected import *
 from .WaitElementVisible import *
 from .AcceptAlert import *
+from .WaitAttributeChanged import *

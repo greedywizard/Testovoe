@@ -44,7 +44,7 @@ def Click(scenario: Scenario,
     win_count = scenario.Driver.window_handles.__len__()
 
     def _run():
-        button: WebElement = scenario.Wait.until(EC.visibility_of_element_located((by, path)))
+        button: WebElement = scenario.Wait.until(EC.visibility_of_element_located((by, path)) and EC.element_to_be_clickable((by, path)))
 
         try:
             if as_script:

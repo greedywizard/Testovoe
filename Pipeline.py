@@ -21,7 +21,7 @@ class PipelineData:
 class Pipeline:
     def __init__(self, options: webdriver.ChromeOptions, is_restore: bool, data: PipelineData):
         self.driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-        self.wait: WebDriverWait = WebDriverWait(self.driver, 5)
+        self.wait: WebDriverWait = WebDriverWait(self.driver, 10)
         self.__is_restore = is_restore
         self.__data = data
 
@@ -60,11 +60,13 @@ class Pipeline:
                 self.__is_restore = False
             else:
                 result = graph[POINT].Base(DATA)
-                POINT = result.next_point
 
             DATA = result.data
+            POINT = result.next_point
+
             if not POINT:
                 break
 
+        Logger.Info("Profit!")
         input()
         self.driver.quit()

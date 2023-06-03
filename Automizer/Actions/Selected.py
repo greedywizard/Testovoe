@@ -5,17 +5,9 @@ from selenium.webdriver.support.select import Select
 from Automizer.Scenario import Scenario
 
 
-class SelectedResult:
-    pass
-
-
 def Selector(scenario: Scenario,
              by: By,
              path: str,
-             option: str) -> SelectedResult:
-    result: SelectedResult = SelectedResult()
-
+             option: str):
     select_element: Select = Select(scenario.Wait.until(EC.visibility_of_element_located((by, path))))
     select_element.select_by_value(option)
-
-    return result

@@ -115,11 +115,7 @@ class Point6(ControlPoint):
         data3 = DeployToken.Data()
         data3.name = res3.name
         data3.code = res3.code
-        res4 = DeployToken(self.__driver, self.__wait, data3).Run()
-        # data4 = AddToken.Data()
-        # data4.address = res4.address
-
-        # SendBetweenAccounts(__driver, wait).Run()
+        return DeployToken(self.__driver, self.__wait, data3).Run()
 
 
 class Point7(ControlPoint):
@@ -133,7 +129,9 @@ class Point7(ControlPoint):
         self.__wait = wait
 
     def _restore(self, data: RestoreData):
-        OpenMetamaskWallet(self.__driver, self.__wait, data.seed_phrase).Run()
+        mm = OpenMetamaskWallet.Data()
+        mm.seed = data.seed_phrase
+        OpenMetamaskWallet(self.__driver, self.__wait, mm).Run()
         SetupMetamaskWallet(self.__driver, self.__wait).Run()
         ConnectScroll(self.__driver, self.__wait).Run()
         ConnectUniswap(self.__driver, self.__wait).Run()
@@ -145,7 +143,7 @@ class Point7(ControlPoint):
         AddToken(self.__driver, self.__wait, data).Run()
         SwapToScrollAlpha(self.__driver, self.__wait).Run()
         CreateSecondAccount(self.__driver, self.__wait).Run()
-        # SendBetweenAccounts(__driver, wait).Run()
+        SendBetweenAccounts(self.__driver, self.__wait).Run()
 
 
 class Mapper1(ControlPoint):

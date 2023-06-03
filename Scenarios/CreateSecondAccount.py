@@ -18,9 +18,13 @@ class CreateSecondAccount(Scenario):
 
         Actions.OpenUrl(self, URLs.Metamask_NewAccount)
 
-        # Ввести название
         Actions.Input(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", "scroll2")
-        # Получить значение из input
-        Actions.GetElement(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input[@value='scroll2']")
-        # "Create"
-        Actions.Click(self, By.XPATH, "//button[text()='Create']", as_script=True)
+
+        while True:
+            try:
+                Actions.WaitAttributeChanged(self, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", "value", "scroll2", True)
+                break
+            except:
+                pass
+
+        Actions.Click(self, By.XPATH, "//button[text()='Create']")
