@@ -1,5 +1,5 @@
 from selenium import webdriver
-from Pipeline import Pipeline, PipelineData
+from Pipeline import Pipeline, PipelineOptions
 
 
 def main():
@@ -10,8 +10,9 @@ def main():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
 
-    data = PipelineData()
+    data = PipelineOptions()
     data.seed_phrase = seed_phrase
+
     Pipeline(options, True, data).Start()
 
 

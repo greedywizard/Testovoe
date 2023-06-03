@@ -14,19 +14,21 @@ from ControlPoints import *
 from Scenarios import *
 
 
-class PipelineData:
-    seed_phrase: str = None
+class PipelineOptions:
+    def __init__(self):
+        self.seed_phrase: str = None
+        self.discord_login: str = None
 
 
 class Pipeline:
-    def __init__(self, options: webdriver.ChromeOptions, is_restore: bool, data: PipelineData):
+    def __init__(self, options: webdriver.ChromeOptions, is_restore: bool, pipe_options: PipelineOptions):
         self.driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
         self.wait: WebDriverWait = WebDriverWait(self.driver, 10)
         self.__is_restore = is_restore
-        self.__data = data
+        self.__opt = pipe_options
 
     def Start(self):
-        Logger.Configure(file_name=f'{self.__data.seed_phrase}.log')
+        Logger.Configure(file_name=f'{self.__opt.seed_phrase}.log')
 
         self.wait.until(EC.new_window_is_opened(self.driver.window_handles))
         all_window_handles = self.driver.window_handles
@@ -35,29 +37,35 @@ class Pipeline:
             self.driver.close()
         self.driver.switch_to.window(all_window_handles[0])
 
+        data_p1 = Point1.StaticData()
+        data_p1.seed_phrase = self.__opt.seed_phrase
+
+        data_p8 = Point8.StaticData()
+        data_p8.discord_login = self.__opt.discord_login
+
         graph = {
-            "Point 1": Point1(self.driver, self.wait, next_point="Point 2"),
+            "Point 1": Point1(self.driver, self.wait, data_p1, next_point="Point 2"),
             "Point 2": Point2(self.driver, self.wait, next_point="Point 3"),
             "Point 3": Point3(self.driver, self.wait, next_point="Point 4"),
             "Point 4": Point4(self.driver, self.wait, next_point="Point 5"),
             "Point 5": Point5(self.driver, self.wait, next_point="Mapper 1"),
             "Point 6": Point6(self.driver, self.wait, next_point="Mapper 2"),
             "Point 7": Point7(self.driver, self.wait, next_point="Point8"),
-            "Point 8": Point8(self.driver, self.wait),
+            "Point 8": Point8(self.driver, self.wait, data_p8),
             "Mapper 1": Mapper1(self.driver, self.wait, next_point="Point 6"),
             "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
         }
 
-        RESTORE_DATA = Point7.RestoreData()
-        RESTORE_DATA.seed_phrase = self.__data.seed_phrase
-        RESTORE_DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
+        RESTORE_DATA = Point8.RestoreData()
+        RESTORE_DATA.seed_phrase = self.__opt.seed_phrase
+        # RESTORE_DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
 
-        DATA = None
+        DATA = RESTORE_DATA
         POINT = "Point 8"
         while True:
             result: ControlPointResult
             if self.__is_restore:
-                result = graph[POINT].Restore(RESTORE_DATA)
+                result = graph[POINT].Restore(DATA)
                 self.__is_restore = False
             else:
                 result = graph[POINT].Base(DATA)

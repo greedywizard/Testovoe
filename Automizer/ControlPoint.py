@@ -35,5 +35,5 @@ class ControlPoint(ABC):
         pass
 
     @abstractmethod
-    def _base(self, data):
+    def _base(self, process_data):
         pass

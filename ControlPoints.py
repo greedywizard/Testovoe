@@ -4,15 +4,22 @@ from Scenarios import *
 
 
 class Point1(ControlPoint):
-    def __init__(self, driver, wait, next_point=None, restore_point=None):
+    class StaticData:
+        def __init__(self):
+            self.seed_phrase = None
+
+    def __init__(self, driver, wait, static_data: StaticData, next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
+        self.__static_data = static_data
 
     def _restore(self, data):
         pass
 
-    def _base(self, data: OpenMetamaskWallet.Data):
+    def _base(self, process_data):
+        data = OpenMetamaskWallet.Data()
+        data.seed = self.__static_data.seed_phrase
         OpenMetamaskWallet(self.__driver, self.__wait, data).Run()
         SetupMetamaskWallet(self.__driver, self.__wait).Run()
         ConnectScroll(self.__driver, self.__wait).Run()
@@ -36,7 +43,7 @@ class Point2(ControlPoint):
         ConnectScroll(self.__driver, self.__wait).Run()
         return
 
-    def _base(self, data):
+    def _base(self, process_data):
         WaitTransferGoerliToAlpha(self.__driver, self.__wait).Run()
         return
 
@@ -53,7 +60,7 @@ class Point3(ControlPoint):
         ConnectScroll(self.__driver, self.__wait).Run()
         return
 
-    def _base(self, data):
+    def _base(self, process_data):
         ConnectUniswap(self.__driver, self.__driver).Run()
         return
 
@@ -71,7 +78,7 @@ class Point4(ControlPoint):
         ConnectUniswap(self.__driver, self.__wait).Run()
         return
 
-    def _base(self, data):
+    def _base(self, process_data):
         SwapEthToWeth(self.__driver, self.__wait).Run()
         SwapWethToUsdc(self.__driver, self.__wait).Run()
         AddLiquid(self.__driver, self.__wait).Run()
@@ -92,7 +99,7 @@ class Point5(ControlPoint):
         ConnectUniswap(self.__driver, self.__wait).Run()
         return
 
-    def _base(self, data):
+    def _base(self, process_data):
         return DeployContract(self.__driver, self.__wait).Run()
 
 
@@ -109,8 +116,8 @@ class Point6(ControlPoint):
         ConnectUniswap(self.__driver, self.__wait).Run()
         return
 
-    def _base(self, data: ValidateContract.Data):
-        ValidateContract(self.__driver, self.__wait, data).Run()
+    def _base(self, process_data: ValidateContract.Data):
+        ValidateContract(self.__driver, self.__wait, process_data).Run()
         res3 = CreateToken(self.__driver, self.__wait).Run()
         data3 = DeployToken.Data()
         data3.name = res3.name
@@ -120,8 +127,9 @@ class Point6(ControlPoint):
 
 class Point7(ControlPoint):
     class RestoreData:
-        token = None
-        seed_phrase = None
+        def __init__(self):
+            self.token = None
+            self.seed_phrase = None
 
     def __init__(self, driver, wait, next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
@@ -139,8 +147,8 @@ class Point7(ControlPoint):
         result.address = data.token
         return result
 
-    def _base(self, data: AddToken.Data):
-        AddToken(self.__driver, self.__wait, data).Run()
+    def _base(self, process_data: AddToken.Data):
+        AddToken(self.__driver, self.__wait, process_data).Run()
         SwapToScrollAlpha(self.__driver, self.__wait).Run()
         CreateSecondAccount(self.__driver, self.__wait).Run()
         SendBetweenAccounts(self.__driver, self.__wait).Run()
@@ -148,13 +156,18 @@ class Point7(ControlPoint):
 
 class Point8(ControlPoint):
     class RestoreData:
-        token = None
-        seed_phrase = None
+        def __init__(self):
+            self.seed_phrase = None
 
-    def __init__(self, driver, wait, next_point=None, restore_point=None):
+    class StaticData:
+        def __init__(self):
+            self.discord_login = None
+
+    def __init__(self, driver, wait, data: StaticData, next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
+        self.__static_data = data
 
     def _restore(self, data: RestoreData):
         mm = OpenMetamaskWallet.Data()
@@ -163,13 +176,12 @@ class Point8(ControlPoint):
         SetupMetamaskWallet(self.__driver, self.__wait).Run()
         ConnectScroll(self.__driver, self.__wait).Run()
         ConnectUniswap(self.__driver, self.__wait).Run()
-        result = AddToken.Data()
-        result.address = data.token
-        return result
 
-    def _base(self, data):
+    def _base(self, process_data):
+        s = Subscribe.Data()
+        s.discord_login = process_data.discord_login
 
-        pass
+        Subscribe(self.__driver, self.__wait).Run()
 
 
 class Mapper1(ControlPoint):
@@ -181,10 +193,10 @@ class Mapper1(ControlPoint):
     def _restore(self, data: OpenMetamaskWallet.Data):
         return
 
-    def _base(self, data: DeployContract.Result):
+    def _base(self, process_data: DeployContract.Result):
         result = ValidateContract.Data()
-        result.address = data.address
-        result.compile_version = data.compile_version
+        result.address = process_data.address
+        result.compile_version = process_data.compile_version
         return result
 
 
@@ -197,7 +209,7 @@ class Mapper2(ControlPoint):
     def _restore(self, data: OpenMetamaskWallet.Data):
         return
 
-    def _base(self, data: DeployToken.Result):
+    def _base(self, process_data: DeployToken.Result):
         result = AddToken.Data()
-        result.address = data.address
+        result.address = process_data.address
         return result

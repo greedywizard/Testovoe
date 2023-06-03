@@ -35,19 +35,3 @@ class Scenario(ABC):
     @abstractmethod
     def _exec(self):
         pass
-
-
-class Repeater:
-    def __init__(self, scenario: Scenario, args=None):
-        self.__args = args
-        self.__scenario = scenario
-
-    @property
-    def Scenario(self) -> Scenario:
-        return self.__scenario
-
-    @property
-    def Args(self):
-        return self.__args
-
-
