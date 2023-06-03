@@ -123,17 +123,23 @@ class Point6(ControlPoint):
 
 
 class Point7(ControlPoint):
+    class RestoreData:
+        token = None
+        mm_data = None
+
     def __init__(self, driver, wait, base_id=None, restore_id=None):
         super().__init__(base_id, restore_id)
         self.__driver = driver
         self.__wait = wait
 
-    def _restore(self, data: OpenMetamaskWallet.Data):
-        OpenMetamaskWallet(self.__driver, self.__wait, data).Run()
+    def _restore(self, data: RestoreData):
+        OpenMetamaskWallet(self.__driver, self.__wait, data.mm_data).Run()
         SetupMetamaskWallet(self.__driver, self.__wait).Run()
         ConnectScroll(self.__driver, self.__wait).Run()
         ConnectUniswap(self.__driver, self.__wait).Run()
-        return
+        result = AddToken.Data()
+        result.address = data.token
+        return result
 
     def _base(self, data: AddToken.Data):
         AddToken(self.__driver, self.__wait, data).Run()

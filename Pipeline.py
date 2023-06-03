@@ -40,18 +40,20 @@ class Pipeline:
 
         graph = {
             "Point 1": Point1(self.driver, self.wait, base_id="Point 2"),
-            "Point 2": Point2(self.driver, self.wait, base_id="Point 3", restore_id="Point 2"),
-            "Point 3": Point3(self.driver, self.wait, base_id="Point 4", restore_id="Point 3"),
-            "Point 4": Point4(self.driver, self.wait, base_id="Point 5", restore_id="Point 4"),
-            "Point 5": Point5(self.driver, self.wait, base_id="Mapper 1", restore_id="Point 5"),
+            "Point 2": Point2(self.driver, self.wait, base_id="Point 3"),
+            "Point 3": Point3(self.driver, self.wait, base_id="Point 4"),
+            "Point 4": Point4(self.driver, self.wait, base_id="Point 5"),
+            "Point 5": Point5(self.driver, self.wait, base_id="Mapper 1"),
             "Point 6": Point6(self.driver, self.wait, base_id="Mapper 2"),
             "Point 7": Point7(self.driver, self.wait),
             "Mapper 1": Mapper1(self.driver, self.wait, base_id="Point 6"),
             "Mapper 2": Mapper1(self.driver, self.wait, base_id="Point 7"),
         }
 
-        DATA = mm_data
-        POINT = "Point 5"
+        DATA = Point7.RestoreData()
+        DATA.mm_data = mm_data
+        DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
+        POINT = "Point 7"
         while True:
             result: ControlPointResult
             if self.__is_restore:
@@ -59,10 +61,9 @@ class Pipeline:
                 self.__is_restore = False
             else:
                 result = graph[POINT].Base(DATA)
+                POINT = result.next_point_id
 
-            POINT = result.next_point_id
             DATA = result.data
-
             if not POINT:
                 break
 

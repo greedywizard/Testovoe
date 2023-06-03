@@ -45,3 +45,4 @@ class AddToken(Scenario):
                 pass
 
         Actions.Click(self, By.XPATH, "//button[text()='Add custom token']", as_script=True)
+        Actions.Click(self, By.XPATH, "//button[text()='Import tokens']", as_script=True)
