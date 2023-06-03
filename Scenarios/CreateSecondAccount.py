@@ -13,7 +13,7 @@ class CreateSecondAccount(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def _exec(self, args=None):
+    def _exec(self):
         Logger.Info("CreateSecondAccount()")
 
         Actions.OpenUrl(self, URLs.Metamask_NewAccount)

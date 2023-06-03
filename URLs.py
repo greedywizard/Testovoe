@@ -10,3 +10,4 @@ Uniswap_Swap_Usdc = "https://uniswap-v3.scroll.io/#/swap?outputCurrency=0xA0D71B
 Uniswap_ETH_Liquid = "https://uniswap-v3.scroll.io/#/add/ETH"
 Remix = "https://remix.ethereum.org/"
 OpenZeppelin_Wizard = "https://docs.openzeppelin.com/contracts/4.x/wizard"
+Guild = "https://guild.xyz/scrollzkp"

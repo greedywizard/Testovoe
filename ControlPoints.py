@@ -146,6 +146,32 @@ class Point7(ControlPoint):
         SendBetweenAccounts(self.__driver, self.__wait).Run()
 
 
+class Point8(ControlPoint):
+    class RestoreData:
+        token = None
+        seed_phrase = None
+
+    def __init__(self, driver, wait, next_point=None, restore_point=None):
+        super().__init__(next_point, restore_point)
+        self.__driver = driver
+        self.__wait = wait
+
+    def _restore(self, data: RestoreData):
+        mm = OpenMetamaskWallet.Data()
+        mm.seed = data.seed_phrase
+        OpenMetamaskWallet(self.__driver, self.__wait, mm).Run()
+        SetupMetamaskWallet(self.__driver, self.__wait).Run()
+        ConnectScroll(self.__driver, self.__wait).Run()
+        ConnectUniswap(self.__driver, self.__wait).Run()
+        result = AddToken.Data()
+        result.address = data.token
+        return result
+
+    def _base(self, data):
+
+        pass
+
+
 class Mapper1(ControlPoint):
     def __init__(self, driver, wait, next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)

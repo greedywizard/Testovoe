@@ -15,7 +15,7 @@ class SwapEthToWeth(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def _exec(self, args=None):
+    def _exec(self):
         Logger.Info("SwapEthToWeth()")
 
         Actions.OpenUrl(self, URLs.Uniswap_Swap)

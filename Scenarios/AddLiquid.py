@@ -17,7 +17,7 @@ class AddLiquid(Scenario):
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def _exec(self, args=None):
+    def _exec(self):
         Logger.Info("AddLiquid()")
 
         Actions.OpenUrl(self, URLs.Uniswap_ETH_Liquid)

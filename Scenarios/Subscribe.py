@@ -10,18 +10,14 @@ import Automizer.Actions as Actions
 import URLs
 
 
-class SwapToScrollAlpha(Scenario):
+class Subscribe(Scenario):
     def __init__(self,
                  driver: WebDriver,
                  wait: WebDriverWait):
         super().__init__(driver, wait)
 
-    def _exec(self):
-        Logger.Info("SwapToScrollAlpha()")
+    def _exec(self, args=None):
+        Logger.Info("Subscribe()")
 
-        Actions.OpenUrl(self, URLs.Metamask_Home)
+        Actions.OpenUrl(self, URLs.Guild)
 
-        # Открыть свиписок сетей
-        Actions.Click(self, By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div', as_script=True)
-        # Выбрать сеть goerli
-        Actions.Click(self, By.XPATH, '/html/body/div[1]/div/div[2]/div/div[2]/li[.//span[text()="Scroll Alpha"]]', as_script=True)

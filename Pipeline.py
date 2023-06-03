@@ -42,7 +42,8 @@ class Pipeline:
             "Point 4": Point4(self.driver, self.wait, next_point="Point 5"),
             "Point 5": Point5(self.driver, self.wait, next_point="Mapper 1"),
             "Point 6": Point6(self.driver, self.wait, next_point="Mapper 2"),
-            "Point 7": Point7(self.driver, self.wait),
+            "Point 7": Point7(self.driver, self.wait, next_point="Point8"),
+            "Point 8": Point8(self.driver, self.wait),
             "Mapper 1": Mapper1(self.driver, self.wait, next_point="Point 6"),
             "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
         }
@@ -52,7 +53,7 @@ class Pipeline:
         RESTORE_DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
 
         DATA = None
-        POINT = "Point 7"
+        POINT = "Point 8"
         while True:
             result: ControlPointResult
             if self.__is_restore:
