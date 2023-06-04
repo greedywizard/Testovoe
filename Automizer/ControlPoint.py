@@ -1,5 +1,15 @@
+import json
 from abc import ABC, abstractmethod
 from typing import final
+
+
+class ControlPointRestoreData(ABC):
+    @final
+    def FromJson(self, json_string: str):
+        json_dict = json.loads(json_string)
+        for i in vars(self):
+            self.__setattr__(i, json_dict[i])
+        return self
 
 
 class ControlPointResult(ABC):
@@ -15,7 +25,12 @@ class ControlPoint(ABC):
         self.__bId = next_point
 
     @final
-    def Restore(self, data) -> ControlPointResult:
+    def Restore(self, data: str) -> ControlPointResult:
+        """
+        Подготавливает скрипт для продолжения с контрольной точки
+        :param data: JSON строка с данными для восстановления
+        :return:Данные для последующего вызова основного тела контрольной точки
+        """
         res = self._restore(data)
         return self.Base(res)
 

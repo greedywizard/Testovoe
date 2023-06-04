@@ -1,5 +1,5 @@
 from Automizer.Logger import Logger
-from Automizer.ControlPoint import ControlPoint, ControlPointResult
+from Automizer.ControlPoint import ControlPoint, ControlPointRestoreData
 from Scenarios import *
 
 
@@ -155,13 +155,16 @@ class Point7(ControlPoint):
 
 
 class Point8(ControlPoint):
-    class RestoreData:
+    class RestoreData(ControlPointRestoreData):
         def __init__(self):
             self.seed_phrase = None
 
     class StaticData:
         def __init__(self):
             self.discord_login = None
+            self.discord_pass = None
+            self.twitter_login = None
+            self.twitter_pass = None
 
     def __init__(self, driver, wait, data: StaticData, next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
@@ -169,9 +172,10 @@ class Point8(ControlPoint):
         self.__wait = wait
         self.__static_data = data
 
-    def _restore(self, data: RestoreData):
+    def _restore(self, data: str):
+        rd = Point8.RestoreData().FromJson(data)
         mm = OpenMetamaskWallet.Data()
-        mm.seed = data.seed_phrase
+        mm.seed = rd.seed_phrase
         OpenMetamaskWallet(self.__driver, self.__wait, mm).Run()
         SetupMetamaskWallet(self.__driver, self.__wait).Run()
         ConnectScroll(self.__driver, self.__wait).Run()
@@ -179,9 +183,12 @@ class Point8(ControlPoint):
 
     def _base(self, process_data):
         s = Subscribe.Data()
-        s.discord_login = process_data.discord_login
+        s.discord_login = self.__static_data.discord_login
+        s.discord_pass = self.__static_data.discord_pass
+        s.twitter_login = self.__static_data.twitter_login
+        s.twitter_pass = self.__static_data.twitter_pass
 
-        Subscribe(self.__driver, self.__wait).Run()
+        Subscribe(self.__driver, self.__wait, s).Run()
 
 
 class Mapper1(ControlPoint):

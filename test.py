@@ -1,22 +1,16 @@
-from abc import ABC, abstractmethod
-import typing
+import json
 
 
-class Test(ABC):
-    @typing.final
-    def Exec(self):
-        print("exec")
-        return self._run()
+class RestoreData:
+    def __init__(self):
+        self.seed_phrase = None
 
-    @abstractmethod
-    def _run(self):
-        pass
-
-
-class T(Test):
-    def _run(self):
-        print("run")
+    def FromJson(self, json_string):
+        json_dict = json.loads(json_string)
+        for i in vars(self):
+            self.__setattr__(i, json_dict[i])
         return self
 
 
-T().Exec()
+a = RestoreData().FromJson('{"seed_phrase":"milk craft duck galaxy occur copy rich drastic also wise hair project"}')
+print(a.seed_phrase)

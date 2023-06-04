@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 from webdriver_manager.chrome import ChromeDriverManager
@@ -15,9 +16,14 @@ from Scenarios import *
 
 
 class PipelineOptions:
-    def __init__(self):
-        self.seed_phrase: str = None
-        self.discord_login: str = None
+    def __init__(self, seed, dl, dp, tl, tp, rp, rd):
+        self.seed_phrase = seed
+        self.discord_login = dl
+        self.discord_pass = dp
+        self.twitter_login = tl
+        self.twitter_pass = tp
+        self.restore_point = rp
+        self.restore_data = rd
 
 
 class Pipeline:
@@ -42,6 +48,9 @@ class Pipeline:
 
         data_p8 = Point8.StaticData()
         data_p8.discord_login = self.__opt.discord_login
+        data_p8.discord_pass = self.__opt.discord_pass
+        data_p8.twitter_login = self.__opt.twitter_login
+        data_p8.twitter_pass = self.__opt.twitter_pass
 
         graph = {
             "Point 1": Point1(self.driver, self.wait, data_p1, next_point="Point 2"),
@@ -50,18 +59,23 @@ class Pipeline:
             "Point 4": Point4(self.driver, self.wait, next_point="Point 5"),
             "Point 5": Point5(self.driver, self.wait, next_point="Mapper 1"),
             "Point 6": Point6(self.driver, self.wait, next_point="Mapper 2"),
-            "Point 7": Point7(self.driver, self.wait, next_point="Point8"),
+            "Point 7": Point7(self.driver, self.wait, next_point="Point 8"),
             "Point 8": Point8(self.driver, self.wait, data_p8),
             "Mapper 1": Mapper1(self.driver, self.wait, next_point="Point 6"),
             "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
         }
 
-        RESTORE_DATA = Point8.RestoreData()
-        RESTORE_DATA.seed_phrase = self.__opt.seed_phrase
+        # RESTORE_DATA = Point8.RestoreData()
+        # RESTORE_DATA.seed_phrase = self.__opt.seed_phrase
         # RESTORE_DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
 
-        DATA = RESTORE_DATA
-        POINT = "Point 8"
+        if self.__opt.restore_data:
+            DATA = self.__opt.restore_data
+        else:
+            DATA = None
+
+        POINT = self.__opt.restore_point
+
         while True:
             result: ControlPointResult
             if self.__is_restore:
