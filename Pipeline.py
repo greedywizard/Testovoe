@@ -1,5 +1,4 @@
-import json
-from typing import List
+from typing import Type
 
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -8,32 +7,18 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import Automizer.Scenario
-from Automizer.Logger import Logger
-from Automizer.ControlPoint import ControlPoint, ControlPointResult
+from Automizer.ControlPoint import ControlPointResult
 from ControlPoints import *
-from Scenarios import *
-
-
-class PipelineOptions:
-    def __init__(self, seed, dl, dp, tl, tp, rp, rd):
-        self.seed_phrase = seed
-        self.discord_login = dl
-        self.discord_pass = dp
-        self.twitter_login = tl
-        self.twitter_pass = tp
-        self.restore_point = rp
-        self.restore_data = rd
+from db import PipelineOptions
 
 
 class Pipeline:
-    def __init__(self, options: webdriver.ChromeOptions, is_restore: bool, pipe_options: PipelineOptions):
+    def __init__(self, options: webdriver.ChromeOptions, pipe_options: Type[PipelineOptions]):
         self.driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
         self.wait: WebDriverWait = WebDriverWait(self.driver, 10)
-        self.__is_restore = is_restore
         self.__opt = pipe_options
 
-    def Start(self):
+    def Start(self) -> Type[PipelineOptions]:
         Logger.Configure(file_name=f'{self.__opt.seed_phrase}.log')
 
         self.wait.until(EC.new_window_is_opened(self.driver.window_handles))
@@ -65,10 +50,6 @@ class Pipeline:
             "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
         }
 
-        # RESTORE_DATA = Point8.RestoreData()
-        # RESTORE_DATA.seed_phrase = self.__opt.seed_phrase
-        # RESTORE_DATA.token = "0xb03ac08CDB198EC41Ff90C1FBC709D5468da20eB"
-
         if self.__opt.restore_data:
             DATA = self.__opt.restore_data
         else:
@@ -78,9 +59,9 @@ class Pipeline:
 
         while True:
             result: ControlPointResult
-            if self.__is_restore:
+            if self.__opt.is_restore:
                 result = graph[POINT].Restore(DATA)
-                self.__is_restore = False
+                self.__opt.is_restore = False
             else:
                 result = graph[POINT].Base(DATA)
 
@@ -91,5 +72,10 @@ class Pipeline:
                 break
 
         Logger.Info("Profit!")
-        input()
         self.driver.quit()
+
+        self.__opt.is_complete = True
+        self.__opt.is_restore = False
+        self.__opt.restore_data = None
+        self.__opt.restore_point = None
+        return self.__opt

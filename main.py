@@ -1,30 +1,28 @@
-import csv
+import os
+import sys
+from typing import Type
 
 from selenium import webdriver
-from Pipeline import Pipeline, PipelineOptions
+
+import db
+from Pipeline import Pipeline
 
 
 def main():
-    pipe_options = []
-    with open('accounts.csv', 'r') as file:
-        reader = csv.DictReader(file, delimiter=';')
-        for row in reader:
-            user = PipelineOptions(row['Seed'],
-                                   row['DiscordLogin'],
-                                   row['DiscordPass'],
-                                   row['TwitterLogin'],
-                                   row['TwitterPass'],
-                                   row['RestorePoint'],
-                                   row['RestoreData'])
-            pipe_options.append(user)
+    pipe_options: list[Type[db.PipelineOptions]] = db.GetAll()
 
     options = webdriver.ChromeOptions()
     options.add_extension('./Extentions/metamask.crx')
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
 
-    Pipeline(options, True, pipe_options[0]).Start()
+    for i in pipe_options:
+        db.UpdateRecord(Pipeline(options, i).Start())
 
 
 if __name__ == "__main__":
+    if not os.path.exists("data.db"):
+        db.CreateTable()
+        sys.exit()
+
     main()
