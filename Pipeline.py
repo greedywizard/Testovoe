@@ -15,7 +15,7 @@ from db import PipelineOptions
 class Pipeline:
     def __init__(self, options: webdriver.ChromeOptions, pipe_options: Type[PipelineOptions]):
         self.driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
-        self.wait: WebDriverWait = WebDriverWait(self.driver, 10)
+        self.wait: WebDriverWait = WebDriverWait(self.driver, 20)
         self.__opt = pipe_options
 
     def Start(self) -> Type[PipelineOptions]:
