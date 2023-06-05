@@ -30,7 +30,7 @@ class BuildContract(Act):
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
 
-    def _base(self, process_data):
+    def _base(self, dyna_data):
         res = self.__deploy_contract()
         self.__validate_contract(res.address, res.compile_version)
 

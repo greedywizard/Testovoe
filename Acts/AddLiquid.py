@@ -26,7 +26,7 @@ class AddLiquid(Act):
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
 
-    def _base(self, process_data):
+    def _base(self, dyna_data):
         Logger.Info("AddLiquid()")
 
         Actions.OpenUrl(self.s, URLs.Uniswap_ETH_Liquid)

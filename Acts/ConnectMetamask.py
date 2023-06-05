@@ -7,7 +7,7 @@ from db import PipelineOptions
 
 
 class ConnectMetamask(Act):
-    def __init__(self, driver, wait, data: Type[PipelineOptions],next_point=None, restore_point=None):
+    def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
@@ -17,7 +17,7 @@ class ConnectMetamask(Act):
     def _restore(self, data):
         pass
 
-    def _base(self, process_data):
+    def _base(self, dyna_data):
         Logger.Info("ConnectMetamask()")
 
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)

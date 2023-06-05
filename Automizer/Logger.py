@@ -13,10 +13,13 @@ class Logger:
 
     @classmethod
     def Configure(cls, file_path: str = None, file_name: str = 'debug.log'):
-        _file_path: str = file_name
+        if not os.path.exists(file_path):
+            os.makedirs(file_path)
 
         if file_path:
             _file_path: str = os.path.join(file_path, file_name)
+        else:
+            _file_path: str = file_name
 
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)

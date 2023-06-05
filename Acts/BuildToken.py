@@ -18,9 +18,8 @@ from db import PipelineOptions
 
 
 class BuildToken(Act):
-    class Data:
-        def __init__(self):
-            self.address: str = None
+    class Result:
+        address: str = None
 
     def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
@@ -37,7 +36,7 @@ class BuildToken(Act):
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
 
-    def _base(self, process_data: Data):
+    def _base(self, dyna_data):
         res = self.__create_token()
         return self.__deploy_token(res.symbols, res.code)
 
@@ -68,7 +67,6 @@ class BuildToken(Act):
 
     def __deploy_token(self, symbols, code):
         Logger.Info("DeployToken()")
-        result = self.Result()
 
         Actions.OpenUrl(self.s, URLs.Remix)
 
@@ -137,6 +135,7 @@ class BuildToken(Act):
             except:
                 pass
 
+        result = self.Result()
         while True:
             Logger.Info("Deploying...")
             try:

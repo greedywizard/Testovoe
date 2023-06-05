@@ -50,5 +50,5 @@ class Act(ABC):
         pass
 
     @abstractmethod
-    def _base(self, process_data):
+    def _base(self, dyna_data):
         pass

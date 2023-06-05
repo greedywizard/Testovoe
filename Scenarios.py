@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.common.by import By
 import URLs
 from Automizer.Enums import WindowActions
@@ -7,6 +9,7 @@ from Automizer.Logger import Logger
 
 
 def OpenMetamaskWallet(scenario: ExecEnvironment, seed: str):
+    time.sleep(3)
     Logger.Info("OpenMetamaskWallet()")
 
     Actions.OpenUrl(scenario, url=URLs.Metamask_Home)

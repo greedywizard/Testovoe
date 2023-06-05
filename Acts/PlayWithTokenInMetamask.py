@@ -6,6 +6,8 @@ from typing import Type
 
 from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
+
+import Scenarios
 from Automizer.Act import Act
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
@@ -30,10 +32,13 @@ class PlayWithTokenInMetamask(Act):
         self.__deployTokenTuple = namedtuple('__deployTokenTuple', ['symbols', 'code'])
 
     def _restore(self, data):
-        pass
+        Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
+        Scenarios.SetupMetamaskWallet(self.s)
+        Scenarios.ConnectScroll(self.s)
+        Scenarios.ConnectUniswap(self.s)
 
-    def _base(self, process_data: Data):
-        self.__add_token(process_data.address)
+    def _base(self, dyna_data: Data):
+        self.__add_token(dyna_data.address)
         self.__swap_to_scrollAlpha()
         self.__create_second_account()
         self.__send_between_accounts("Account 1", "scroll2")
