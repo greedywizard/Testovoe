@@ -10,6 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import db
 from Automizer.ControlPoint import ControlPointResult
+from Automizer.Logger import Logger
 from ControlPoints import *
 from db import PipelineOptions
 
@@ -31,16 +32,7 @@ class Pipeline:
         self.driver.switch_to.window(all_window_handles[0])
 
         graph = {
-            "Point 1": Point1(self.driver, self.wait, self.__opt, next_point="Point 2"),
-            "Point 2": Point2(self.driver, self.wait, next_point="Point 3"),
-            "Point 3": Point3(self.driver, self.wait, next_point="Point 4"),
-            "Point 4": Point4(self.driver, self.wait, next_point="Point 5"),
-            "Point 5": Point5(self.driver, self.wait, next_point="Mapper 1"),
-            "Point 6": Point6(self.driver, self.wait, next_point="Mapper 2"),
-            "Point 7": Point7(self.driver, self.wait, next_point="Point 8"),
-            "Point 8": Point8(self.driver, self.wait, self.__opt),
-            "Mapper 1": Mapper1(self.driver, self.wait, next_point="Point 6"),
-            "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
+            "": ConnectMetamask(self.driver, self.wait, self.__opt, next_point="Point 2"),
         }
 
         if self.__opt.restore_data:
@@ -48,10 +40,12 @@ class Pipeline:
         else:
             DATA = None
 
-        POINT = self.__opt.restore_point
+        if self.__opt.restore_point:
+            POINT = self.__opt.restore_point
+        else:
+            POINT = ""
 
         while True:
-            result: ControlPointResult = None
             try:
                 if self.__opt.is_restore:
                     result = graph[POINT].Restore(DATA)
@@ -71,9 +65,7 @@ class Pipeline:
 
             self.__opt.restore_data = json.dumps(DATA.__dict__)
             self.__opt.restore_point = POINT
-            db.UpdateRecord(self.__opt)
-
-            o: PipelineOptions = PipelineOptions()
+            # db.UpdateRecord(self.__opt)
 
         Logger.Info("Profit!")
         self.driver.quit()

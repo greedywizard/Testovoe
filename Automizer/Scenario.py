@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-class Scenario(ABC):
+class Scenario:
     def __init__(self, driver: WebDriver, wait: WebDriverWait):
         self._driver: WebDriver = driver
         self._wait: WebDriverWait = wait
@@ -27,11 +27,3 @@ class Scenario(ABC):
     def Active_Window(self, value: str):
         self.Driver.switch_to.window(value)
         self._active_window = value
-
-    @final
-    def Run(self):
-        return self._exec()
-
-    @abstractmethod
-    def _exec(self):
-        pass
