@@ -2,10 +2,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.select import Select
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 
 
-def Selector(scenario: Scenario,
+def Selector(scenario: ExecEnvironment,
              by: By,
              path: str,
              option: str):

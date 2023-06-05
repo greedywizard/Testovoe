@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 
 
 class GetShadowRootResult:
@@ -17,7 +17,7 @@ class GetShadowRootResult:
         self.__element = value
 
 
-def GetShadowRoot(scenario: Scenario,
+def GetShadowRoot(scenario: ExecEnvironment,
                   by: By,
                   path: str) -> GetShadowRootResult:
     result: GetShadowRootResult = GetShadowRootResult()

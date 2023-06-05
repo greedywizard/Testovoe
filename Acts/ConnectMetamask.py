@@ -1,18 +1,18 @@
 from typing import Type
 import Scenarios
-from Automizer.ControlPoint import ControlPoint
+from Automizer.Act import Act
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 from db import PipelineOptions
 
 
-class ConnectMetamask(ControlPoint):
+class ConnectMetamask(Act):
     def __init__(self, driver, wait, data: Type[PipelineOptions],next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
         self.__static_data = data
-        self.s = Scenario(self.__driver, self.__wait)
+        self.s = ExecEnvironment(self.__driver, self.__wait)
 
     def _restore(self, data):
         pass

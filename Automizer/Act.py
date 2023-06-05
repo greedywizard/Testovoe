@@ -19,7 +19,7 @@ class ControlPointResult(ABC):
         self.data = None
 
 
-class ControlPoint(ABC):
+class Act(ABC):
     def __init__(self, next_point, restore_point):
         self.__rId = restore_point
         self.__bId = next_point

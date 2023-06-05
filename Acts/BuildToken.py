@@ -8,16 +8,16 @@ from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 
 import Scenarios
-from Automizer.ControlPoint import ControlPoint
+from Automizer.Act import Act
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 import Automizer.Actions as Actions
 import URLs
 from db import PipelineOptions
 
 
-class BuildToken(ControlPoint):
+class BuildToken(Act):
     class Data:
         def __init__(self):
             self.address: str = None
@@ -27,7 +27,7 @@ class BuildToken(ControlPoint):
         self.__driver = driver
         self.__wait = wait
         self.__static_data = data
-        self.s = Scenario(self.__driver, self.__wait)
+        self.s = ExecEnvironment(self.__driver, self.__wait)
 
         self.__deployTokenTuple = namedtuple('__deployTokenTuple', ['symbols', 'code'])
 

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 
 
 class GetElementResult:
@@ -17,7 +17,7 @@ class GetElementResult:
         self._element = value
 
 
-def GetElement(scenario: Scenario,
+def GetElement(scenario: ExecEnvironment,
                by: By,
                path: str) -> GetElementResult:
     result: GetElementResult = GetElementResult()

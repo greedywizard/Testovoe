@@ -9,9 +9,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import db
-from Automizer.ControlPoint import ControlPointResult
+from Automizer.Act import ControlPointResult
 from Automizer.Logger import Logger
-from ControlPoints import *
+from Acts import *
 from db import PipelineOptions
 
 

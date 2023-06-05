@@ -1,7 +1,7 @@
 from typing import List
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 
 
 class GetElementsResult:
@@ -21,9 +21,9 @@ class GetElementsResult:
         return len(self.__elements)
 
 
-def GetElements(scenario: Scenario,
-               by: By,
-               path: str) -> GetElementsResult:
+def GetElements(scenario: ExecEnvironment,
+                by: By,
+                path: str) -> GetElementsResult:
     result: GetElementsResult = GetElementsResult()
 
     result.Elements = scenario.Driver.find_elements(by, path)

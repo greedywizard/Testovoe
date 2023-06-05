@@ -1,9 +1,9 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 
 
-def WaitElementVisible(scenario: Scenario,
+def WaitElementVisible(scenario: ExecEnvironment,
                        by: By,
                        path: str,
                        hide: bool = False):

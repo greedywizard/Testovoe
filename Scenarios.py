@@ -1,12 +1,12 @@
 from selenium.webdriver.common.by import By
 import URLs
 from Automizer.Enums import WindowActions
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 import Automizer.Actions as Actions
 from Automizer.Logger import Logger
 
 
-def OpenMetamaskWallet(scenario: Scenario, seed: str):
+def OpenMetamaskWallet(scenario: ExecEnvironment, seed: str):
     Logger.Info("OpenMetamaskWallet()")
 
     Actions.OpenUrl(scenario, url=URLs.Metamask_Home)
@@ -47,7 +47,7 @@ def OpenMetamaskWallet(scenario: Scenario, seed: str):
     Actions.Click(scenario, By.XPATH, "//button[@data-testid='pin-extension-done']")
 
 
-def SetupMetamaskWallet(scenario: Scenario):
+def SetupMetamaskWallet(scenario: ExecEnvironment):
     Logger.Info("SetupMetamaskWallet()")
 
     Actions.OpenUrl(scenario, url=URLs.Metamask_Settings_Advance)
@@ -58,7 +58,7 @@ def SetupMetamaskWallet(scenario: Scenario):
     Actions.Click(scenario, By.XPATH, "//li[.//span[text()='Goerli test network']]", as_script=True)
 
 
-def ConnectScroll(scenario: Scenario):
+def ConnectScroll(scenario: ExecEnvironment):
     Logger.Info("ConnectScroll()")
 
     Actions.OpenUrl(scenario, url=URLs.Scroll_Alpha)
@@ -77,7 +77,7 @@ def ConnectScroll(scenario: Scenario):
     Actions.Click(scenario, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
 
 
-def ConnectUniswap(scenario: Scenario):
+def ConnectUniswap(scenario: ExecEnvironment):
     Logger.Info("ConnectUniswap()")
 
     Actions.OpenUrl(scenario, URLs.Uniswap_Swap)

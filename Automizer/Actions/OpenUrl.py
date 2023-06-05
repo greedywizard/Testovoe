@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 
 
 class OpenUrlResult:
@@ -27,7 +27,7 @@ class OpenUrlResult:
         self.__old_window = value
 
 
-def OpenUrl(scenario: Scenario,
+def OpenUrl(scenario: ExecEnvironment,
             url: str,
             in_new_window: bool = False,
             as_script: bool = False) -> OpenUrlResult:

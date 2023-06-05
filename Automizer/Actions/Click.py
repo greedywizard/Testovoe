@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ElementClickInterceptedException
 
 from Automizer.Logger import Logger
-from Automizer.Scenario import Scenario
+from Automizer.ExecEnvironment import ExecEnvironment
 from Automizer.Enums import WindowActions
 
 
@@ -30,7 +30,7 @@ class ClickResult:
         self.__old_window = value
 
 
-def Click(scenario: Scenario,
+def Click(scenario: ExecEnvironment,
           by: By,
           path: str,
           as_script: bool = False,

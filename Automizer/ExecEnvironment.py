@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 
 
-class Scenario:
+class ExecEnvironment:
     def __init__(self, driver: WebDriver, wait: WebDriverWait):
         self._driver: WebDriver = driver
         self._wait: WebDriverWait = wait
