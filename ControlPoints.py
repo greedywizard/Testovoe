@@ -1,14 +1,13 @@
+from typing import Type
+
 from Automizer.Logger import Logger
 from Automizer.ControlPoint import ControlPoint, ControlPointRestoreData
 from Scenarios import *
+from db import PipelineOptions
 
 
 class Point1(ControlPoint):
-    class StaticData:
-        def __init__(self):
-            self.seed_phrase = None
-
-    def __init__(self, driver, wait, static_data: StaticData, next_point=None, restore_point=None):
+    def __init__(self, driver, wait, static_data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait
@@ -166,7 +165,7 @@ class Point8(ControlPoint):
             self.twitter_login = None
             self.twitter_pass = None
 
-    def __init__(self, driver, wait, data: StaticData, next_point=None, restore_point=None):
+    def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
         self.__wait = wait

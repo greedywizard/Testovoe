@@ -1,6 +1,6 @@
 import logging
 import sqlite3
-from typing import List, Type
+from typing import Type
 
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
@@ -39,7 +39,7 @@ def GetAll() -> list[Type[PipelineOptions]]:
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    res = session.query(PipelineOptions).all()
+    res = session.query(PipelineOptions).filter_by(is_complete=False).all()
 
     session.close()
     return res

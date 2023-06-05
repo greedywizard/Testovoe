@@ -1,3 +1,4 @@
+import json
 from typing import Type
 
 from webdriver_manager.chrome import ChromeDriverManager
@@ -7,6 +8,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+import db
 from Automizer.ControlPoint import ControlPointResult
 from ControlPoints import *
 from db import PipelineOptions
@@ -28,24 +30,15 @@ class Pipeline:
             self.driver.close()
         self.driver.switch_to.window(all_window_handles[0])
 
-        data_p1 = Point1.StaticData()
-        data_p1.seed_phrase = self.__opt.seed_phrase
-
-        data_p8 = Point8.StaticData()
-        data_p8.discord_login = self.__opt.discord_login
-        data_p8.discord_pass = self.__opt.discord_pass
-        data_p8.twitter_login = self.__opt.twitter_login
-        data_p8.twitter_pass = self.__opt.twitter_pass
-
         graph = {
-            "Point 1": Point1(self.driver, self.wait, data_p1, next_point="Point 2"),
+            "Point 1": Point1(self.driver, self.wait, self.__opt, next_point="Point 2"),
             "Point 2": Point2(self.driver, self.wait, next_point="Point 3"),
             "Point 3": Point3(self.driver, self.wait, next_point="Point 4"),
             "Point 4": Point4(self.driver, self.wait, next_point="Point 5"),
             "Point 5": Point5(self.driver, self.wait, next_point="Mapper 1"),
             "Point 6": Point6(self.driver, self.wait, next_point="Mapper 2"),
             "Point 7": Point7(self.driver, self.wait, next_point="Point 8"),
-            "Point 8": Point8(self.driver, self.wait, data_p8),
+            "Point 8": Point8(self.driver, self.wait, self.__opt),
             "Mapper 1": Mapper1(self.driver, self.wait, next_point="Point 6"),
             "Mapper 2": Mapper1(self.driver, self.wait, next_point="Point 7"),
         }
@@ -58,18 +51,29 @@ class Pipeline:
         POINT = self.__opt.restore_point
 
         while True:
-            result: ControlPointResult
-            if self.__opt.is_restore:
-                result = graph[POINT].Restore(DATA)
-                self.__opt.is_restore = False
-            else:
-                result = graph[POINT].Base(DATA)
+            result: ControlPointResult = None
+            try:
+                if self.__opt.is_restore:
+                    result = graph[POINT].Restore(DATA)
+                    self.__opt.is_restore = False
+                else:
+                    result = graph[POINT].Base(DATA)
+            except:
+                self.__opt.is_restore = True
+                db.UpdateRecord(self.__opt)
+                break
 
             DATA = result.data
             POINT = result.next_point
 
             if not POINT:
                 break
+
+            self.__opt.restore_data = json.dumps(DATA.__dict__)
+            self.__opt.restore_point = POINT
+            db.UpdateRecord(self.__opt)
+
+            o: PipelineOptions = PipelineOptions()
 
         Logger.Info("Profit!")
         self.driver.quit()
