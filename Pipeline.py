@@ -66,6 +66,7 @@ class Pipeline:
                     result = graph[POINT].Base(DATA)
             except:
                 self.__opt.is_restore = True
+                self.__opt.restore_point = POINT
                 db.UpdateRecord(self.__opt)
                 break
 

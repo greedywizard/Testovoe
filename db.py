@@ -12,8 +12,7 @@ Base = declarative_base()
 class PipelineOptions(Base):
     __tablename__ = 'PipelineOptions'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    seed_phrase = Column(String, nullable=False)
+    seed_phrase = Column(String, nullable=False, primary_key=True)
     discord_login = Column(String)
     discord_pass = Column(String)
     twitter_login = Column(String)
