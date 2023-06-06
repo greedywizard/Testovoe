@@ -35,7 +35,7 @@ class Pipeline:
         graph = {
             "": ConnectMetamask(self.driver, self.wait, self.__opt, next_point=TransferGoerliToAlphaTestnet.__name__),
             TransferGoerliToAlphaTestnet.__name__: TransferGoerliToAlphaTestnet(self.driver, self.wait, self.__opt, next_point=WaitTransferGoerliToAlpha.__name__),
-            WaitTransferGoerliToAlpha.__name__: TransferGoerliToAlphaTestnet(self.driver, self.wait, self.__opt, next_point=SwapEthToWeth.__name__),
+            WaitTransferGoerliToAlpha.__name__: WaitTransferGoerliToAlpha(self.driver, self.wait, self.__opt, next_point=SwapEthToWeth.__name__),
             SwapEthToWeth.__name__: SwapEthToWeth(self.driver, self.wait, self.__opt, next_point=SwapWethToUsdc.__name__),
             SwapWethToUsdc.__name__: SwapWethToUsdc(self.driver, self.wait, self.__opt, next_point=AddLiquid.__name__),
             AddLiquid.__name__: AddLiquid(self.driver, self.wait, self.__opt, next_point=SwapUsdcToEth.__name__),
@@ -57,34 +57,36 @@ class Pipeline:
         else:
             POINT = ""
 
-        while True:
-            try:
+        try:
+            while True:
                 if self.__opt.is_restore:
                     result = graph[POINT].Restore(DATA)
                     self.__opt.is_restore = False
                 else:
                     result = graph[POINT].Base(DATA)
-            except:
-                self.__opt.is_restore = True
+
+                DATA = result.data
+                POINT = result.next_point
+
+                if not POINT:
+                    break
+
+                if DATA:
+                    self.__opt.restore_data = json.dumps(DATA.__dict__)
+
                 self.__opt.restore_point = POINT
+
                 db.UpdateRecord(self.__opt)
-                break
 
-            DATA = result.data
-            POINT = result.next_point
+            Logger.Info("Profit!")
+            self.__opt.is_complete = True
+            self.__opt.is_restore = False
+            self.__opt.restore_data = None
+            self.__opt.restore_point = None
 
-            if not POINT:
-                break
+        except Exception as e:
+            Logger.Error(e.__str__())
+            self.__opt.is_restore = True
 
-            self.__opt.restore_data = json.dumps(DATA.__dict__)
-            self.__opt.restore_point = POINT
-            db.UpdateRecord(self.__opt)
-
-        Logger.Info("Profit!")
         self.driver.quit()
-
-        self.__opt.is_complete = True
-        self.__opt.is_restore = False
-        self.__opt.restore_data = None
-        self.__opt.restore_point = None
         return self.__opt

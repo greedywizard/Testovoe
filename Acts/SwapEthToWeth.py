@@ -1,4 +1,4 @@
-from random import random
+import random
 from typing import Type
 
 from selenium.webdriver.common.by import By
@@ -31,6 +31,11 @@ class SwapEthToWeth(Act):
         Logger.Info("SwapEthToWeth()")
 
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
+
+        if Actions.GetElement(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button/span").Element.text != "Scroll Alpha":
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/div/div/button", window_action=WindowActions.Open)
+            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
         # Список токенов на которые переводить
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")

@@ -86,14 +86,10 @@ def ConnectUniswap(scenario: ExecEnvironment):
     Actions.OpenUrl(scenario, URLs.Uniswap_Swap)
 
     Actions.Click(scenario, By.XPATH, "//button[text()='Connect']")
-    res = Actions.Click(scenario, By.ID, "metamask", window_action=WindowActions.Open)
-    scenario.Active_Window = res.New_Window
+    Actions.Click(scenario, By.ID, "metamask", window_action=WindowActions.Open)
     Actions.Click(scenario, By.XPATH, "//button[text()='Next']")
     Actions.Click(scenario, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
-    scenario.Active_Window = res.Old_Window
     Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-    res = Actions.Click(scenario, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", window_action=WindowActions.Open)
-    scenario.Active_Window = res.New_Window
+    Actions.Click(scenario, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", window_action=WindowActions.Open)
     Actions.Click(scenario, By.XPATH, "//button[text()='Approve']")
     Actions.Click(scenario, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
-    scenario.Active_Window = res.Old_Window

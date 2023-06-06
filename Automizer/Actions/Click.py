@@ -74,9 +74,11 @@ def Click(scenario: ExecEnvironment,
         result.Old_Window = scenario.Driver.current_window_handle
         result.New_Window = scenario.Driver.window_handles[-1]
         scenario.Active_Window = result.New_Window
+        scenario.Previous_Window = result.Old_Window
+        scenario.New_Window = result.New_Window
 
     if window_action == WindowActions.WaitClose:
         scenario.Wait.until(EC.number_of_windows_to_be(win_count - 1))
-        scenario.Active_Window = result.Old_Window
+        scenario.Active_Window = scenario.Previous_Window
 
     return result

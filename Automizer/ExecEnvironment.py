@@ -9,6 +9,8 @@ class ExecEnvironment:
         self._driver: WebDriver = driver
         self._wait: WebDriverWait = wait
         self._active_window: str = driver.current_window_handle
+        self._prev_window: str = None
+        self._new_window: str = None
 
     @property
     def Driver(self) -> WebDriver:
@@ -26,3 +28,19 @@ class ExecEnvironment:
     def Active_Window(self, value: str):
         self.Driver.switch_to.window(value)
         self._active_window = value
+
+    @property
+    def Previous_Window(self):
+        return self._prev_window
+
+    @Previous_Window.setter
+    def Previous_Window(self, value: str):
+        self._prev_window = value
+
+    @property
+    def New_Window(self):
+        return self._new_window
+
+    @New_Window.setter
+    def New_Window(self, value: str):
+        self._new_window = value

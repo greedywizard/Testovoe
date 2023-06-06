@@ -32,6 +32,9 @@ class TransferGoerliToAlphaTestnet(Act):
 
             Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[2]/button", window_action=WindowActions.Open)
+            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
+
             res = Actions.GetElement(self.s, By.XPATH, "//div[1]//h6[contains(text(), 'Balance')]")
             balance = float(res.Element.text.split(' ')[1]) / 100
 

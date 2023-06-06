@@ -2,7 +2,7 @@ import logging
 import sqlite3
 from typing import Type
 
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
+from sqlalchemy import create_engine, Column, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -49,7 +49,7 @@ def UpdateRecord(opt: Type[PipelineOptions]):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    obj = session.query(PipelineOptions).filter_by(id=opt.id).first()
+    obj = session.query(PipelineOptions).filter_by(seed_phrase=opt.seed_phrase).first()
     obj.is_restore = opt.is_restore
     obj.is_complete = opt.is_complete
     obj.restore_point = opt.restore_point
