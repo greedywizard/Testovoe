@@ -4,7 +4,7 @@ import os
 
 class Logger:
     _instance = None
-    _logger = None
+    _logger: logging.Logger = None
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -27,7 +27,7 @@ class Logger:
         c_handler = logging.StreamHandler()
         f_handler = logging.FileHandler(_file_path)
 
-        _format = logging.Formatter('%(levelname)s %(message)s')
+        _format = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
         c_handler.setFormatter(_format)
         f_handler.setFormatter(_format)
 
@@ -47,4 +47,8 @@ class Logger:
     @classmethod
     def Info(cls, message: str):
         cls._logger.info(message)
+
+    @classmethod
+    def Exception(cls, exception: Exception):
+        cls._logger.exception(exception)
 

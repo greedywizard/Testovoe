@@ -24,5 +24,6 @@ class ConnectMetamask(Act):
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
+        Scenarios.ConnectGuild(self.s)
 
 

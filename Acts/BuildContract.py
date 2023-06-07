@@ -135,6 +135,7 @@ class BuildContract(Act):
         res = Actions.OpenUrl(self.s, f"https://blockscout.scroll.io/address/{address}/verify-via-flattened-code/new", in_new_window=True)
 
         Actions.AcceptAlert(self.s)
+        time.sleep(1)
         # Выбор компилятора
         Actions.Selector(self.s, By.ID, "smart_contract_compiler_version", compile_version)
         time.sleep(1)
@@ -149,5 +150,5 @@ class BuildContract(Act):
             except:
                 pass
 
+        self.s.Active_Window = res.Old_Window
         self.s.Driver.close()
-        self.Active_Window = res.Old_Window

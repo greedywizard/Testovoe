@@ -27,7 +27,7 @@ class BuildToken(Act):
         self.__wait = wait
         self.__static_data = data
         self.s = ExecEnvironment(self.__driver, self.__wait)
-
+        self.__restore = False
         self.__deployTokenTuple = namedtuple('__deployTokenTuple', ['symbols', 'code'])
 
     def _restore(self, data):
@@ -35,6 +35,7 @@ class BuildToken(Act):
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
+        self.__restore = True
 
     def _base(self, dyna_data):
         res = self.__create_token()
@@ -71,6 +72,9 @@ class BuildToken(Act):
         Actions.OpenUrl(self.s, URLs.Remix)
 
         time.sleep(1)
+
+        if Actions.GetElement(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']").Element:
+            Actions.Click(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']")
 
         while True:
             Logger.Info("Try create new file...")
@@ -121,16 +125,17 @@ class BuildToken(Act):
         Actions.Click(self.s, By.XPATH, "//a/span[text()='Injected Provider - MetaMask']")
 
         while True:
+            if self.__restore:
+                Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Deploy']]", window_action=WindowActions.Open)
+                Actions.Click(self.s, By.XPATH, "//button[text()='Next']")
+                Actions.Click(self.s, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
+                break
+
+        while True:
             Logger.Info("Try start deploy...")
             try:
-                # "Deploy"
-                res = Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Deploy']]", window_action=WindowActions.Open)
-                # Переключаемся на всплывающее окно
-                self.s.Active_Window = res.New_Window
-                # "Confirm"
+                Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Deploy']]", window_action=WindowActions.Open)
                 Actions.Click(self.s, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
-                # Переключение на основное окно
-                self.s.Active_Window = res.Old_Window
                 break
             except:
                 pass

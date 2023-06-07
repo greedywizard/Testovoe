@@ -61,8 +61,8 @@ class SwapWethToUsdc(Act):
             Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]", window_action=WindowActions.Open)
 
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
-            Actions.Click(self.s, By.XPATH, "//button[text()='Next']")
-            Actions.Click(self.s, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.WaitClose)
+            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
+            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
 
             # Ожидание подсчетов
             while True:
@@ -81,6 +81,6 @@ class SwapWethToUsdc(Act):
             Actions.Click(self.s, By.ID, "swap-button")
 
         Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)
-        Actions.Click(self.s, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
+        Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         # "Close"
         Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")

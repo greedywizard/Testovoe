@@ -2,11 +2,12 @@ from typing import List
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from Automizer.ExecEnvironment import ExecEnvironment
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class GetElementsResult:
     def __init__(self):
-        self.__elements = None
+        self.__elements = []
 
     @property
     def Elements(self) -> List[WebElement]:
@@ -26,6 +27,9 @@ def GetElements(scenario: ExecEnvironment,
                 path: str) -> GetElementsResult:
     result: GetElementsResult = GetElementsResult()
 
-    result.Elements = scenario.Driver.find_elements(by, path)
+    try:
+        result.Elements = scenario.Wait.until(EC.presence_of_all_elements_located((by, path)))
+    except:
+        result.Elements = []
 
     return result

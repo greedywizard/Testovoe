@@ -1,5 +1,8 @@
+import json
+import time
 from typing import Type
 
+import requests
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -20,23 +23,24 @@ class WaitTransferGoerliToAlpha(Act):
         self.s = ExecEnvironment(self.__driver, self.__wait)
 
     def _restore(self, data):
-        Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
+        wa = Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
+        return wa
 
-    def _base(self, dyna_data):
+    def _base(self, wallet_address):
         Logger.Info("WaitTransferGoerliToAlpha()")
         Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 
-        Actions.Click(self.s, By.XPATH, '//*[@id="root"]/div/div[1]/div[1]/div/button[2]')
-
         while True:
+            Logger.Info("Waiting success transfer...")
             try:
-                Logger.Info("Waiting success transfer...")
-                Actions.GetElement(self.s, By.XPATH, "/html/body/div[2]/div/div[2]/div[1]/div/table/tbody/tr[1]/td[1]/div/div[1]/span[text()='Success']")
-                Actions.GetElement(self.s, By.XPATH, "/html/body/div[2]/div/div[2]/div[1]/div/table/tbody/tr[1]/td[1]/div/div[2]/span[text()='Success']")
-                break
+                response = requests.get(f'https://alpha-api.scroll.io/bridgehistory/api/txs?address={wallet_address}&offset=0&limit=1')
+                a = json.loads(response.text)["data"]["result"][0]
+                if "finalizeTx" in a:
+                    break
+                time.sleep(30)
             except:
                 pass
 

@@ -1,5 +1,7 @@
+import time
 from typing import Type
 
+from selenium.common import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -12,7 +14,7 @@ import URLs
 from db import PipelineOptions
 
 
-class AddLiquid(Act):
+class RemoveLiquidEthUSDC(Act):
     def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
@@ -27,18 +29,19 @@ class AddLiquid(Act):
         Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data):
-        Logger.Info("AddLiquid()")
+        Logger.Info("RemoveLiquid()")
 
-        Actions.OpenUrl(self.s, URLs.Uniswap_ETH_Liquid)
+        Actions.OpenUrl(self.s, URLs.Uniswap_ETH_Liquid_Pool)
 
-        Actions.Click(self.s, By.XPATH, "//span[text()='Select a token']")
-        Actions.Click(self.s, By.XPATH, "//div[text()='USDC']")
-
-        Actions.Click(self.s, By.XPATH, '//*[@id="root"]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[3]/div/div[2]/button[1]')
-        Actions.Click(self.s, By.XPATH, '//*[@id="root"]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[2]/div/div/div/div[2]/button')
-        Actions.Click(self.s, By.XPATH, '//*[@id="root"]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[2]/div/div[2]/div/div/div[3]/button')
-        Actions.Click(self.s, By.XPATH, "//button[text()='MAX']")
-        Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/div/div/main/a[2]")
+        # Убрать ликвидность
+        Actions.Click(self.s, By.XPATH, "//a[text()='Remove Liquidity']")
         Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
-        Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
+        Actions.Click(self.s, By.XPATH, "//button[text()='Remove']")
+        Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[3]/div[3]/div/div/div/div/div/div[2]/button", window_action=WindowActions.Open)
         Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
+        while True:
+            Logger.Info("Wait")
+            e = Actions.GetElement(self.s, By.XPATH, "//div[text()='Success']").Element
+            if e:
+                break

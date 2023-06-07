@@ -49,14 +49,20 @@ def OpenMetamaskWallet(scenario: ExecEnvironment, seed: str):
     Actions.Click(scenario, By.XPATH, "//button[@data-testid='pin-extension-next']")
     Actions.Click(scenario, By.XPATH, "//button[@data-testid='pin-extension-done']")
 
+    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div/div[1]/span/button/span", as_script=True)
+    Actions.Click(scenario, By.XPATH, "//button[@data-testid='account-options-menu__account-details']", as_script=True)
+    r = Actions.GetElement(scenario, By.XPATH, "/html/body/div[1]/div/span/div[1]/div/div/div/div[3]/div[2]/div/div/div").Element.text
+    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/span/div[1]/div/div/div/button[1]", as_script=True)
+    return r
+
 
 def SetupMetamaskWallet(scenario: ExecEnvironment):
     Logger.Info("SetupMetamaskWallet()")
 
     Actions.OpenUrl(scenario, url=URLs.Metamask_Settings_Advance)
 
-    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[5]/div[2]/div/label/div[1]/div[1]/div[2]")
-    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[1]/div[1]/div[2]")
+    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[2]/div[2]/div[2]/div[5]/div[2]/div/label/div[1]/div[1]/div[2]", as_script=True)
+    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[3]/div/div[1]/div[1]/div[2]", as_script=True)
     Actions.Click(scenario, By.XPATH, "//div[@data-testid='network-display']", as_script=True)
     Actions.Click(scenario, By.XPATH, "//li[.//span[text()='Goerli test network']]", as_script=True)
 
@@ -93,3 +99,14 @@ def ConnectUniswap(scenario: ExecEnvironment):
     Actions.Click(scenario, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", window_action=WindowActions.Open)
     Actions.Click(scenario, By.XPATH, "//button[text()='Approve']")
     Actions.Click(scenario, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
+
+
+def ConnectGuild(scenario: ExecEnvironment):
+    Actions.OpenUrl(scenario, URLs.Guild)
+
+    Actions.Click(scenario, By.XPATH, "//span[text()='Connect to a wallet']")
+    Actions.Click(scenario, By.XPATH, "//span[text()='MetaMask']", window_action=WindowActions.Open)
+    Actions.Click(scenario, By.XPATH, "//button[text()='Next']")
+    Actions.Click(scenario, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
+    Actions.Click(scenario, By.XPATH, "//span[text()='Verify account']", window_action=WindowActions.Open)
+    Actions.Click(scenario, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)

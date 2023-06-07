@@ -8,7 +8,7 @@ from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 
 import Scenarios
-from Automizer.Act import Act
+from Automizer.Act import Act, ControlPointRestoreData
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
 from Automizer.ExecEnvironment import ExecEnvironment
@@ -18,7 +18,7 @@ from db import PipelineOptions
 
 
 class PlayWithTokenInMetamask(Act):
-    class Data:
+    class Data(ControlPointRestoreData):
         def __init__(self):
             self.address: str = None
 
@@ -36,8 +36,9 @@ class PlayWithTokenInMetamask(Act):
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
+        return PlayWithTokenInMetamask.Data().FromJson(data)
 
-    def _base(self, dyna_data: Data):
+    def _base(self, dyna_data):
         self.__add_token(dyna_data.address)
         self.__swap_to_scrollAlpha()
         self.__create_second_account()

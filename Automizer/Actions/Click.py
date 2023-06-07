@@ -34,6 +34,8 @@ def Click(scenario: ExecEnvironment,
           by: By,
           path: str,
           as_script: bool = False,
+          is_visible: bool = True,
+          is_clickable: bool = True,
           shadow_root: WebElement = None,
           window_action: WindowActions = None) -> ClickResult:
     """
@@ -44,7 +46,17 @@ def Click(scenario: ExecEnvironment,
     win_count = scenario.Driver.window_handles.__len__()
 
     def _run():
-        button: WebElement = scenario.Wait.until(EC.visibility_of_element_located((by, path)) and EC.element_to_be_clickable((by, path)))
+        button: WebElement = None
+        if is_visible:
+            button = scenario.Wait.until(EC.visibility_of_element_located((by, path)))
+        else:
+            button = scenario.Wait.until(EC.presence_of_element_located((by, path)))
+
+        if is_clickable and not button.is_enabled():
+            button = scenario.Wait.until(EC.element_to_be_clickable((by, path)))
+
+        if not button:
+            raise ElementClickInterceptedException
 
         try:
             if as_script:

@@ -8,5 +8,5 @@ def Input(scenario: ExecEnvironment,
           by: By,
           path: str,
           data: str):
-    input_element: WebElement = scenario.Wait.until(EC.presence_of_element_located((by, path)) and EC.element_to_be_clickable((by, path)))
+    input_element: WebElement = scenario.Wait.until(EC.visibility_of_element_located((by, path)) and EC.element_to_be_clickable((by, path)))
     input_element.send_keys(data)

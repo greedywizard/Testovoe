@@ -1,4 +1,5 @@
 import random
+import time
 from typing import Type
 
 from selenium.webdriver.common.by import By
@@ -32,9 +33,9 @@ class SwapEthToWeth(Act):
 
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
 
-        if Actions.GetElement(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button/span").Element.text != "Scroll Alpha":
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/div/div/button", window_action=WindowActions.Open)
+        if not Actions.GetElement(self.s, By.XPATH, "//button/span[text()='Scroll Alpha']", is_visible=False).Element:
+            Actions.Click(self.s, By.XPATH, "//div/span[text()='Unsupported']", is_visible=True)
+            Actions.Click(self.s, By.XPATH, "//button/div[text()='Scroll Alpha']", window_action=WindowActions.Open)
             Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
         # Список токенов на которые переводить
@@ -46,9 +47,9 @@ class SwapEthToWeth(Act):
 
         value = Actions.GetElement(self.s, By.XPATH, '//*[@id="swap-currency-input"]/div/div[2]/div/div[2]/div').Element.text.split(' ')[1]
 
-        # Рандомная половина
         val = self._generate_half_random(float(value))
-        # Ввод количества
+
+        time.sleep(1)
         Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/input",
                       str(val))
         # "Warp"

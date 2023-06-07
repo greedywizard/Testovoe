@@ -19,8 +19,7 @@ class PipelineOptions(Base):
     twitter_pass = Column(String)
     restore_point = Column(String)
     restore_data = Column(String)
-    is_complete = Column(Boolean, nullable=False)
-    is_restore = Column(Boolean, nullable=False)
+    is_complete = Column(Boolean, nullable=False, default=False)
 
 
 def CreateTable():
@@ -50,7 +49,6 @@ def UpdateRecord(opt: Type[PipelineOptions]):
     session = Session()
 
     obj = session.query(PipelineOptions).filter_by(seed_phrase=opt.seed_phrase).first()
-    obj.is_restore = opt.is_restore
     obj.is_complete = opt.is_complete
     obj.restore_point = opt.restore_point
     obj.restore_data = opt.restore_data
