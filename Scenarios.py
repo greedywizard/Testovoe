@@ -51,9 +51,9 @@ def OpenMetamaskWallet(scenario: ExecEnvironment, seed: str):
 
     Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div/div[1]/span/button/span", as_script=True)
     Actions.Click(scenario, By.XPATH, "//button[@data-testid='account-options-menu__account-details']", as_script=True)
-    r = Actions.GetElement(scenario, By.XPATH, "/html/body/div[1]/div/span/div[1]/div/div/div/div[3]/div[2]/div/div/div").Element.text
+    wallet_address = Actions.GetElement(scenario, By.XPATH, "/html/body/div[1]/div/span/div[1]/div/div/div/div[3]/div[2]/div/div/div").Element.text
     Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/span/div[1]/div/div/div/button[1]", as_script=True)
-    return r
+    return wallet_address
 
 
 def SetupMetamaskWallet(scenario: ExecEnvironment):

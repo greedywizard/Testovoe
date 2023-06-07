@@ -14,6 +14,7 @@ from Automizer.Logger import Logger
 from Automizer.ExecEnvironment import ExecEnvironment
 import Automizer.Actions as Actions
 import URLs
+from DynaData import DynaData
 from db import PipelineOptions
 
 
@@ -37,9 +38,9 @@ class BuildToken(Act):
         Scenarios.ConnectUniswap(self.s)
         self.__restore = True
 
-    def _base(self, dyna_data):
+    def _base(self, dyna_data: DynaData):
         res = self.__create_token()
-        return self.__deploy_token(res.symbols, res.code)
+        dyna_data.NewToken.address = self.__deploy_token(res.symbols, res.code)
 
     def __create_token(self):
         Logger.Info("CreateToken()")
@@ -59,7 +60,7 @@ class BuildToken(Act):
         symbols = random_letter
         Actions.Input(self.s, By.XPATH, "/html/body/div/div[2]/div[1]/div[1]/section[1]/div/label[2]/input", random_letter)
         # много денях
-        Actions.Input(self.s, By.XPATH, "/html/body/div/div[2]/div[1]/div[1]/section[1]/label/input", str(2124221))
+        Actions.Input(self.s, By.XPATH, "/html/body/div/div[2]/div[1]/div[1]/section[1]/label/input", str(21242))
         # Получить код контракта
         code = Actions.GetElement(self.s, By.XPATH, "/html/body/div/div[2]/div[2]/pre/code").Element.text
         self.s.Driver.switch_to.default_content()

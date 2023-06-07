@@ -11,6 +11,7 @@ from Automizer.Logger import Logger
 from Automizer.ExecEnvironment import ExecEnvironment
 import Automizer.Actions as Actions
 import URLs
+from DynaData import DynaData
 from db import PipelineOptions
 
 
@@ -22,14 +23,14 @@ class WaitTransferGoerliToAlpha(Act):
         self.__static_data = data
         self.s = ExecEnvironment(self.__driver, self.__wait)
 
-    def _restore(self, data):
-        wa = Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
+    def _restore(self, data: DynaData):
+        Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
-        return wa
 
-    def _base(self, wallet_address):
+    def _base(self, dyna_data: DynaData):
+        wallet_address = dyna_data.Metamask.wallet_address
         Logger.Info("WaitTransferGoerliToAlpha()")
         Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 

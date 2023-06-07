@@ -77,8 +77,7 @@ class SwapUsdcToEth(Act):
                 except:
                     pass
 
-            Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Swap']]", window_action=WindowActions.Open)
-            Actions.Click(self.s, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
+            Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Swap']]")
         else:
             Actions.Click(self.s, By.ID, "swap-button")
 

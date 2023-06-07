@@ -1,5 +1,5 @@
 import json
-from typing import Type
+from typing import Type, final
 
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -51,7 +51,7 @@ class Pipeline:
         }
 
         if self.__opt.restore_data:
-            DATA = self.__opt.restore_data
+            DATA = DynaData().FromJson(self.__opt.restore_data)
         else:
             DATA = None
 

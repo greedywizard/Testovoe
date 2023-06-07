@@ -8,19 +8,19 @@ from selenium.webdriver import ActionChains, Keys
 from selenium.webdriver.common.by import By
 
 import Scenarios
-from Automizer.Act import Act, ControlPointRestoreData
+from Automizer.Act import Act
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
 from Automizer.ExecEnvironment import ExecEnvironment
 import Automizer.Actions as Actions
 import URLs
+from DynaData import DynaData
 from db import PipelineOptions
 
 
-class PlayWithTokenInMetamask(Act):
-    class Data(ControlPointRestoreData):
-        def __init__(self):
-            self.address: str = None
+class PlayWithTokenInMetamask:
+    class Data:
+        address: str = None
 
     def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
@@ -36,10 +36,9 @@ class PlayWithTokenInMetamask(Act):
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
-        return PlayWithTokenInMetamask.Data().FromJson(data)
 
-    def _base(self, dyna_data):
-        self.__add_token(dyna_data.address)
+    def _base(self, dyna_data: DynaData):
+        self.__add_token(dyna_data.NewToken.address)
         self.__swap_to_scrollAlpha()
         self.__create_second_account()
         self.__send_between_accounts("Account 1", "scroll2")

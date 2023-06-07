@@ -31,6 +31,8 @@ class SubscribeTwitter(Act):
     def _base(self, dyna_data):
         Logger.Info("SubscribeTwitter()")
 
+        Actions.OpenUrl(self.s, URLs.Guild)
+
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[2]/div[1]/button[2]")
 
         Actions.Click(self.s, By.XPATH, "//div[p[contains(text(), 'Twitter')]]/button", window_action=WindowActions.Open)
@@ -45,4 +47,3 @@ class SubscribeTwitter(Act):
             Actions.WaitElementVisible(self.s, By.XPATH, "div[text()='Account successfully connected']")
         except TimeoutException:
             pass
-
