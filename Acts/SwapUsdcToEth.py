@@ -59,13 +59,14 @@ class SwapUsdcToEth(Act):
         allow_button: bool = Actions.GetElements(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]").ElementsCount > 0
 
         if allow_button:
-            # "Allow the Uniswap Protocol to use your WETH"
-            Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]", window_action=WindowActions.Open)
-            # "Max"
+            while True:
+                try:
+                    Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]", window_action=WindowActions.Open)
+                    break
+                except:
+                    pass
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
-            # "Next"
             Actions.Click(self.s, By.XPATH, "//button[text()='Next']")
-            # "Approve"
             Actions.Click(self.s, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.WaitClose)
 
             # Ожидание подсчетов
@@ -82,7 +83,6 @@ class SwapUsdcToEth(Act):
             Actions.Click(self.s, By.ID, "swap-button")
 
         Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)
-        # "Confirm"
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[3]/div[3]/footer/button[2]", window_action=WindowActions.WaitClose)
+        Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         # "Close"
         Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")

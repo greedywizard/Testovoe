@@ -18,10 +18,7 @@ from DynaData import DynaData
 from db import PipelineOptions
 
 
-class PlayWithTokenInMetamask:
-    class Data:
-        address: str = None
-
+class PlayWithTokenInMetamask(Act):
     def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
@@ -38,11 +35,14 @@ class PlayWithTokenInMetamask:
         Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data: DynaData):
-        self.__add_token(dyna_data.NewToken.address)
+        self.__add_token(dyna_data.new_token)
         self.__swap_to_scrollAlpha()
         self.__create_second_account()
         self.__send_between_accounts("Account 1", "scroll2")
         self.__send_between_accounts("scroll2", "Account 1", lambda x: x/2)
+        Actions.OpenUrl(self.s, URLs.Metamask_Home)
+        Actions.Click(self.s, By.XPATH, "//button[@data-testid='account-menu-icon']", as_script=True)
+        Actions.Click(self.s, By.XPATH, f"//button[.//div[3]/div[text()='Account 1']]", as_script=True)
 
     def __add_token(self, address):
         Logger.Info("AddToken()")
@@ -78,7 +78,7 @@ class PlayWithTokenInMetamask:
         Logger.Info("CreateSecondAccount()")
 
         Actions.OpenUrl(self.s, URLs.Metamask_NewAccount)
-
+        time.sleep(2)
         Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", "scroll2")
 
         while True:
@@ -87,7 +87,7 @@ class PlayWithTokenInMetamask:
                 break
             except:
                 pass
-
+        time.sleep(2)
         Actions.Click(self.s, By.XPATH, "//button[text()='Create']")
 
     def __send_between_accounts(self, account_from, account_to, rand=None):

@@ -58,7 +58,12 @@ class SwapWethToUsdc(Act):
         allow_button: bool = Actions.GetElements(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]").ElementsCount > 0
 
         if allow_button:
-            Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]", window_action=WindowActions.Open)
+            while True:
+                try:
+                    Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]", window_action=WindowActions.Open)
+                    break
+                except:
+                    pass
 
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
             Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")

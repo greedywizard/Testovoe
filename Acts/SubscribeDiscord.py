@@ -26,10 +26,12 @@ class SubscribeDiscord(Act):
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
-        Scenarios.ConnectGuild(self.s)
+
 
     def _base(self, dyna_data):
         Logger.Info("SubscribeDiscord()")
+
+        Scenarios.ConnectGuild(self.s)
 
         Actions.OpenUrl(self.s, URLs.Guild)
 

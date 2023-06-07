@@ -48,5 +48,3 @@ class TransferGoerliToAlphaTestnet(Act):
         except ValueError:
             Logger.Info("There is no Goerli balance")
             print('clear account')
-
-        return

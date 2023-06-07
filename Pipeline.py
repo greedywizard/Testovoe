@@ -11,15 +11,16 @@ from selenium.webdriver.support import expected_conditions as EC
 import db
 from Automizer.Logger import Logger
 from Acts import *
+from DynaData import DynaData
 from db import PipelineOptions
-import Mappers as mp
 
 
 class Pipeline:
     def __init__(self, options: webdriver.ChromeOptions, pipe_options: Type[PipelineOptions]):
         self.driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
         self.driver.set_window_size(800, 800)
-        self.wait: WebDriverWait = WebDriverWait(self.driver, 10)
+        self.driver.implicitly_wait(1)
+        self.wait: WebDriverWait = WebDriverWait(self.driver, 20)
         self.__opt = pipe_options
 
     def Start(self) -> Type[PipelineOptions]:
@@ -43,8 +44,7 @@ class Pipeline:
             RemoveLiquidEthUSDC.__name__: RemoveLiquidEthUSDC(self.driver, self.wait, self.__opt, next_point=SwapUsdcToEth.__name__),
             SwapUsdcToEth.__name__: SwapUsdcToEth(self.driver, self.wait, self.__opt, next_point=BuildContract.__name__),
             BuildContract.__name__: BuildContract(self.driver, self.wait, self.__opt, next_point=BuildToken.__name__),
-            BuildToken.__name__: BuildToken(self.driver, self.wait, self.__opt, next_point=mp.Mapper.__name__),
-            mp.Mapper.__name__: mp.Mapper(next_point=PlayWithTokenInMetamask.__name__),
+            BuildToken.__name__: BuildToken(self.driver, self.wait, self.__opt, next_point=PlayWithTokenInMetamask.__name__),
             PlayWithTokenInMetamask.__name__: PlayWithTokenInMetamask(self.driver, self.wait, self.__opt, next_point=SubscribeDiscord.__name__),
             SubscribeDiscord.__name__: SubscribeDiscord(self.driver, self.wait, self.__opt, next_point=SubscribeTwitter.__name__),
             SubscribeTwitter.__name__: SubscribeTwitter(self.driver, self.wait, self.__opt)
@@ -53,9 +53,9 @@ class Pipeline:
         if self.__opt.restore_data:
             DATA = DynaData().FromJson(self.__opt.restore_data)
         else:
-            DATA = None
+            DATA = DynaData()
 
-        restore: bool = True
+        restore: bool = False
         if self.__opt.restore_point:
             POINT = self.__opt.restore_point
             restore: bool = True
@@ -76,10 +76,7 @@ class Pipeline:
                 if not POINT:
                     break
 
-                if DATA:
-                    self.__opt.restore_data = json.dumps(DATA.__dict__)
-                else:
-                    self.__opt.restore_data = None
+                self.__opt.restore_data = json.dumps(DATA.__dict__)
 
                 self.__opt.restore_point = POINT
                 db.UpdateRecord(self.__opt)

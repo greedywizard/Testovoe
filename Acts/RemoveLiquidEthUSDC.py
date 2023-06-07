@@ -30,7 +30,7 @@ class RemoveLiquidEthUSDC(Act):
 
     def _base(self, dyna_data):
         Logger.Info("RemoveLiquid()")
-
+        time.sleep(15)
         Actions.OpenUrl(self.s, URLs.Uniswap_ETH_Liquid_Pool)
 
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/div/div/main/a[2]")

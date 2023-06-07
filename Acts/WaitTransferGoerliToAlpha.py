@@ -30,14 +30,13 @@ class WaitTransferGoerliToAlpha(Act):
         Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data: DynaData):
-        wallet_address = dyna_data.Metamask.wallet_address
         Logger.Info("WaitTransferGoerliToAlpha()")
         Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 
         while True:
             Logger.Info("Waiting success transfer...")
             try:
-                response = requests.get(f'https://alpha-api.scroll.io/bridgehistory/api/txs?address={wallet_address}&offset=0&limit=1')
+                response = requests.get(f'https://alpha-api.scroll.io/bridgehistory/api/txs?address={dyna_data.wallet_address}&offset=0&limit=1')
                 a = json.loads(response.text)["data"]["result"][0]
                 if "finalizeTx" in a:
                     break

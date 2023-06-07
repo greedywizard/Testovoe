@@ -41,7 +41,7 @@ class AddLiquidEthUSDC(Act):
         Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[3]/div/div[2]/button[1]')
         Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[2]/div/div/div/div[2]/button')
         Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[2]/div/div[2]/div/div/div[3]/button')
-        Actions.Click(self.s, By.XPATH, "//button[text()='MAX']")
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[3]/div/div[2]/div/div[2]/button")
 
         if Actions.GetElement(self.s, By.XPATH, "//button[text()='Approve USDC']").Element:
             Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
@@ -58,4 +58,3 @@ class AddLiquidEthUSDC(Act):
                 break
 
         Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
-

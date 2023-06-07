@@ -19,9 +19,6 @@ from db import PipelineOptions
 
 
 class BuildToken(Act):
-    class Result:
-        address: str = None
-
     def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
         super().__init__(next_point, restore_point)
         self.__driver = driver
@@ -40,7 +37,7 @@ class BuildToken(Act):
 
     def _base(self, dyna_data: DynaData):
         res = self.__create_token()
-        dyna_data.NewToken.address = self.__deploy_token(res.symbols, res.code)
+        dyna_data.new_token = self.__deploy_token(res.symbols, res.code)
 
     def __create_token(self):
         Logger.Info("CreateToken()")
@@ -67,7 +64,7 @@ class BuildToken(Act):
 
         return self.__deployTokenTuple(symbols=symbols, code=code)
 
-    def __deploy_token(self, symbols, code):
+    def __deploy_token(self, symbols, code) -> str:
         Logger.Info("DeployToken()")
 
         Actions.OpenUrl(self.s, URLs.Remix)
@@ -141,15 +138,15 @@ class BuildToken(Act):
             except:
                 pass
 
-        result = self.Result()
+        address: str = None
         while True:
             Logger.Info("Deploying...")
             try:
                 element = Actions.GetElement(self.s, By.XPATH,
                                              "/html/body/div[1]/div[1]/div[2]/section/div/div/div[6]/div/div[1]/div/div[4]/div[2]/div/div[1]/div/div[2]/a/i")
-                result.address = element.Element.get_attribute("content")
+                address = element.Element.get_attribute("content")
                 break
             except:
                 pass
 
-        return result
+        return address

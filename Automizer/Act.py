@@ -36,7 +36,9 @@ class Act(ABC):
             result.restore_point = self.__rId
         else:
             result.restore_point = self.__bId
-        result.data = self._base(data)
+        result.data = data
+        self._base(data)
+
         return result
 
     @abstractmethod
