@@ -1,4 +1,7 @@
+import time
 from typing import Type
+
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -38,3 +41,8 @@ class SubscribeTwitter(Act):
                       self.__static_data.twitter_pass)
         Actions.Click(self.s, By.XPATH, "//span[text()='Log in']")
         Actions.Click(self.s, By.XPATH, "//div[@data-testid='OAuth_Consent_Button']", is_clickable=False, as_script=True, window_action=WindowActions.WaitClose)
+        try:
+            Actions.WaitElementVisible(self.s, By.XPATH, "div[text()='Account successfully connected']")
+        except TimeoutException:
+            pass
+

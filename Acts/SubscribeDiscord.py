@@ -1,4 +1,7 @@
+import time
 from typing import Type
+
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -40,4 +43,9 @@ class SubscribeDiscord(Act):
             Logger.Info("Discord account connected yet")
             Actions.Click(self.s, By.XPATH, "//button[span[text()='Connect anyway']]", window_action=WindowActions.Open)
             Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Authorize']]", window_action=WindowActions.WaitClose)
+        try:
+            Actions.WaitElementVisible(self.s, By.XPATH, "div[text()='Account successfully connected']")
+        except TimeoutException:
+            pass
         Actions.Click(self.s, By.XPATH, "/html/body/div[17]/div[3]/div/section/button")
+
