@@ -1,7 +1,7 @@
 import time
 from typing import Type
 
-from selenium.common import ElementNotInteractableException
+from selenium.common import ElementNotInteractableException, TimeoutException
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -37,8 +37,8 @@ class AddLiquidEthUSDC(Act):
         Actions.Input(self.s, By.ID, "token-search-input", "Ether")
         Actions.Click(self.s, By.XPATH, "//div[text()='Ether']")
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[2]/div[3]/div/div/button")
-        Actions.Input(self.s, By.ID, "token-search-input", "USDC")
-        Actions.Click(self.s, By.XPATH, "//div[text()='Scroll USD']")
+        Actions.Input(self.s, By.ID, "token-search-input", "0xA0D71B9877f44C744546D649147E3F1e70a93760")
+        Actions.Click(self.s, By.XPATH, "//div[text()='USD Coin']")
 
         try:
             # I understand
@@ -52,17 +52,25 @@ class AddLiquidEthUSDC(Act):
         Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[2]/div/div/div/div[2]/button')
         # I  understand
         Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[2]/div/div[2]/div/div/div[3]/button')
-        # Max USDC
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[3]/div/div[2]/div/div[2]/button")
 
-        attr = Actions.GetElement(self.s, By.XPATH, "/html/body/reach-portal/div", is_visible=False).Element.get_attribute("data-popper-placement")
+        balance = Actions.GetElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[2]/div", is_visible=False)\
+            .Element.text.split(' ')[1]
 
-        if attr == "left":
-            self._left()
-        if attr == "bottom" or attr == "top":
-            self._bottom()
+        Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[2]/div/div[1]/input", str(float(balance) * 0.90))
 
-            # Add
+        if self.s.Driver.find_element(By.XPATH, "//button[text()='Approve USDC']"):
+            Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
+            Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
+            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
+            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
+
+        if self.s.Driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button"):
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button", is_visible=False, as_script=True)
+
+        if self.s.Driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[3]/div/button"):
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[3]/div/button", is_visible=False, as_script=True)
+
+        # Add
         Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div[2]/button", window_action=WindowActions.Open)
         Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
 
@@ -73,23 +81,3 @@ class AddLiquidEthUSDC(Act):
                 break
 
         Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
-
-    def _bottom(self):
-        if Actions.GetElement(self.s, By.XPATH, "//button[text()='Approve USDC']").Element:
-            Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
-            Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
-            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
-            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
-
-        # Preview
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button", as_script=True)
-
-    def _left(self):
-        if Actions.GetElement(self.s, By.XPATH, "//button[text()='Approve USDC']").Element:
-            Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
-            Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
-            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
-            Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
-
-        # Preview
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[3]/div/button", as_script=True)

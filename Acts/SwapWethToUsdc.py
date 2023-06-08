@@ -98,7 +98,7 @@ class SwapWethToUsdc(Act):
         while True:
             try:
                 Logger.Info("Waiting Approve")
-                Actions.Click(self.s, By.ID, "swap-button")
+                Actions.Click(self.s, By.ID, "swap-button", is_visible=False)
                 break
             except:
                 pass

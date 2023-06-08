@@ -1,6 +1,7 @@
 import time
 from typing import Type
 
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -30,22 +31,34 @@ class SwapUsdcToEth(Act):
     def _base(self, dyna_data):
         Logger.Info("SwapUsdcToEth()")
 
-        Actions.OpenUrl(self.s, URLs.Uniswap_Swap_Usdc)
+        Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
+
+        # Переключится на Scroll Alpha
+        size = self.s.Driver.get_window_size()
+        width = size['width']
+        if width < 640:
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
+        else:
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
+
+        res = Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
+        if res.Prev_Window != res.New_Window:
+            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
+
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/button")
+        Actions.Input(self.s, By.ID, "token-search-input", "0xA0D71B9877f44C744546D649147E3F1e70a93760")
+        Actions.Click(self.s, By.XPATH, "//div[text()='USD Coin']")
 
         try:
-            # "I understand" кнопка
+            # I understand
             Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
         except:
             pass
 
-        # Открыть список монет
-        Actions.Click(self.s, By.XPATH, '//*[@id="swap-currency-input"]/div/div[1]/button')
-        # Выбрать монеты usdc
-        Actions.Click(self.s, By.XPATH, "//div[text()='USDC']")
-        # Открыть список монет
-        Actions.Click(self.s, By.XPATH, '//*[@id="swap-currency-output"]/div/div[1]/button')
-        # Выбрать монеты eth
-        Actions.Click(self.s, By.XPATH, "//div[text()='ETH']")
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
+        Actions.Input(self.s, By.ID, "token-search-input", "Ether")
+        Actions.Click(self.s, By.XPATH, "//div[text()='Ether']")
+
         try:
             # Кнопка "max"
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
@@ -53,42 +66,35 @@ class SwapUsdcToEth(Act):
             Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
             return
 
-        # Ожидаем подсчет
-        time.sleep(3)
-        # Проверка наличия "Allow the Uniswap Protocol to use your USDC"
-        allow_button: bool = Actions.GetElements(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]").ElementsCount > 0
-
-        if allow_button:
-            while True:
-                try:
-                    Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]", window_action=WindowActions.Open)
-                    break
-                except:
-                    pass
-            Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
-            Actions.Click(self.s, By.XPATH, "//button[text()='Next']")
-            Actions.Click(self.s, By.XPATH, "//button[text()='Approve']", window_action=WindowActions.WaitClose)
-
-            # Ожидание подсчетов
-            while True:
-                try:
-                    Logger.Info("Waiting calc WETH to USDC...")
-                    Actions.GetElement(self.s, By.XPATH, "//button[@data-testid='web3-status-connected']")
-                    break
-                except:
-                    pass
-
-            while True:
-                try:
-                    Logger.Info("Waiting Approve")
-                    Actions.Click(self.s, By.ID, "swap-button")
-                    break
-                except:
-                    pass
-        else:
+        try:
+            self._approve()
+        except TimeoutException:
             Actions.Click(self.s, By.ID, "swap-button")
 
         Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)
         Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         # "Close"
         Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
+
+    def _approve(self):
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]", window_action=WindowActions.Open)
+        Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
+        Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
+        Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
+
+        # Ожидание подсчетов
+        while True:
+            try:
+                Logger.Info("Waiting calc WETH to USDC...")
+                Actions.GetElement(self.s, By.XPATH, "//button[@data-testid='web3-status-connected']")
+                break
+            except:
+                pass
+
+        while True:
+            try:
+                Logger.Info("Waiting Approve")
+                Actions.Click(self.s, By.ID, "swap-button", is_visible=False)
+                break
+            except:
+                pass

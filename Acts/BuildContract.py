@@ -2,6 +2,7 @@ import time
 from collections import namedtuple
 from typing import Type
 
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 import Scenarios
@@ -135,9 +136,13 @@ class BuildContract(Act):
         res = Actions.OpenUrl(self.s, f"https://blockscout.scroll.io/address/{address}/verify-via-flattened-code/new", in_new_window=True)
 
         Actions.AcceptAlert(self.s)
-        time.sleep(3)
+
+        try:
+            Actions.Selector(self.s, By.ID, "smart_contract_compiler_version", compile_version)
+        except NoSuchElementException:
+            pass
         # Выбор компилятора
-        Actions.Selector(self.s, By.ID, "smart_contract_compiler_version", compile_version)
+
         time.sleep(3)
         # "Publish"
         Actions.Click(self.s, By.XPATH, "//button[text()='Verify & publish']")
