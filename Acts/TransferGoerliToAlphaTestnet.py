@@ -1,3 +1,4 @@
+import time
 from typing import Type
 
 from selenium.webdriver.common.by import By
@@ -24,7 +25,6 @@ class TransferGoerliToAlphaTestnet(Act):
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
-        Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data):
         try:

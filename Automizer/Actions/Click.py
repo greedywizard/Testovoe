@@ -22,11 +22,11 @@ class ClickResult:
         self.__new_window = value
 
     @property
-    def Old_Window(self) -> str:
+    def Prev_Window(self) -> str:
         return self.__old_window
 
-    @Old_Window.setter
-    def Old_Window(self, value: str):
+    @Prev_Window.setter
+    def Prev_Window(self, value: str):
         self.__old_window = value
 
 
@@ -82,11 +82,14 @@ def Click(scenario: ExecEnvironment,
         _shadow_run()
 
     if window_action == WindowActions.Open:
-        scenario.Wait.until(EC.number_of_windows_to_be(win_count + 1))
-        result.Old_Window = scenario.Driver.current_window_handle
+        try:
+            scenario.Wait.until(EC.number_of_windows_to_be(win_count + 1))
+        except:
+            pass
+        result.Prev_Window = scenario.Driver.current_window_handle
         result.New_Window = scenario.Driver.window_handles[-1]
         scenario.Active_Window = result.New_Window
-        scenario.Previous_Window = result.Old_Window
+        scenario.Previous_Window = result.Prev_Window
         scenario.New_Window = result.New_Window
 
     if window_action == WindowActions.WaitClose:

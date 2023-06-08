@@ -27,7 +27,6 @@ class SubscribeDiscord(Act):
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
 
-
     def _base(self, dyna_data):
         Logger.Info("SubscribeDiscord()")
 

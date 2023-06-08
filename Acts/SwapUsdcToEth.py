@@ -56,12 +56,12 @@ class SwapUsdcToEth(Act):
         # Ожидаем подсчет
         time.sleep(3)
         # Проверка наличия "Allow the Uniswap Protocol to use your USDC"
-        allow_button: bool = Actions.GetElements(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]").ElementsCount > 0
+        allow_button: bool = Actions.GetElements(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]").ElementsCount > 0
 
         if allow_button:
             while True:
                 try:
-                    Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your USDC']]", window_action=WindowActions.Open)
+                    Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]", window_action=WindowActions.Open)
                     break
                 except:
                     pass
@@ -78,7 +78,13 @@ class SwapUsdcToEth(Act):
                 except:
                     pass
 
-            Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Swap']]")
+            while True:
+                try:
+                    Logger.Info("Waiting Approve")
+                    Actions.Click(self.s, By.ID, "swap-button")
+                    break
+                except:
+                    pass
         else:
             Actions.Click(self.s, By.ID, "swap-button")
 

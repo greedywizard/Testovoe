@@ -5,6 +5,7 @@ from typing import Type
 from selenium.webdriver.common.by import By
 
 import Scenarios
+from Automizer import Actions
 from Automizer.Act import Act
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
@@ -33,17 +34,28 @@ class SwapEthToWeth(Act):
 
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
 
-        if not Actions.GetElement(self.s, By.XPATH, "//button/span[text()='Scroll Alpha']", is_visible=False).Element:
-            Actions.Click(self.s, By.XPATH, "//div/span[text()='Unsupported']", is_visible=True)
-            Actions.Click(self.s, By.XPATH, "//button/div[text()='Scroll Alpha']", window_action=WindowActions.Open)
+        # Переключение на scroll Alpha
+        size = self.s.Driver.get_window_size()
+        width = size['width']
+        if width < 640:
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
+        else:
+            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
+
+        res = Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
+        if res.Prev_Window != res.New_Window:
             Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
-        # Список токенов на которые переводить
+        # Выбор
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
-        # Выбрать токен WETH
-        Actions.Click(self.s, By.XPATH, '/html/body/reach-portal[2]/div[3]/div/div/div/div/div[3]/div[1]/div/div/div[./div[2]/div[text()="WETH"]]')
-        # "I understand"
-        Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+        Actions.Input(self.s, By.ID, "token-search-input", "Ether")
+        Actions.Click(self.s, By.XPATH, "//div[text()='Wrapped Ether']")
+
+        try:
+            # I understand
+            Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+        except:
+            pass
 
         value = Actions.GetElement(self.s, By.XPATH, '//*[@id="swap-currency-input"]/div/div[2]/div/div[2]/div').Element.text.split(' ')[1]
 
@@ -57,6 +69,8 @@ class SwapEthToWeth(Act):
         # "Confirm"
         Actions.Click(self.s, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
 
+        Actions.GetElement(self.s, By.XPATH, "//button[text()='Insufficient ETH balance']")
+
     @staticmethod
     def _generate_half_random(target_number):
         pointer = pow(10, str(round(target_number, 8)).split('.')[1].__len__())
@@ -65,3 +79,4 @@ class SwapEthToWeth(Act):
 
         random_number = random.randint(lower_bound, upper_bound)
         return random_number / pointer
+

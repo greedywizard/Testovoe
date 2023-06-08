@@ -53,14 +53,14 @@ class SwapWethToUsdc(Act):
             return
 
         # Ожидаем подсчет
-        time.sleep(3)
+        time.sleep(15)
         # Проверка наличия "Allow the Uniswap Protocol to use your WETH"
-        allow_button: bool = Actions.GetElements(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]").ElementsCount > 0
+        allow_button: bool = Actions.GetElements(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]").ElementsCount > 0
 
         if allow_button:
             while True:
                 try:
-                    Actions.Click(self.s, By.XPATH, "//button[.//div/div[text()='Allow the Uniswap Protocol to use your WETH']]", window_action=WindowActions.Open)
+                    Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]", window_action=WindowActions.Open)
                     break
                 except:
                     pass
@@ -74,14 +74,17 @@ class SwapWethToUsdc(Act):
                 try:
                     Logger.Info("Waiting calc WETH to USDC...")
                     Actions.GetElement(self.s, By.XPATH, "//button[@data-testid='web3-status-connected']")
-                    # "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/span/button/div/p"
-                    # Actions.Click(self, By.XPATH, "//div[text()='You can now trade WETH']")
                     break
                 except:
                     pass
 
-            # Swap
-            Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Swap']]")
+            while True:
+                try:
+                    Logger.Info("Waiting Approve")
+                    Actions.Click(self.s, By.ID, "swap-button")
+                    break
+                except:
+                    pass
         else:
             Actions.Click(self.s, By.ID, "swap-button")
 
