@@ -91,12 +91,19 @@ def ConnectUniswap(scenario: ExecEnvironment):
 
     Actions.OpenUrl(scenario, URLs.Uniswap_Swap)
 
-    Actions.Click(scenario, By.XPATH, "//button[text()='Connect']")
+    Actions.Click(scenario, By.XPATH, "//button[@data-testid='navbar-connect-wallet']")
     Actions.Click(scenario, By.ID, "metamask", window_action=WindowActions.Open)
     Actions.Click(scenario, By.XPATH, "//button[text()='Next']")
     Actions.Click(scenario, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
-    Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-    Actions.Click(scenario, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", window_action=WindowActions.Open)
+
+    size = scenario.Driver.get_window_size()
+    width = size['width']
+    if width < 640:
+        Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
+    else:
+        Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
+
+    Actions.Click(scenario, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
     Actions.Click(scenario, By.XPATH, "//button[text()='Approve']")
     Actions.Click(scenario, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
