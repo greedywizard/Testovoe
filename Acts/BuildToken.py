@@ -115,9 +115,6 @@ class BuildToken(Act):
             except:
                 pass
 
-        if Actions.ExistElement(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']"):
-            Actions.Click(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']")
-
         # Открыть деплой
         Actions.Click(self.s, By.ID, "verticalIconsKindudapp")
         # Открыть список enviroment
@@ -132,6 +129,9 @@ class BuildToken(Act):
                 Actions.Click(self.s, By.XPATH, "//button[text()='Next']")
                 Actions.Click(self.s, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
                 break
+
+        if Actions.ExistElement(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']"):
+            Actions.Click(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']")
 
         while True:
             Logger.Info("Try start deploy...")

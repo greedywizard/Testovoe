@@ -2,9 +2,9 @@ from selenium.common.exceptions import NoAlertPresentException
 from Automizer.ExecEnvironment import ExecEnvironment
 
 
-def AcceptAlert(scenario: ExecEnvironment):
+def AcceptAlert(env: ExecEnvironment):
     try:
-        alert = scenario.Driver.switch_to.alert
+        alert = env.Driver.switch_to.alert
         alert.accept()
     except NoAlertPresentException:
         # Продолжить, если нет модального диалога

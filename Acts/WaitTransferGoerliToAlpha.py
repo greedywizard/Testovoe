@@ -28,15 +28,21 @@ class WaitTransferGoerliToAlpha(Act):
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
-        Scenarios.ConnectUniswap(self.s)
+        Scenarios.ConnectUniswap(self.s, useScroll=False)
 
     def _base(self, dyna_data: DynaData):
         Logger.Info("WaitTransferGoerliToAlpha()")
+
         Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 
-        minDate = datetime.utcnow() - timedelta(minutes=10)
+        delta_m = 15
+        minDate = datetime.utcnow() - timedelta(minutes=delta_m)
+        start_date = datetime.utcnow()
         while True:
             Logger.Info("Waiting success transfer...")
+            if datetime.utcnow() - timedelta(minutes=delta_m) > start_date:
+                Logger.Info("Transfer is too long. Break")
+                break
             try:
                 response = requests.get(f'https://alpha-api.scroll.io/bridgehistory/api/txs?address={dyna_data.wallet_address}&offset=0&limit=1')
                 a = json.loads(response.text)["data"]["result"][0]
@@ -47,5 +53,3 @@ class WaitTransferGoerliToAlpha(Act):
                 time.sleep(30)
             except:
                 pass
-
-        return

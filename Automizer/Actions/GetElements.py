@@ -1,4 +1,6 @@
 from typing import List
+
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from Automizer.ExecEnvironment import ExecEnvironment
@@ -22,14 +24,19 @@ class GetElementsResult:
         return len(self.__elements)
 
 
-def GetElements(scenario: ExecEnvironment,
+def GetElements(env: ExecEnvironment,
                 by: By,
                 path: str) -> GetElementsResult:
     result: GetElementsResult = GetElementsResult()
 
-    try:
-        result.Elements = scenario.Wait.until(EC.presence_of_all_elements_located((by, path)))
-    except:
-        result.Elements = []
+    attempt = 1
+    while attempt <= 3:
+        try:
+            result.Elements = env.Wait.until(EC.presence_of_all_elements_located((by, path)))
+            break
+        except StaleElementReferenceException:
+            attempt = attempt + 1
+        except:
+            result.Elements = []
 
     return result

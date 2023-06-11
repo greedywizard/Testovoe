@@ -58,12 +58,15 @@ class SwapWethToUsdc(Act):
             Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
             return
 
-        try:
-            self._approve()
-        except TimeoutException:
-            Actions.Click(self.s, By.ID, "swap-button", is_visible=False)
+            # Ожидание подсчетов
+        time.sleep(3)
 
-        Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open, is_visible=False)
+        if Actions.ExistElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]"):
+            self._approve()
+        else:
+            Actions.Click(self.s, By.ID, "swap-button", as_script=True)
+
+        Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open, as_script=True)
         Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         # "Close"
         Actions.GetElement(self.s, By.XPATH, "//div[text()='Success']")
@@ -86,7 +89,7 @@ class SwapWethToUsdc(Act):
         while True:
             try:
                 Logger.Info("Waiting Approve")
-                Actions.Click(self.s, By.ID, "swap-button", is_visible=False)
+                Actions.Click(self.s, By.ID, "swap-button", as_script=True)
                 break
             except:
                 pass

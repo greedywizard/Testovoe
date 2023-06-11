@@ -91,5 +91,6 @@ class Pipeline:
         except Exception as e:
             Logger.Exception(e)
 
+        input()
         self.driver.quit()
         return self.__opt

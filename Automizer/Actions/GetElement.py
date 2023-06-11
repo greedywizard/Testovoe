@@ -1,4 +1,4 @@
-from selenium.common import TimeoutException
+from selenium.common import TimeoutException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,18 +18,23 @@ class GetElementResult:
         self._element = value
 
 
-def GetElement(scenario: ExecEnvironment,
+def GetElement(env: ExecEnvironment,
                by: By,
                path: str,
                is_visible: bool = True) -> GetElementResult:
     result: GetElementResult = GetElementResult()
 
-    try:
-        if is_visible:
-            result.Element = scenario.Wait.until(EC.visibility_of_element_located((by, path)))
-        else:
-            result.Element = scenario.Wait.until(EC.presence_of_element_located((by, path)))
-    except TimeoutException:
-        result.Element = None
+    attempt = 1
+    while attempt <= 3:
+        try:
+            if is_visible:
+                result.Element = env.Wait.until(EC.visibility_of_element_located((by, path)))
+            else:
+                result.Element = env.Wait.until(EC.presence_of_element_located((by, path)))
+            break
+        except TimeoutException:
+            result.Element = None
+        except StaleElementReferenceException:
+            attempt = attempt + 1
 
     return result

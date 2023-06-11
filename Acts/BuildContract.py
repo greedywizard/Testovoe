@@ -156,5 +156,5 @@ class BuildContract(Act):
             except:
                 pass
 
-        self.s.Active_Window = res.Old_Window
         Actions.CloseWindow(self.s)
+        self.s.Active_Window = res.Old_Window

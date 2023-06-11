@@ -34,6 +34,8 @@ class SwapEthToWeth(Act):
 
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
 
+        Scenarios.UniswapUseAlpha(self.s)
+
         # Выбор
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
         Actions.Input(self.s, By.ID, "token-search-input", "Ether")
@@ -53,7 +55,7 @@ class SwapEthToWeth(Act):
         Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/input",
                       str(val))
         # "Warp"
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button", window_action=WindowActions.Open)
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button", window_action=WindowActions.Open, as_script=True)
         # "Confirm"
         Actions.Click(self.s, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
 

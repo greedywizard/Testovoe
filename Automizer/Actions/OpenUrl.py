@@ -27,21 +27,21 @@ class OpenUrlResult:
         self.__old_window = value
 
 
-def OpenUrl(scenario: ExecEnvironment,
+def OpenUrl(env: ExecEnvironment,
             url: str,
             in_new_window: bool = False,
             as_script: bool = False) -> OpenUrlResult:
     result: OpenUrlResult = OpenUrlResult()
 
     if in_new_window:
-        result.Old_Window = scenario.Driver.current_window_handle
-        scenario.Driver.execute_script("window.open('');")
-        result.New_Window = scenario.Driver.window_handles[-1]
-        scenario.Driver.switch_to.window(result.New_Window)
+        result.Old_Window = env.Driver.current_window_handle
+        env.Driver.execute_script("window.open('');")
+        result.New_Window = env.Driver.window_handles[-1]
+        env.Driver.switch_to.window(result.New_Window)
 
     if not as_script:
-        scenario.Driver.get(url)
+        env.Driver.get(url)
     else:
-        scenario.Driver.execute_script(f"window.location.href = '{url}';")
+        env.Driver.execute_script(f"window.location.href = '{url}';")
 
     return result
