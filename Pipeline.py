@@ -3,6 +3,8 @@ from typing import Type, final
 
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from selenium.webdriver.edge.service import Service as EdgeService
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -17,7 +19,7 @@ from db import PipelineOptions
 
 class Pipeline:
     def __init__(self, options: webdriver.ChromeOptions, pipe_options: Type[PipelineOptions]):
-        self.driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+        self.driver: WebDriver = webdriver.Edge(service=ChromeService(ChromeDriverManager().install()), options=options)
         self.driver.set_window_size(800, 800)
         self.driver.implicitly_wait(1)
         self.wait: WebDriverWait = WebDriverWait(self.driver, 20)
@@ -38,12 +40,12 @@ class Pipeline:
             "": ConnectMetamask(self.driver, self.wait, self.__opt, next_point=TransferGoerliToAlphaTestnet.__name__),
             TransferGoerliToAlphaTestnet.__name__: TransferGoerliToAlphaTestnet(self.driver, self.wait, self.__opt, next_point=WaitTransferGoerliToAlpha.__name__),
             WaitTransferGoerliToAlpha.__name__: WaitTransferGoerliToAlpha(self.driver, self.wait, self.__opt, next_point=SwapEthToWeth.__name__),
-            SwapEthToWeth.__name__: SwapEthToWeth(self.driver, self.wait, self.__opt, next_point=SwapWethToUsdc.__name__),
-            SwapWethToUsdc.__name__: SwapWethToUsdc(self.driver, self.wait, self.__opt, next_point=AddLiquidEthUSDC.__name__),
-            AddLiquidEthUSDC.__name__: AddLiquidEthUSDC(self.driver, self.wait, self.__opt, next_point=RemoveLiquidEthUSDC.__name__),
-            RemoveLiquidEthUSDC.__name__: RemoveLiquidEthUSDC(self.driver, self.wait, self.__opt, next_point=SwapUsdcToEth.__name__),
-            SwapUsdcToEth.__name__: SwapUsdcToEth(self.driver, self.wait, self.__opt, next_point=BuildContract.__name__),
-            BuildContract.__name__: BuildContract(self.driver, self.wait, self.__opt, next_point=BuildToken.__name__),
+            SwapEthToWeth.__name__: SwapEthToWeth(self.driver, self.wait, self.__opt, next_point=SwapWethToUsdc.__name__),  # uniswap
+            SwapWethToUsdc.__name__: SwapWethToUsdc(self.driver, self.wait, self.__opt, next_point=AddLiquidEthUSDC.__name__),  # uniswap
+            AddLiquidEthUSDC.__name__: AddLiquidEthUSDC(self.driver, self.wait, self.__opt, next_point=RemoveLiquidEthUSDC.__name__),  # uniswap
+            RemoveLiquidEthUSDC.__name__: RemoveLiquidEthUSDC(self.driver, self.wait, self.__opt, next_point=SwapUsdcToEth.__name__),  # uniswap
+            SwapUsdcToEth.__name__: SwapUsdcToEth(self.driver, self.wait, self.__opt, next_point=BuildContract.__name__),  # uniswap
+            BuildContract.__name__: BuildContract(self.driver, self.wait, self.__opt, next_point=BuildToken.__name__),  # remix
             BuildToken.__name__: BuildToken(self.driver, self.wait, self.__opt, next_point=PlayWithTokenInMetamask.__name__),
             PlayWithTokenInMetamask.__name__: PlayWithTokenInMetamask(self.driver, self.wait, self.__opt, next_point=SubscribeDiscord.__name__),
             SubscribeDiscord.__name__: SubscribeDiscord(self.driver, self.wait, self.__opt, next_point=SubscribeTwitter.__name__),

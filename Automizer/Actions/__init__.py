@@ -8,3 +8,5 @@ from .Selected import *
 from .WaitElementVisible import *
 from .AcceptAlert import *
 from .WaitAttributeChanged import *
+from .ExistElement import *
+from .CloseWindow import *

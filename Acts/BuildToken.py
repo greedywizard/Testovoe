@@ -71,7 +71,7 @@ class BuildToken(Act):
 
         time.sleep(1)
 
-        if Actions.GetElement(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']").Element:
+        if Actions.ExistElement(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']"):
             Actions.Click(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']")
 
         while True:
@@ -115,6 +115,9 @@ class BuildToken(Act):
             except:
                 pass
 
+        if Actions.ExistElement(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']"):
+            Actions.Click(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']")
+
         # Открыть деплой
         Actions.Click(self.s, By.ID, "verticalIconsKindudapp")
         # Открыть список enviroment
@@ -123,6 +126,7 @@ class BuildToken(Act):
         Actions.Click(self.s, By.XPATH, "//a/span[text()='Injected Provider - MetaMask']")
 
         while True:
+            Logger.Info("Connecting wallet")
             if self.__restore:
                 Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Deploy']]", window_action=WindowActions.Open)
                 Actions.Click(self.s, By.XPATH, "//button[text()='Next']")

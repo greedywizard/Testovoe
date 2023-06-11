@@ -45,7 +45,8 @@ class BuildContract(Act):
         time.sleep(1)
 
         # "Accept"
-        Actions.Click(self.s, By.XPATH, "//button[text()='Accept']")
+        if Actions.ExistElement(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']"):
+            Actions.Click(self.s, By.XPATH, "//button[@data-id='matomoModal-modal-footer-ok-react']")
 
         while True:
             Logger.Info("Waiting github button...")
@@ -156,4 +157,4 @@ class BuildContract(Act):
                 pass
 
         self.s.Active_Window = res.Old_Window
-        self.s.Driver.close()
+        Actions.CloseWindow(self.s)

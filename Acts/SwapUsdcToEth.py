@@ -33,18 +33,6 @@ class SwapUsdcToEth(Act):
 
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
 
-        # Переключится на Scroll Alpha
-        size = self.s.Driver.get_window_size()
-        width = size['width']
-        if width < 640:
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
-        else:
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-
-        res = Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
-        if res.Prev_Window != res.New_Window:
-            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
-
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/button")
         Actions.Input(self.s, By.ID, "token-search-input", "0xA0D71B9877f44C744546D649147E3F1e70a93760")
         Actions.Click(self.s, By.XPATH, "//div[text()='USD Coin']")
@@ -66,9 +54,9 @@ class SwapUsdcToEth(Act):
             Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
             return
 
-        try:
+        if Actions.ExistElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]"):
             self._approve()
-        except TimeoutException:
+        else:
             Actions.Click(self.s, By.ID, "swap-button")
 
         Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)

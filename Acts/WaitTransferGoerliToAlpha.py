@@ -28,6 +28,7 @@ class WaitTransferGoerliToAlpha(Act):
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
+        Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data: DynaData):
         Logger.Info("WaitTransferGoerliToAlpha()")

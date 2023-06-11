@@ -32,7 +32,7 @@ class AddLiquidEthUSDC(Act):
         Logger.Info("AddLiquid()")
 
         Actions.OpenUrl(self.s, URLs.Uniswap_ETH_Liquid)
-        # /html/body/reach-portal[2]/div[3]/div/div/div/div/div[3]/div[1]/div/div/div[1]/div[2]/div[1]/div[1]
+
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[2]/div[1]/div/div/button")
         Actions.Input(self.s, By.ID, "token-search-input", "Ether")
         Actions.Click(self.s, By.XPATH, "//div[text()='Ether']")
@@ -56,18 +56,18 @@ class AddLiquidEthUSDC(Act):
         balance = Actions.GetElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/div[2]/div", is_visible=False)\
             .Element.text.split(' ')[1]
 
-        Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[2]/div/div[1]/input", str(float(balance) * 0.90))
+        Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[2]/div/div[1]/input", str(float(balance) * 0.70)[0:6])
 
-        if self.s.Driver.find_element(By.XPATH, "//button[text()='Approve USDC']"):
+        if Actions.ExistElement(self.s, By.XPATH, "//button[text()='Approve USDC']"):
             Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
             Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
             Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
 
-        if self.s.Driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button"):
+        if Actions.ExistElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button"):
             Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button", is_visible=False, as_script=True)
 
-        if self.s.Driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[3]/div/button"):
+        if Actions.ExistElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[3]/div/button"):
             Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[4]/div[3]/div/button", is_visible=False, as_script=True)
 
         # Add

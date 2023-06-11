@@ -32,18 +32,6 @@ class SwapWethToUsdc(Act):
         Logger.Info("SwapWethToUsdc()")
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
 
-        # Переключится на Scroll Alpha
-        size = self.s.Driver.get_window_size()
-        width = size['width']
-        if width < 640:
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
-        else:
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-
-        res = Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
-        if res.Prev_Window != res.New_Window:
-            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
-
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/button")
         Actions.Input(self.s, By.ID, "token-search-input", "Ether")
         Actions.Click(self.s, By.XPATH, "//div[text()='Wrapped Ether']")
@@ -73,9 +61,9 @@ class SwapWethToUsdc(Act):
         try:
             self._approve()
         except TimeoutException:
-            Actions.Click(self.s, By.ID, "swap-button")
+            Actions.Click(self.s, By.ID, "swap-button", is_visible=False)
 
-        Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)
+        Actions.Click(self.s, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open, is_visible=False)
         Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
         # "Close"
         Actions.GetElement(self.s, By.XPATH, "//div[text()='Success']")

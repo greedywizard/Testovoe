@@ -25,6 +25,7 @@ class TransferGoerliToAlphaTestnet(Act):
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
+        Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data):
         try:
@@ -32,8 +33,10 @@ class TransferGoerliToAlphaTestnet(Act):
 
             Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[2]/button", window_action=WindowActions.Open)
-            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
+            if Actions.GetElement(self.s, By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[2]/div[1]/p").Element.text == 'Scroll Alpha Testnet':
+                Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[2]/button", window_action=WindowActions.Open)
+                Actions.Click(self.s, By.XPATH, "//button[text()='Approve']")
+                Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
             res = Actions.GetElement(self.s, By.XPATH, "//div[1]//h6[contains(text(), 'Balance')]")
             balance = float(res.Element.text.split(' ')[1]) / 100

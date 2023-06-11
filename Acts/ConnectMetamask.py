@@ -24,5 +24,4 @@ class ConnectMetamask(Act):
         dyna_data.wallet_address = Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
-        Scenarios.ConnectUniswap(self.s)
-        Scenarios.ConnectUniswap(self.s)
+        Scenarios.ConnectUniswap(self.s, useScroll=False)

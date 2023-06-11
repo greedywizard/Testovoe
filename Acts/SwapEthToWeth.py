@@ -34,18 +34,6 @@ class SwapEthToWeth(Act):
 
         Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
 
-        # Переключение на scroll Alpha
-        size = self.s.Driver.get_window_size()
-        width = size['width']
-        if width < 640:
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
-        else:
-            Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
-
-        res = Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
-        if res.Prev_Window != res.New_Window:
-            Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
-
         # Выбор
         Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
         Actions.Input(self.s, By.ID, "token-search-input", "Ether")

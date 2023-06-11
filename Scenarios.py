@@ -86,26 +86,28 @@ def ConnectScroll(scenario: ExecEnvironment):
     Actions.Click(scenario, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
 
 
-def ConnectUniswap(scenario: ExecEnvironment):
+def ConnectUniswap(env: ExecEnvironment, useScroll: bool = True):
     Logger.Info("ConnectUniswap()")
 
-    Actions.OpenUrl(scenario, URLs.Uniswap_Swap)
+    Actions.OpenUrl(env, URLs.Uniswap_Swap)
 
-    Actions.Click(scenario, By.XPATH, "//button[@data-testid='navbar-connect-wallet']")
-    Actions.Click(scenario, By.ID, "metamask", window_action=WindowActions.Open)
-    Actions.Click(scenario, By.XPATH, "//button[text()='Next']")
-    Actions.Click(scenario, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
+    Actions.Click(env, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/span/div/button[1]")
+    Actions.Click(env, By.ID, "metamask", window_action=WindowActions.Open)
+    Actions.Click(env, By.XPATH, "//button[text()='Next']")
+    Actions.Click(env, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
+    Actions.WaitElementVisible(env, By.XPATH, "//div[text()='Waiting to connect']", hide=True)
 
-    size = scenario.Driver.get_window_size()
-    width = size['width']
-    if width < 640:
-        Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
-    else:
-        Actions.Click(scenario, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
+    if useScroll:
+        if Actions.ExistElement(env, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button"):
+            Actions.Click(env, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[1]/div[2]/div/button")
+        if Actions.ExistElement(env, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button"):
+            Actions.Click(env, By.XPATH, "/html/body/div[1]/div/div[1]/nav/div/div[3]/div/div[3]/div/button")
 
-    Actions.Click(scenario, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
-    Actions.Click(scenario, By.XPATH, "//button[text()='Approve']")
-    Actions.Click(scenario, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
+        res = Actions.Click(env, By.XPATH, "//button[.//div[text()='Scroll Alpha']]", as_script=True, window_action=WindowActions.Open)
+        if res.Prev_Window != res.New_Window:
+            if Actions.ExistElement(env, By.XPATH, "//button[text()='Approve']"):
+                Actions.Click(env, By.XPATH, "//button[text()='Approve']")
+            Actions.Click(env, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
 
 def ConnectGuild(scenario: ExecEnvironment):
