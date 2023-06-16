@@ -14,6 +14,8 @@ class Logger:
 
     @classmethod
     def Configure(cls, file_path: str = None, file_name: str = 'debug', file_ext: str = '.log'):
+        cls()
+
         if file_path and not os.path.exists(file_path):
             os.makedirs(file_path)
 
@@ -22,15 +24,16 @@ class Logger:
         else:
             _file_path: str = f'{file_name}{file_ext}'
 
+        if file_name in logging.Logger.manager.loggerDict:
+            logging.Logger.manager.loggerDict.pop(file_name)
         logger = logging.getLogger(file_name)
         logger.setLevel(logging.INFO)
 
         c_handler = logging.StreamHandler()
         f_handler = logging.FileHandler(_file_path)
 
-        _format = logging.Formatter('%(asctime)s - %(name)s: %(levelname)s %(message)s')
-        c_handler.setFormatter(_format)
-        f_handler.setFormatter(_format)
+        c_handler.setFormatter(logging.Formatter('%(levelname)s @ %(asctime)s - %(name)s: %(message)s'))
+        f_handler.setFormatter(logging.Formatter('%(levelname)s @ %(asctime)s: %(message)s'))
 
         logger.addHandler(c_handler)
         logger.addHandler(f_handler)

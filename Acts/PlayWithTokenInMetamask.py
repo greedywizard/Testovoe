@@ -78,19 +78,9 @@ class PlayWithTokenInMetamask(Act):
         Logger.Info("CreateSecondAccount()")
 
         Actions.OpenUrl(self.s, URLs.Metamask_NewAccount)
-        time.sleep(1)
         Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", "scroll2")
-
-        while True:
-            try:
-                Actions.WaitAttributeChanged(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", "value", "scroll2", True)
-                break
-            except:
-                pass
-
-        Actions.PressKey(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", Keys.ENTER)
-        time.sleep(1)
         Actions.Click(self.s, By.XPATH, "//button[text()='Create']")
+        Actions.GetElement(self.s, By.XPATH, "//div[text()='scroll2']", is_visible=False)
 
     def __send_between_accounts(self, account_from, account_to, rand=None):
         Logger.Info("SendBetweenAccounts()")
