@@ -78,7 +78,7 @@ class PlayWithTokenInMetamask(Act):
         Logger.Info("CreateSecondAccount()")
 
         Actions.OpenUrl(self.s, URLs.Metamask_NewAccount)
-        time.sleep(2)
+        time.sleep(1)
         Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", "scroll2")
 
         while True:
@@ -87,7 +87,9 @@ class PlayWithTokenInMetamask(Act):
                 break
             except:
                 pass
-        time.sleep(2)
+
+        Actions.PressKey(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div[2]/input", Keys.ENTER)
+        time.sleep(1)
         Actions.Click(self.s, By.XPATH, "//button[text()='Create']")
 
     def __send_between_accounts(self, account_from, account_to, rand=None):
@@ -123,8 +125,8 @@ class PlayWithTokenInMetamask(Act):
         while True:
             Logger.Info(f"Pending ({account_from} -> {account_to})...")
             try:
-                Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div/div[3]/div/div/div/div/div[1]", as_script=True)
-                if Actions.GetElement(self.s, By.XPATH, "/html/body/div[2]/div/div/section/div[2]/div/div[2]/div[1]/div[2]/div").Element.text == "Confirmed":
+                Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[3]/div/div/div/div[3]/div/div/div/div/div[1]", is_visible=False, is_clickable=False, as_script=True)
+                if Actions.GetElement(self.s, By.XPATH, "/html/body/div[2]/div/div/section/div[2]/div/div[2]/div[1]/div[2]/div", is_visible=False).Element.text == "Confirmed":
                     break
             except:
                 pass

@@ -4,7 +4,7 @@ from typing import Type
 
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.support.select import Select
 import Scenarios
 from Automizer.Act import Act
 from Automizer.Enums import WindowActions
@@ -138,10 +138,15 @@ class BuildContract(Act):
 
         Actions.AcceptAlert(self.s)
 
+        selector: Select = Select(Actions.GetElement(self.s, By.ID, "smart_contract_compiler_version").Element)
+        if selector.options.__len__() < 0:
+            self.s.Driver.refresh()
+
         try:
             Actions.Selector(self.s, By.ID, "smart_contract_compiler_version", compile_version)
         except NoSuchElementException:
             pass
+
         # Выбор компилятора
 
         time.sleep(3)

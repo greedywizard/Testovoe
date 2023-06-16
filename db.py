@@ -1,6 +1,6 @@
 import logging
 import sqlite3
-from typing import Type
+from typing import Type, List
 
 from sqlalchemy import create_engine, Column, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
@@ -32,7 +32,7 @@ def CreateTable():
     conn.close()
 
 
-def GetAll() -> list[Type[PipelineOptions]]:
+def GetAll() -> List[Type[PipelineOptions]]:
     engine = create_engine('sqlite:///data.db')
     Session = sessionmaker(bind=engine)
     session = Session()

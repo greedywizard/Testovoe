@@ -34,6 +34,7 @@ def GetElement(env: ExecEnvironment,
             break
         except TimeoutException:
             result.Element = None
+            break
         except StaleElementReferenceException:
             attempt = attempt + 1
 

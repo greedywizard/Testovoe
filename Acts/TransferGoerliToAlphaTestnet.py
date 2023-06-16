@@ -28,9 +28,8 @@ class TransferGoerliToAlphaTestnet(Act):
         Scenarios.ConnectUniswap(self.s)
 
     def _base(self, dyna_data):
+        Logger.Info("TransferGoerliToAlphaTestnet()")
         try:
-            Logger.Info("TransferGoerliToAlphaTestnet()")
-
             Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
 
             if Actions.GetElement(self.s, By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[2]/div[1]/p").Element.text == 'Scroll Alpha Testnet':

@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Type
 
 
 class Logger:
@@ -12,22 +13,22 @@ class Logger:
         return cls._instance
 
     @classmethod
-    def Configure(cls, file_path: str = None, file_name: str = 'debug.log'):
-        if not os.path.exists(file_path):
+    def Configure(cls, file_path: str = None, file_name: str = 'debug', file_ext: str = '.log'):
+        if file_path and not os.path.exists(file_path):
             os.makedirs(file_path)
 
         if file_path:
-            _file_path: str = os.path.join(file_path, file_name)
+            _file_path: str = os.path.join(file_path, f'{file_name}{file_ext}')
         else:
-            _file_path: str = file_name
+            _file_path: str = f'{file_name}{file_ext}'
 
-        logger = logging.getLogger()
+        logger = logging.getLogger(file_name)
         logger.setLevel(logging.INFO)
 
         c_handler = logging.StreamHandler()
         f_handler = logging.FileHandler(_file_path)
 
-        _format = logging.Formatter('%(asctime)s: %(levelname)s %(message)s')
+        _format = logging.Formatter('%(asctime)s - %(name)s: %(levelname)s %(message)s')
         c_handler.setFormatter(_format)
         f_handler.setFormatter(_format)
 

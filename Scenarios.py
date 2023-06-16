@@ -67,7 +67,7 @@ def SetupMetamaskWallet(env: ExecEnvironment):
     Actions.Click(env, By.XPATH, "//li[.//span[text()='Goerli test network']]", as_script=True)
 
 
-def ConnectScroll(env: ExecEnvironment):
+def  ConnectScroll(env: ExecEnvironment):
     Logger.Info("ConnectScroll()")
 
     Actions.OpenUrl(env, url=URLs.Scroll_Alpha)
@@ -75,12 +75,12 @@ def ConnectScroll(env: ExecEnvironment):
     Actions.Click(env, By.XPATH, "/html/body/div/div/div[2]/div[1]/div[2]/dl/div[2]/div[2]/dd/ul/li/div[2]/a")
 
     result_sr = Actions.GetShadowRoot(env, By.XPATH, "/html/body/onboard-v2")
-    r: Actions.Click = Actions.Click(env,
-                                     By.CSS_SELECTOR,
-                                     "section > div > div > div > div > div > div > div > div.scroll-container.svelte-1qwmck3 >"
-                                     " div > div > div > div.wallet-button-container.svelte-1vlog3j > button > div",
-                                     shadow_root=result_sr.Element,
-                                     window_action=WindowActions.Open)
+    Actions.Click(env,
+                  By.CSS_SELECTOR,
+                  "section > div > div > div > div > div > div > div > div.scroll-container.svelte-1qwmck3 >"
+                  " div > div > div > div.wallet-button-container.svelte-1vlog3j > button > div",
+                  shadow_root=result_sr.Element,
+                  window_action=WindowActions.Open)
 
     Actions.Click(env, By.XPATH, "//button[text()='Next']")
     Actions.Click(env, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)

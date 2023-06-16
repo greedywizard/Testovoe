@@ -14,6 +14,8 @@ class Act(ABC):
     def __init__(self, next_point, restore_point):
         self.__rId = restore_point
         self.__bId = next_point
+        self._isRestore = False
+
 
     @final
     def Restore(self, data: str) -> ActResult:
@@ -22,6 +24,7 @@ class Act(ABC):
         :param data: JSON строка с данными для восстановления
         :return:Данные для последующего вызова основного тела контрольной точки
         """
+        self._isRestore = True
         res = self._restore(data)
         if res:
             return self.Base(res)

@@ -1,10 +1,8 @@
 import json
-from typing import Type, final
+from typing import Type
 
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from selenium.webdriver.edge.service import Service as EdgeService
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -18,7 +16,12 @@ from db import PipelineOptions
 
 
 class Pipeline:
-    def __init__(self, options: webdriver.ChromeOptions, pipe_options: Type[PipelineOptions]):
+    def __init__(self, pipe_options: Type[PipelineOptions]):
+        Logger.Configure(file_path="walletlogs/", file_name=f'{pipe_options.seed_phrase}')
+        options = webdriver.ChromeOptions()
+        options.add_extension('./Extentions/metamask.crx')
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--no-sandbox")
         self.driver: WebDriver = webdriver.Edge(service=ChromeService(ChromeDriverManager().install()), options=options)
         self.driver.set_window_size(800, 800)
         self.driver.implicitly_wait(1)
@@ -26,8 +29,6 @@ class Pipeline:
         self.__opt = pipe_options
 
     def Start(self) -> Type[PipelineOptions]:
-        Logger.Configure(file_path="logs/", file_name=f'{self.__opt.seed_phrase}.log')
-
         self.wait.until(EC.new_window_is_opened(self.driver.window_handles))
         all_window_handles = self.driver.window_handles
         for handle in all_window_handles[1:]:
@@ -88,9 +89,12 @@ class Pipeline:
             self.__opt.restore_data = None
             self.__opt.restore_point = None
 
+            db.UpdateRecord(self.__opt)
+
         except Exception as e:
             Logger.Exception(e)
+            Logger.Error("End task with error")
 
-        input()
-        self.driver.quit()
-        return self.__opt
+        finally:
+            self.driver.quit()
+            return self.__opt

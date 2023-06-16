@@ -58,11 +58,13 @@ class AddLiquidEthUSDC(Act):
 
         Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[2]/div/div/div[2]/div/div[1]/input", str(float(balance) * 0.70)[0:6])
 
-        if Actions.ExistElement(self.s, By.XPATH, "//button[text()='Approve USDC']"):
-            Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", window_action=WindowActions.Open)
+        try:
+            Actions.Click(self.s, By.XPATH, "//button[text()='Approve USDC']", is_visible=False, as_script=True, window_action=WindowActions.Open)
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
             Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']")
             Actions.Click(self.s, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
+        except:
+            pass
 
         if Actions.ExistElement(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button"):
             Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[3]/div/button", is_visible=False, as_script=True)

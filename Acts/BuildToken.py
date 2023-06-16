@@ -25,7 +25,6 @@ class BuildToken(Act):
         self.__wait = wait
         self.__static_data = data
         self.s = ExecEnvironment(self.__driver, self.__wait)
-        self.__restore = False
         self.__deployTokenTuple = namedtuple('__deployTokenTuple', ['symbols', 'code'])
 
     def _restore(self, data):
@@ -33,7 +32,6 @@ class BuildToken(Act):
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
         Scenarios.ConnectUniswap(self.s)
-        self.__restore = True
 
     def _base(self, dyna_data: DynaData):
         res = self.__create_token()
@@ -124,10 +122,12 @@ class BuildToken(Act):
 
         while True:
             Logger.Info("Connecting wallet")
-            if self.__restore:
+            if self._isRestore:
                 Actions.Click(self.s, By.XPATH, "//button[.//div[text()='Deploy']]", window_action=WindowActions.Open)
                 Actions.Click(self.s, By.XPATH, "//button[text()='Next']")
                 Actions.Click(self.s, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
+                break
+            else:
                 break
 
         if Actions.ExistElement(self.s, By.XPATH, "//button[@data-id='udappNotify-modal-footer-ok-react']"):

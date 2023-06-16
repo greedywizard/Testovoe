@@ -10,3 +10,4 @@ from .AcceptAlert import *
 from .WaitAttributeChanged import *
 from .ExistElement import *
 from .CloseWindow import *
+from .PressKey import *
