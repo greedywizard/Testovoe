@@ -33,7 +33,7 @@ class RemoveLiquidEthUSDC(Act):
         time.sleep(15)
         Actions.OpenUrl(self.s, URLs.Uniswap_ETH_Liquid_Pool)
 
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/div/div/main/a[2]")
+        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/div/div/main/a[.//div[1]/div[1]/div[text()[2] = 'USDC' and text()[4] = 'ETH']]")
         # Убрать ликвидность
         Actions.Click(self.s, By.XPATH, "//a[text()='Remove Liquidity']")
         Actions.Click(self.s, By.XPATH, "//button[text()='Max']")

@@ -67,7 +67,7 @@ def SetupMetamaskWallet(env: ExecEnvironment):
     Actions.Click(env, By.XPATH, "//li[.//span[text()='Goerli test network']]", as_script=True)
 
 
-def  ConnectScroll(env: ExecEnvironment):
+def ConnectScroll(env: ExecEnvironment):
     Logger.Info("ConnectScroll()")
 
     Actions.OpenUrl(env, url=URLs.Scroll_Alpha)
@@ -84,6 +84,10 @@ def  ConnectScroll(env: ExecEnvironment):
 
     Actions.Click(env, By.XPATH, "//button[text()='Next']")
     Actions.Click(env, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
+
+    Actions.Click(env, By.XPATH, "//li[.//div/span[text()='Scroll Alpha Testnet']]/div/a", window_action=WindowActions.Open)
+    Actions.Click(env, By.XPATH, "//button[text()='Approve']")
+    Actions.Click(env, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
 
 def UniswapUseAlpha(env: ExecEnvironment):

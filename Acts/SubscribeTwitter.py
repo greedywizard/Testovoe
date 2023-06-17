@@ -26,9 +26,13 @@ class SubscribeTwitter(Act):
         Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
         Scenarios.SetupMetamaskWallet(self.s)
         Scenarios.ConnectScroll(self.s)
+        Scenarios.ConnectUniswap(self.s)
         Scenarios.ConnectGuild(self.s)
 
     def _base(self, dyna_data):
+        if not self._isRestore:
+            Scenarios.ConnectGuild(self.s)
+
         Logger.Info("SubscribeTwitter()")
 
         Actions.OpenUrl(self.s, URLs.Guild)

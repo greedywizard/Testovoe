@@ -72,7 +72,7 @@ class PlayWithTokenInMetamask(Act):
         # Открыть свиписок сетей
         Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[1]/div/div[2]/div/div', as_script=True)
         # Выбрать сеть goerli
-        Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div/div[2]/li[.//span[text()="Scroll Alpha"]]', as_script=True)
+        Actions.Click(self.s, By.XPATH, '/html/body/div[1]/div/div[2]/div/div[2]/li[.//span[contains(text(), "Scroll Alpha")]]', as_script=True)
 
     def __create_second_account(self):
         Logger.Info("CreateSecondAccount()")

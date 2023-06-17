@@ -33,8 +33,6 @@ class WaitTransferGoerliToAlpha(Act):
     def _base(self, dyna_data: DynaData):
         Logger.Info("WaitTransferGoerliToAlpha()")
 
-        Actions.OpenUrl(self.s, URLs.Scroll_Bridge)
-
         delta_m = 15
         minDate = datetime.utcnow() - timedelta(minutes=delta_m)
         start_date = datetime.utcnow()

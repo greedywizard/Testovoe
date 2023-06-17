@@ -34,7 +34,8 @@ class TransferGoerliToAlphaTestnet(Act):
 
             if Actions.GetElement(self.s, By.XPATH, "/html/body/div/div/div[2]/div/div[1]/div[2]/div[1]/p").Element.text == 'Scroll Alpha Testnet':
                 Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div/div[2]/button", window_action=WindowActions.Open)
-                Actions.Click(self.s, By.XPATH, "//button[text()='Approve']")
+                if Actions.ExistElement(self.s, By.XPATH, "//button[text()='Approve']"):
+                    Actions.Click(self.s, By.XPATH, "//button[text()='Approve']")
                 Actions.Click(self.s, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
             res = Actions.GetElement(self.s, By.XPATH, "//div[1]//h6[contains(text(), 'Balance')]")

@@ -56,7 +56,7 @@ class SwapWethToUsdc(Act):
             Actions.Click(self.s, By.XPATH, "//button[text()='Max']")
         except:
             Logger.Error("Cant click 'Max-Button'. balance can be 0.0")
-            return
+            raise ValueError
 
             # Ожидание подсчетов
         time.sleep(3)

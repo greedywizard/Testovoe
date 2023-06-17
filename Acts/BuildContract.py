@@ -138,9 +138,12 @@ class BuildContract(Act):
 
         Actions.AcceptAlert(self.s)
 
-        selector: Select = Select(Actions.GetElement(self.s, By.ID, "smart_contract_compiler_version").Element)
-        if selector.options.__len__() < 0:
-            self.s.Driver.refresh()
+        while True:
+            selector: Select = Select(Actions.GetElement(self.s, By.ID, "smart_contract_compiler_version").Element)
+            if selector.options.__len__() == 0:
+                self.s.Driver.refresh()
+            else:
+                break
 
         try:
             Actions.Selector(self.s, By.ID, "smart_contract_compiler_version", compile_version)
@@ -155,10 +158,10 @@ class BuildContract(Act):
         while True:
             Logger.Info("Publishing...")
             try:
-                # self.Driver.refresh()
                 Actions.WaitElementVisible(self.s, By.ID, "loading", hide=True)
                 break
             except:
+                self.s.Driver.refresh()
                 pass
 
         Actions.CloseWindow(self.s)

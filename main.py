@@ -1,5 +1,6 @@
 import concurrent.futures as cf
 import os
+import configparser
 import sys
 from typing import Type, List
 import db
@@ -14,13 +15,18 @@ def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
 
 
 def main():
+    cfg = configparser.ConfigParser()
+    cfg.read('config.ini')
+    max_process_count = int(cfg['WORKERS']['max_count'])
+    timeout = int(cfg['WORKERS']['timeout'])
+
     pipe_options: List[Type[db.PipelineOptions]] = db.GetAll()
 
-    with cf.ProcessPoolExecutor(max_workers=2) as executor:
+    with cf.ProcessPoolExecutor(max_workers=max_process_count) as executor:
         futures: {cf.Future} = {executor.submit(worker, i) for i in pipe_options}
 
         while futures:
-            done, not_done = cf.wait(futures, return_when=cf.FIRST_COMPLETED)
+            done, not_done = cf.wait(futures, return_when=cf.FIRST_COMPLETED, timeout=timeout)
 
             if done:
                 for future in done:
@@ -44,5 +50,15 @@ if __name__ == "__main__":
     if not os.path.exists("data.db"):
         db.CreateTable()
         sys.exit()
+
+    if not os.path.exists("config.ini"):
+        config = configparser.ConfigParser()
+        config['WORKERS'] = {
+            'max_count': '1',
+            'timeout': '1200'
+        }
+
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
 
     main()
