@@ -13,13 +13,14 @@ class PipelineOptions(Base):
     __tablename__ = 'PipelineOptions'
 
     seed_phrase = Column(String, nullable=False, primary_key=True)
-    discord_login = Column(String)
-    discord_pass = Column(String)
-    twitter_login = Column(String)
-    twitter_pass = Column(String)
+    discord_login = Column(String, nullable=False)
+    discord_pass = Column(String, nullable=False)
+    twitter_login = Column(String, nullable=False)
+    twitter_pass = Column(String, nullable=False)
     restore_point = Column(String)
     restore_data = Column(String)
     is_complete = Column(Boolean, nullable=False, default=False)
+    status = Column(String)
 
 
 def CreateTable():
@@ -52,6 +53,7 @@ def UpdateRecord(opt: Type[PipelineOptions]):
     obj.is_complete = opt.is_complete
     obj.restore_point = opt.restore_point
     obj.restore_data = opt.restore_data
+    obj.status = opt.status
 
     session.commit()
     session.close()

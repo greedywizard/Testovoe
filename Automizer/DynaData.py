@@ -1,14 +1,9 @@
 import json
+from abc import ABC
 from typing import final
 
-from Acts import *
 
-
-class DynaData:
-    def __init__(self):
-        self.wallet_address: str = None
-        self.new_token: str = None
-
+class DynaData(ABC):
     @final
     def FromJson(self, json_string: str):
         json_dict = json.loads(json_string)

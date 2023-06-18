@@ -9,56 +9,52 @@ from Automizer import Actions
 from Automizer.Act import Act
 from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
-from Automizer.ExecEnvironment import ExecEnvironment
-import Automizer.Actions as Actions
 import URLs
+from Objects import DObject
 from db import PipelineOptions
 
 
-class SwapEthToWeth(Act):
-    def __init__(self, driver, wait, data: Type[PipelineOptions], next_point=None, restore_point=None):
-        super().__init__(next_point, restore_point)
-        self.__driver = driver
-        self.__wait = wait
-        self.__static_data = data
-        self.s = ExecEnvironment(self.__driver, self.__wait)
+class SwapEthToWeth(Act[Type[PipelineOptions], DObject]):
+    def __init__(self, next_act: str):
+        super().__init__()
+        self._next_act = next_act
 
     def _restore(self, data):
-        Scenarios.OpenMetamaskWallet(self.s, self.__static_data.seed_phrase)
-        Scenarios.SetupMetamaskWallet(self.s)
-        Scenarios.ConnectScroll(self.s)
-        Scenarios.ConnectUniswap(self.s)
+        Scenarios.OpenMetamaskWallet(self.Env, self._static_data.seed_phrase)
+        Scenarios.SetupMetamaskWallet(self.Env)
+        Scenarios.ConnectScroll(self.Env)
+        Scenarios.ConnectUniswap(self.Env)
 
     def _base(self, dyna_data):
         Logger.Info("SwapEthToWeth()")
 
-        Actions.OpenUrl(self.s, URLs.Uniswap_Swap)
+        Actions.OpenUrl(self.Env, URLs.Uniswap_Swap)
 
-        Scenarios.UniswapUseAlpha(self.s)
+        Scenarios.UniswapUseAlpha(self.Env)
 
         # Выбор
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
-        Actions.Input(self.s, By.ID, "token-search-input", "Ether")
-        Actions.Click(self.s, By.XPATH, "//div[text()='Wrapped Ether']")
+        Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[1]/div/div/div/div[1]/button")
+        Actions.Input(self.Env, By.ID, "token-search-input", "Ether")
+        Actions.Click(self.Env, By.XPATH, "//div[text()='Wrapped Ether']")
 
         try:
             # I understand
-            Actions.Click(self.s, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
+            Actions.Click(self.Env, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/button[1]")
         except:
             pass
 
-        value = Actions.GetElement(self.s, By.XPATH, '//*[@id="swap-currency-input"]/div/div[2]/div/div[2]/div').Element.text.split(' ')[1]
+        value = Actions.GetElement(self.Env, By.XPATH, '//*[@id="swap-currency-input"]/div/div[2]/div/div[2]/div').Element.text.split(' ')[1]
 
         val = self._generate_half_random(float(value))
 
         time.sleep(1)
-        Actions.Input(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/input",
+        Actions.Input(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[2]/div[1]/div/div/div[1]/input",
                       str(val))
 
-        Actions.Click(self.s, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button", window_action=WindowActions.Open, as_script=True)
-        Actions.Click(self.s, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
-        Actions.WaitElementVisible(self.s, By.XPATH, "//p[contains(text(), 'Pending')]")
-        Actions.WaitElementVisible(self.s, By.XPATH, "//p[contains(text(), 'Pending')]", hide=True)
+        Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button", window_action=WindowActions.Open, as_script=True)
+        Actions.Click(self.Env, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
+        Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]")
+        Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]", hide=True)
 
     @staticmethod
     def _generate_half_random(target_number):

@@ -103,7 +103,7 @@ def UniswapUseAlpha(env: ExecEnvironment):
         Actions.Click(env, By.XPATH, "//button[text()='Switch network']", window_action=WindowActions.WaitClose)
 
 
-def ConnectUniswap(env: ExecEnvironment, useScroll: bool = True):
+def ConnectUniswap(env: ExecEnvironment, use_scroll: bool = True):
     Logger.Info("ConnectUniswap()")
 
     Actions.OpenUrl(env, URLs.Uniswap_Swap)
@@ -114,7 +114,7 @@ def ConnectUniswap(env: ExecEnvironment, useScroll: bool = True):
     Actions.Click(env, By.XPATH, "//button[text()='Connect']", window_action=WindowActions.WaitClose)
     Actions.WaitElementVisible(env, By.XPATH, "//div[text()='Waiting to connect']", hide=True)
 
-    if useScroll:
+    if use_scroll:
         UniswapUseAlpha(env)
 
 

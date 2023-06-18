@@ -1,0 +1,2 @@
+class NoGoerliBalanceException(Exception):
+    pass

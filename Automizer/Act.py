@@ -1,53 +1,59 @@
 import json
 from abc import ABC, abstractmethod
-from typing import final
+from typing import final, Generic
+
+from Automizer.DynaData import DynaData
+from Automizer.ExecEnvironment import ExecEnvironment
+from Automizer.GenericCollection import S, D
 
 
-class ActResult(ABC):
+class ActResult:
     def __init__(self):
-        self.restore_point = None
-        self.next_point = None
-        self.data = None
+        self.next_act: str = None
+        self.data: DynaData = None
 
 
-class Act(ABC):
-    def __init__(self, next_point, restore_point):
-        self.__rId = restore_point
-        self.__bId = next_point
-        self._isRestore = False
+class Act(ABC, Generic[S, D]):
+    def __init__(self):
+        self._static_data: S = None
+        self._next_act = None
+        self._env: ExecEnvironment = None
+        self._isRestore: bool = False
 
+    @property
+    def Env(self) -> ExecEnvironment:
+        return self._env
+
+    @Env.setter
+    def Env(self, value: ExecEnvironment):
+        self._env = value
+
+    @property
+    def Data(self) -> D:
+        return self._static_data
+
+    @Data.setter
+    def Data(self, value: D):
+        self._static_data = value
 
     @final
-    def Restore(self, data: str) -> ActResult:
-        """
-        Подготавливает скрипт для продолжения с контрольной точки
-        :param data: JSON строка с данными для восстановления
-        :return:Данные для последующего вызова основного тела контрольной точки
-        """
+    def Restore(self, dyna_data: DynaData) -> ActResult:
         self._isRestore = True
-        res = self._restore(data)
-        if res:
-            return self.Base(res)
-        else:
-            return self.Base(data)
+        self._restore(dyna_data)
+        return self.Base(dyna_data)
 
     @final
-    def Base(self, data) -> ActResult:
+    def Base(self, dyna_data: DynaData) -> ActResult:
         result = ActResult()
-        result.next_point = self.__bId
-        if self.__rId:
-            result.restore_point = self.__rId
-        else:
-            result.restore_point = self.__bId
-        result.data = data
-        self._base(data)
-
+        self._base(dyna_data)
+        result.next_act = self._next_act
+        result.data = dyna_data
         return result
 
     @abstractmethod
-    def _restore(self, data):
+    def _restore(self, dyna_data: D):
         pass
 
     @abstractmethod
-    def _base(self, dyna_data):
+    def _base(self, dyna_data: D):
         pass
