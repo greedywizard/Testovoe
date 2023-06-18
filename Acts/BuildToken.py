@@ -18,7 +18,7 @@ from db import PipelineOptions
 
 
 class BuildToken(Act[Type[PipelineOptions], DObject]):
-    def __init__(self, next_act: str):
+    def __init__(self, next_act: str = None):
         super().__init__()
         self._next_act = next_act
         self.__deployTokenTuple = namedtuple('__deployTokenTuple', ['symbols', 'code'])

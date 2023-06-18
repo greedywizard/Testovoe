@@ -13,7 +13,7 @@ from db import PipelineOptions
 
 
 class WaitTransferGoerliToAlpha(Act[Type[PipelineOptions], DObject]):
-    def __init__(self, next_act: str):
+    def __init__(self, next_act: str = None):
         super().__init__()
         self._next_act = next_act
 

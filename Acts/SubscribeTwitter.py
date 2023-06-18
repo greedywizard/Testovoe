@@ -15,8 +15,9 @@ from db import PipelineOptions
 
 
 class SubscribeTwitter(Act[Type[PipelineOptions], DObject]):
-    def __init__(self):
+    def __init__(self, next_act: str = None):
         super().__init__()
+        self._next_act = next_act
 
     def _restore(self, data):
         Scenarios.OpenMetamaskWallet(self.Env, self._static_data.seed_phrase)
