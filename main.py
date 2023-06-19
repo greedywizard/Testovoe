@@ -23,6 +23,7 @@ from Objects import DObject
 def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
     Logger.Configure(file_name='main')
     Logger.Info(f'Wallet "{pipe.seed_phrase}" starting...')
+
     # Создаем драйвер
     Logger.Configure(file_path="walletlogs/", file_name=f'{pipe.seed_phrase}')
     options = webdriver.ChromeOptions()
@@ -33,6 +34,7 @@ def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
     driver.set_window_size(800, 800)
     driver.implicitly_wait(1)
     wait: WebDriverWait = WebDriverWait(driver, 20)
+
     # Закрыть окно метамаска
     wait.until(EC.new_window_is_opened(driver.window_handles))
     all_window_handles = driver.window_handles
@@ -40,8 +42,10 @@ def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
         driver.switch_to.window(handle)
         driver.close()
     driver.switch_to.window(all_window_handles[0])
+
     # Создать пайплайн
     P = Pipeline[Type[db.PipelineOptions], DObject](driver, wait, pipe)
+
     # Заполнить пайплайн
     P += ConnectMetamask(TransferGoerliToAlphaTestnet.__name__)
     P += TransferGoerliToAlphaTestnet(WaitTransferGoerliToAlpha.__name__)
