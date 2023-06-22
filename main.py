@@ -58,8 +58,8 @@ def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
     P += BuildContract(BuildToken.__name__)
     P += BuildToken(PlayWithTokenInMetamask.__name__)
     P += PlayWithTokenInMetamask(SubscribeDiscord.__name__)
-    P += SubscribeDiscord(SubscribeTwitter.__name__)
-    P += SubscribeTwitter()
+    P += SubscribeTwitter(SubscribeDiscord.__name__)
+    P += SubscribeDiscord()
 
     P.update = lambda p: db.UpdateRecord(p)
 

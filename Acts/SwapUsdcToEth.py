@@ -60,8 +60,9 @@ class SwapUsdcToEth(Act[Type[PipelineOptions], DObject]):
 
         Actions.Click(self.Env, By.ID, "confirm-swap-or-send", window_action=WindowActions.Open)
         Actions.Click(self.Env, By.XPATH, "//button[@data-testid='page-container-footer-next']", window_action=WindowActions.WaitClose)
-        # "Close"
-        Actions.Click(self.Env, By.XPATH, "/html/body/reach-portal[2]/div[3]/div/div/div/div/div/div[3]/button")
+
+        Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]")
+        Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]", hide=True)
 
     def _approve(self):
         Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/div/div/button[1]", window_action=WindowActions.Open)
