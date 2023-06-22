@@ -26,6 +26,7 @@ class AddLiquidEthUSDC(Act[Type[PipelineOptions], DObject]):
         Logger.Info("AddLiquid()")
 
         Actions.OpenUrl(self.Env, URLs.Uniswap_ETH_Liquid)
+        self.Env.Driver.refresh()
 
         Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[4]/main/div[2]/div/div[1]/div/div[2]/div[1]/div/div/button")
         Actions.Input(self.Env, By.ID, "token-search-input", "Ether")
