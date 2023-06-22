@@ -34,6 +34,11 @@ class SubscribeTwitter(Act[Type[PipelineOptions], DObject]):
 
         Actions.OpenUrl(self.Env, URLs.Guild)
 
+        try:
+            Actions.Click(self.Env, By.XPATH, "/html/body/div[4]/div[3]/div/section/div/div[3]/button")
+        except:
+            pass
+
         Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[2]/div[1]/button[2]")
 
         Actions.Click(self.Env, By.XPATH, "//div[p[contains(text(), 'Twitter')]]/button", window_action=WindowActions.Open)
