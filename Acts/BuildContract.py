@@ -153,12 +153,10 @@ class BuildContract(Act[Type[PipelineOptions], DObject]):
         Actions.Click(self.Env, By.XPATH, "//button[text()='Verify & publish']")
         while True:
             Logger.Info("Publishing...")
-            try:
-                Actions.WaitElementVisible(self.Env, By.ID, "loading", hide=True)
+            if Actions.WaitElementVisible(self.Env, By.ID, "loading", is_visible=False):
                 break
-            except:
+            else:
                 self.Env.Driver.refresh()
-                pass
 
         Actions.CloseWindow(self.Env)
         self.Env.Active_Window = res.Old_Window

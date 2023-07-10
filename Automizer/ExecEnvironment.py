@@ -1,19 +1,19 @@
 from abc import ABC, abstractmethod
 from typing import List, final
-from selenium.webdriver.chrome.webdriver import WebDriver
+from seleniumwire.webdriver import Chrome
 from selenium.webdriver.support.wait import WebDriverWait
 
 
 class ExecEnvironment:
-    def __init__(self, driver: WebDriver, wait: WebDriverWait):
-        self._driver: WebDriver = driver
+    def __init__(self, driver: Chrome, wait: WebDriverWait):
+        self._driver: Chrome = driver
         self._wait: WebDriverWait = wait
         self._active_window: str = driver.current_window_handle
         self._prev_window: str = None
         self._new_window: str = None
 
     @property
-    def Driver(self) -> WebDriver:
+    def Driver(self) -> Chrome:
         return self._driver
 
     @property

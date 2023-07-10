@@ -6,7 +6,7 @@ from typing import Type, List
 
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium import webdriver
+from seleniumwire import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -16,7 +16,7 @@ from Acts import *
 
 from Automizer.Logger import Logger
 from Automizer.Pipeline import Pipeline
-from Exceptions import NoGoerliBalanceException
+from Exceptions import NoGoerliBalanceException, InvalidLoginOrPasswordException
 from Objects import DObject
 
 
@@ -28,6 +28,7 @@ def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
     Logger.Configure(file_path="walletlogs/", file_name=f'{pipe.seed_phrase}')
     options = webdriver.ChromeOptions()
     options.add_extension('./Extentions/metamask.crx')
+    options.add_extension('./Extentions/nopecha.crx')
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--no-sandbox")
     driver: WebDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
@@ -75,6 +76,10 @@ def worker(pipe: Type[db.PipelineOptions]) -> Type[db.PipelineOptions]:
         pipe.restore_point = None
         pipe.is_complete = True
         pipe.status = 'No Goerli balance'
+        db.UpdateRecord(pipe)
+    except InvalidLoginOrPasswordException:
+        pipe.is_complete = True
+        pipe.status = 'Invalid login or password'
         db.UpdateRecord(pipe)
     except Exception as e:
         Logger.Exception(e)

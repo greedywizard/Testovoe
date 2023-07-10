@@ -1,5 +1,10 @@
+import json
+import time
 from typing import Type
+import re
 
+import requests
+from nopecha import nopecha
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 
@@ -9,6 +14,7 @@ from Automizer.Enums import WindowActions
 from Automizer.Logger import Logger
 import Automizer.Actions as Actions
 import URLs
+from Exceptions import InvalidLoginOrPasswordException
 from Objects import DObject
 from db import PipelineOptions
 
@@ -32,24 +38,27 @@ class SubscribeDiscord(Act[Type[PipelineOptions], DObject]):
 
         Actions.OpenUrl(self.Env, URLs.Guild)
 
-        try:
-            Actions.Click(self.Env, By.XPATH, "/html/body/div[4]/div[3]/div/section/div/div[3]/button")
-        except:
-            pass
-
         Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[2]/div[1]/button[2]")
 
         # Дискорд
         Actions.Click(self.Env, By.XPATH, "//div[p[contains(text(), 'Discord')]]/button", window_action=WindowActions.Open)
         Actions.Input(self.Env, By.ID, "uid_6", self._static_data.discord_login)
         Actions.Input(self.Env, By.ID, "uid_8", self._static_data.discord_pass)
+
         Actions.Click(self.Env, By.XPATH, "//button[.//div[text()='Log In']]")
+
+        while True:
+            Logger.Info("Try captcha solve")
+            if Actions.WaitElementVisible(self.Env, By.XPATH, "//button[.//div[text()='Authorize']]", is_visible=True):
+                break
+            if Actions.WaitElementVisible(self.Env, By.XPATH, "//span[text()='Login or password is invalid.']", is_visible=True):
+                Logger.Info("Invalid login or password")
+                raise InvalidLoginOrPasswordException
+
         Actions.Click(self.Env, By.XPATH, "//button[.//div[text()='Authorize']]", window_action=WindowActions.WaitClose)
         if Actions.GetElement(self.Env, By.XPATH, "/html/body/div[18]/div[3]/div/section/header").Element:
             Logger.Info("Discord account connected yet")
             Actions.Click(self.Env, By.XPATH, "//button[span[text()='Connect anyway']]", window_action=WindowActions.Open)
             Actions.Click(self.Env, By.XPATH, "//button[.//div[text()='Authorize']]", window_action=WindowActions.WaitClose)
-        try:
-            Actions.WaitElementVisible(self.Env, By.XPATH, "div[text()='Account successfully connected']")
-        except TimeoutException:
-            pass
+
+        Actions.WaitElementVisible(self.Env, By.XPATH, "div[text()='Account successfully connected']")

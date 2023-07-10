@@ -1,6 +1,6 @@
 from typing import List
 
-from selenium.common import StaleElementReferenceException
+from selenium.common import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from Automizer.ExecEnvironment import ExecEnvironment
@@ -26,17 +26,22 @@ class GetElementsResult:
 
 def GetElements(env: ExecEnvironment,
                 by: By,
-                path: str) -> GetElementsResult:
+                path: str,
+                is_visible: bool = False) -> GetElementsResult:
     result: GetElementsResult = GetElementsResult()
 
     attempt = 1
     while attempt <= 3:
         try:
-            result.Elements = env.Wait.until(EC.presence_of_all_elements_located((by, path)))
+            if is_visible:
+                result.Elements = env.Wait.until(EC.visibility_of_all_elements_located((by, path)))
+            else:
+                result.Elements = env.Wait.until(EC.presence_of_all_elements_located((by, path)))
+            break
+        except TimeoutException:
+            result.Elements = []
             break
         except StaleElementReferenceException:
             attempt = attempt + 1
-        except:
-            result.Elements = []
 
     return result

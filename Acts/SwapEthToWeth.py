@@ -54,7 +54,7 @@ class SwapEthToWeth(Act[Type[PipelineOptions], DObject]):
         Actions.Click(self.Env, By.XPATH, "/html/body/div[1]/div/div[2]/div[5]/main/div[3]/div[2]/button", window_action=WindowActions.Open, as_script=True)
         Actions.Click(self.Env, By.XPATH, "//button[text()='Confirm']", window_action=WindowActions.WaitClose)
         Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]")
-        Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]", hide=True)
+        Actions.WaitElementVisible(self.Env, By.XPATH, "//p[contains(text(), 'Pending')]", is_visible=False)
 
     @staticmethod
     def _generate_half_random(target_number):

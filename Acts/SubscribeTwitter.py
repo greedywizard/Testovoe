@@ -49,7 +49,5 @@ class SubscribeTwitter(Act[Type[PipelineOptions], DObject]):
                       self._static_data.twitter_pass)
         Actions.Click(self.Env, By.XPATH, "//span[text()='Log in']")
         Actions.Click(self.Env, By.XPATH, "//div[@data-testid='OAuth_Consent_Button']", is_clickable=False, as_script=True, window_action=WindowActions.WaitClose)
-        try:
-            Actions.WaitElementVisible(self.Env, By.XPATH, "div[text()='Account successfully connected']")
-        except TimeoutException:
-            pass
+
+        Actions.WaitElementVisible(self.Env, By.XPATH, "div[text()='Account successfully connected']")
